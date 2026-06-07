@@ -67,17 +67,14 @@ export async function POST(req: Request) {
       // Check if user already exists
       const existingUser = await User.findOne({ clerkId: id });
       if (!existingUser) {
-        // Automatically make admin if email starts with admin@ or has specific prefix, for ease of demo/setup
-        const isDefaultAdmin = email.toLowerCase().startsWith('admin@') || email.toLowerCase() === 'gkuma@gmail.com';
-        
         await User.create({
           clerkId: id,
           fullName,
           email,
-          accountStatus: isDefaultAdmin ? 'active' : 'pending_approval',
-          role: isDefaultAdmin ? 'admin' : 'student',
+          accountStatus: 'pending_approval',
+          role: 'student',
         });
-        console.log(`Synced user ${email} to database.`);
+        console.log(`Synced user ${email} as student to database.`);
       }
     } catch (dbError) {
       console.error('Database sync error in webhook:', dbError);

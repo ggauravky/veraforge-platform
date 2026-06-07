@@ -4,29 +4,34 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Shield, Users, CheckSquare, Award, CheckCircle2, XCircle, 
-  ExternalLink, Globe, Loader2, MessageSquare, AlertCircle, RefreshCw 
+  ExternalLink, Globe, Loader2, MessageSquare, AlertCircle, RefreshCw,
+  UserPlus, Trash2, RotateCw
 } from 'lucide-react';
 import { Github, Linkedin } from '@/components/icons';
 import { 
   approveStudentAction, 
   rejectStudentAction, 
   reviewTaskAction, 
-  issueCertificateAction 
+  issueCertificateAction,
+  removeStudentAction,
+  resetStudentTasksAction
 } from '@/lib/actions/admin';
-import { UserButton } from '@clerk/nextjs';
+import { adminLogoutAction } from '@/lib/actions/admin-auth';
 
 interface AdminDashboardProps {
   pendingStudents: any[];
   pendingSubmissions: any[];
   graduationCandidates: any[];
+  allStudents: any[];
 }
 
-type TabType = 'registrations' | 'submissions' | 'graduations';
+type TabType = 'registrations' | 'submissions' | 'graduations' | 'students';
 
 export default function AdminDashboard({ 
   pendingStudents, 
   pendingSubmissions, 
-  graduationCandidates 
+  graduationCandidates,
+  allStudents
 }: AdminDashboardProps) {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('registrations');
@@ -151,6 +156,45 @@ export default function AdminDashboard({
       setLoadingId(null);
     }
   };
+  const handleRemoveStudent = async (studentId: string) => {
+    if (!confirm('Are you sure you want to permanently remove this student and delete all their progress/certificates?')) return;
+    setLoadingId(studentId);
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await removeStudentAction(studentId);
+      if (res.success) {
+        setActionSuccess('Student record and related progress successfully removed from database.');
+        router.refresh();
+      } else {
+        setActionError(res.error || 'Failed to remove student.');
+      }
+    } catch (err: any) {
+      setActionError(err.message || 'An error occurred.');
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
+  const handleResetTasks = async (studentId: string) => {
+    if (!confirm('Are you sure you want to reset this student\'s task assignments? This will wipe all current submissions and certificates.')) return;
+    setLoadingId(studentId);
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await resetStudentTasksAction(studentId);
+      if (res.success) {
+        setActionSuccess('Student assignments successfully reset and default tasks re-seeded.');
+        router.refresh();
+      } else {
+        setActionError(res.error || 'Failed to reset student assignments.');
+      }
+    } catch (err: any) {
+      setActionError(err.message || 'An error occurred.');
+    } finally {
+      setLoadingId(null);
+    }
+  };
 
   return (
     <div className="flex-1 flex flex-col bg-slate-950 relative min-h-screen text-slate-100">
@@ -173,7 +217,16 @@ export default function AdminDashboard({
             <span className="text-xs text-indigo-400 font-medium bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full hidden sm:inline">
               Super Admin Control
             </span>
-            <UserButton />
+            <button
+              onClick={async () => {
+                await adminLogoutAction();
+                router.push('/admin-login');
+                router.refresh();
+              }}
+              className="text-xs text-red-400 hover:text-red-300 font-medium bg-slate-900 hover:bg-slate-850 border border-red-900/30 px-3.5 py-1.5 rounded-full transition-colors cursor-pointer"
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       </header>
@@ -224,8 +277,8 @@ export default function AdminDashboard({
                 : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
-            <Users className="w-4 h-4" />
-            Pending Applications
+            <UserPlus className="w-4 h-4" />
+            Pending Approvals
             {pendingStudents.length > 0 && (
               <span className="ml-1.5 px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-extrabold rounded-full">
                 {pendingStudents.length}
@@ -263,6 +316,23 @@ export default function AdminDashboard({
             {graduationCandidates.filter(c => !c.certificateId).length > 0 && (
               <span className="ml-1.5 px-2 py-0.5 bg-emerald-600 text-white text-[10px] font-extrabold rounded-full">
                 {graduationCandidates.filter(c => !c.certificateId).length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('students')}
+            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all ${
+              activeTab === 'students' 
+                ? 'border-indigo-500 text-white bg-indigo-500/5' 
+                : 'border-transparent text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            Student Directory
+            {allStudents.length > 0 && (
+              <span className="ml-1.5 px-2 py-0.5 bg-slate-800 text-slate-350 text-[10px] font-extrabold rounded-full">
+                {allStudents.length}
               </span>
             )}
           </button>
@@ -496,6 +566,89 @@ export default function AdminDashboard({
                               )}
                             </button>
                           )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {/* TAB 4: STUDENT DIRECTORY */}
+          {activeTab === 'students' && (
+            <div className="overflow-x-auto">
+              {allStudents.length === 0 ? (
+                <div className="text-center py-16 text-slate-500 text-sm">
+                  <Users className="w-12 h-12 mx-auto mb-3 text-slate-700" />
+                  No students registered on the platform.
+                </div>
+              ) : (
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-900 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                      <th className="pb-4 font-semibold">Student Name / Email</th>
+                      <th className="pb-4 font-semibold">Onboarding Details</th>
+                      <th className="pb-4 font-semibold">Verification Status</th>
+                      <th className="pb-4 font-semibold text-right">Directory Management</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-900/50">
+                    {allStudents.map((student) => (
+                      <tr key={student._id} className="hover:bg-slate-900/10 transition-colors">
+                        <td className="py-4">
+                          <div className="font-bold text-white text-base">{student.fullName}</div>
+                          <div className="text-slate-450 text-xs mt-0.5">{student.email}</div>
+                        </td>
+                        <td className="py-4">
+                          {student.universityName ? (
+                            <>
+                              <div className="text-slate-300 font-medium">{student.universityName}</div>
+                              <div className="text-slate-500 text-xs mt-0.5">Class of {student.graduationYear}</div>
+                            </>
+                          ) : (
+                            <span className="text-slate-650 text-xs italic">Pending Onboarding Form</span>
+                          )}
+                        </td>
+                        <td className="py-4">
+                          {student.accountStatus === 'active' && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-950/40 border border-emerald-900/30 text-emerald-400 text-xs font-semibold rounded-full">
+                              Active Student
+                            </span>
+                          )}
+                          {student.accountStatus === 'pending_approval' && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-950/40 border border-indigo-900/30 text-indigo-400 text-xs font-semibold rounded-full animate-pulse">
+                              Pending Review
+                            </span>
+                          )}
+                          {student.accountStatus === 'rejected' && (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-red-950/40 border border-red-900/30 text-red-400 text-xs font-semibold rounded-full">
+                              Application Declined
+                            </span>
+                          )}
+                        </td>
+                        <td className="py-4 text-right">
+                          <div className="flex items-center justify-end gap-2.5">
+                            {student.accountStatus === 'active' && (
+                              <button
+                                onClick={() => handleResetTasks(student._id)}
+                                disabled={loadingId !== null}
+                                className="px-3 py-1.5 border border-indigo-900/30 text-indigo-450 bg-indigo-950/10 hover:bg-indigo-950/20 disabled:opacity-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                                title="Reset student's task progress and re-assign tasks"
+                              >
+                                <RotateCw className="w-3.5 h-3.5" />
+                                Reset Tasks
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleRemoveStudent(student._id)}
+                              disabled={loadingId !== null}
+                              className="px-3 py-1.5 border border-red-950/30 hover:border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              Remove
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}

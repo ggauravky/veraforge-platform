@@ -10,9 +10,13 @@ export default async function PendingReviewPage() {
     redirect('/sign-in');
   }
 
-  // Handle redirects if user status changes
+  // Handle redirects if user status changes or onboarding is not complete
   if (dbUser.role === 'admin') {
     redirect('/admin');
+  }
+
+  if (!dbUser.universityName) {
+    redirect('/onboarding');
   }
 
   if (dbUser.accountStatus === 'active') {

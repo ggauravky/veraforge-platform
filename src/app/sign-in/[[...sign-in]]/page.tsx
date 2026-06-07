@@ -1,4 +1,5 @@
 import { SignIn } from '@clerk/nextjs';
+import { dark } from '@clerk/themes';
 import { Shield } from 'lucide-react';
 
 export default function SignInPage() {
@@ -21,31 +22,14 @@ export default function SignInPage() {
         </div>
 
         {/* Clerk Sign In component */}
-        <div className="w-full bg-slate-900/40 backdrop-blur-xl border border-slate-900 rounded-2xl p-1 shadow-2xl">
-          <SignIn 
-            appearance={{
-              variables: {
-                colorPrimary: '#10b981', // emerald-500
-                colorBackground: '#0b0f19', // slate-950/90
-                colorInputBackground: '#020617', // slate-950
-                colorText: '#f8fafc', // slate-50
-                colorTextSecondary: '#94a3b8', // slate-400
-                colorInputText: '#f8fafc',
-                colorBorder: '#1e293b', // slate-800
-              },
-              elements: {
-                card: 'border-0 bg-transparent shadow-none',
-                headerTitle: 'text-white',
-                headerSubtitle: 'text-slate-400',
-                socialButtonsBlockButton: 'bg-slate-950 hover:bg-slate-900 border-slate-800 text-slate-200',
-                formFieldLabel: 'text-slate-300 font-semibold',
-                formFieldInput: 'bg-slate-950 border-slate-800 focus:border-emerald-500 text-white',
-                footerActionText: 'text-slate-400',
-                footerActionLink: 'text-emerald-400 hover:text-emerald-300',
-              }
-            }}
-          />
-        </div>
+        <SignIn 
+          appearance={{
+            baseTheme: dark,
+            variables: {
+              colorPrimary: '#10b981', // emerald-500
+            }
+          }}
+        />
       </div>
     </div>
   );

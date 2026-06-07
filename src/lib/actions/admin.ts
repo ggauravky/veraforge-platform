@@ -6,16 +6,16 @@ import User from '@/models/User';
 import Task from '@/models/Task';
 import UserTask from '@/models/UserTask';
 import Certificate from '@/models/Certificate';
-import { getOrCreateUser } from '@/lib/auth-sync';
+import { cookies } from 'next/headers';
 import crypto from 'crypto';
 
-// Helper to verify admin access
+// Helper to verify admin access via cookie
 async function checkAdmin() {
-  const activeUser = await getOrCreateUser();
-  if (!activeUser || activeUser.role !== 'admin') {
+  const cookieStore = await cookies();
+  const session = cookieStore.get('admin_session');
+  if (!session || session.value !== 'veraforge_admin_secure_session_token') {
     throw new Error('Unauthorized. Admin access required.');
   }
-  return activeUser;
 }
 
 export async function approveStudentAction(studentId: string) {
@@ -32,29 +32,7 @@ export async function approveStudentAction(studentId: string) {
     student.accountStatus = 'active';
     await student.save();
 
-    // 2. Fetch all tasks to assign
-    const tasks = await Task.find({}).sort({ sequenceOrder: 1 });
-    if (tasks.length === 0) {
-      return { success: false, error: 'No default tasks found in the database. Please seed tasks first.' };
-    }
-
-    // 3. Delete any existing tasks for this student to avoid duplicates
-    await UserTask.deleteMany({ userId: student._id });
-
-    // 4. Assign default tasks to UserTask collection
-    for (let i = 0; i < tasks.length; i++) {
-      const task = tasks[i];
-      // Task 1 (Calculator App, order 1) is unlocked, others are locked
-      const initialStatus = task.sequenceOrder === 1 ? 'unlocked' : 'locked';
-
-      await UserTask.create({
-        userId: student._id,
-        taskId: task._id,
-        status: initialStatus,
-      });
-    }
-
-    revalidatePath('/admin');
+    revalidatePath('/admin/dashboard');
     return { success: true };
   } catch (error: any) {
     console.error('Approve student error:', error);
@@ -113,7 +91,10 @@ export async function reviewTaskAction(data: {
       const currentOrder = currentTask.sequenceOrder;
 
       // Find the next task in sequence
-      const nextTask = await Task.findOne({ sequenceOrder: currentOrder + 1 });
+      const nextTask = await Task.findOne({ 
+        trackCategory: currentTask.trackCategory, 
+        sequenceOrder: currentOrder + 1 
+      });
       if (nextTask) {
         // Find corresponding UserTask and unlock it
         const nextUserTask = await UserTask.findOne({
@@ -176,11 +157,69 @@ export async function issueCertificateAction(studentId: string) {
       issueDate: new Date(),
     });
 
-    revalidatePath('/admin');
+    revalidatePath('/admin/dashboard');
     revalidatePath('/dashboard');
     return { success: true, certificateId: certificate.certificateId };
   } catch (error: any) {
     console.error('Issue certificate error:', error);
+    return { success: false, error: error.message || 'Something went wrong' };
+  }
+}
+
+export async function removeStudentAction(studentId: string) {
+  try {
+    await checkAdmin();
+    await connectToDatabase();
+
+    const deletedUser = await User.findByIdAndDelete(studentId);
+    if (!deletedUser) {
+      return { success: false, error: 'Student not found' };
+    }
+
+    await UserTask.deleteMany({ userId: studentId });
+    await Certificate.deleteMany({ userId: studentId });
+
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Remove student error:', error);
+    return { success: false, error: error.message || 'Something went wrong' };
+  }
+}
+
+export async function resetStudentTasksAction(studentId: string) {
+  try {
+    await checkAdmin();
+    await connectToDatabase();
+
+    const student = await User.findById(studentId);
+    if (!student) {
+      return { success: false, error: 'Student not found.' };
+    }
+
+    // Clean up current progress and certificates
+    await UserTask.deleteMany({ userId: studentId });
+    await Certificate.deleteMany({ userId: studentId });
+
+    if (student.enrolledTrack) {
+      const tasks = await Task.find({ trackCategory: student.enrolledTrack }).sort({ sequenceOrder: 1 });
+      
+      for (let i = 0; i < tasks.length; i++) {
+        const task = tasks[i];
+        const initialStatus = task.sequenceOrder === 1 ? 'unlocked' : 'locked';
+        await UserTask.create({
+          userId: studentId,
+          taskId: task._id,
+          status: initialStatus,
+        });
+      }
+    }
+
+    revalidatePath('/admin/dashboard');
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Reset student tasks error:', error);
     return { success: false, error: error.message || 'Something went wrong' };
   }
 }

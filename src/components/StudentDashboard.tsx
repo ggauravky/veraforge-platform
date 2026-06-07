@@ -127,7 +127,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider block mb-1">Welcome back</span>
             <h2 className="text-2xl font-bold text-white mb-2">{user.fullName}</h2>
             <p className="text-slate-400 text-xs font-light leading-relaxed">
-              Virtual Full Stack Developer Internship Track at VeraForge.
+              Virtual {user.enrolledTrack || 'Web Development'} Internship Track at VeraForge.
             </p>
             
             <div className="mt-6 pt-4 border-t border-slate-800 text-xs text-slate-400 space-y-2">
@@ -173,7 +173,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 </div>
                 <div>
                   <h4 className="text-base font-bold text-white">Graduation Reached</h4>
-                  <p className="text-[10px] text-indigo-400 font-semibold tracking-wider uppercase">Full Stack Track</p>
+                  <p className="text-[10px] text-indigo-400 font-semibold tracking-wider uppercase">{user.enrolledTrack || 'Web Development'} Track</p>
                 </div>
               </div>
               <p className="text-slate-400 text-xs font-light leading-relaxed mb-6">
@@ -199,167 +199,188 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
         </div>
 
         {/* Right column: Sequential Tasks */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-900">
-            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-emerald-400" />
-              Internship Course Assignments
-            </h3>
-            <span className="text-xs text-slate-400">{totalTasks} Sequential Steps</span>
+        {user.accountStatus === 'pending_approval' ? (
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+              <div className="mx-auto w-16 h-16 bg-amber-950/60 border border-amber-500/20 rounded-2xl flex items-center justify-center animate-pulse">
+                <AlertTriangle className="w-8 h-8 text-amber-500" />
+              </div>
+              
+              <div className="max-w-md mx-auto space-y-3">
+                <h3 className="text-xl font-bold text-white">Application Under Review</h3>
+                <p className="text-slate-400 text-sm leading-relaxed font-light">
+                  Your application is currently under review by an administrator.
+                </p>
+                <p className="text-slate-500 text-xs leading-relaxed">
+                  Once approved, your internship track tasks will automatically unlock here. Please check back later.
+                </p>
+              </div>
+            </div>
           </div>
+        ) : (
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-900">
+              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-emerald-400" />
+                Internship Course Assignments
+              </h3>
+              <span className="text-xs text-slate-400">{totalTasks} Sequential Steps</span>
+            </div>
 
-          <div className="space-y-4">
-            {userTasks.map((userTask) => {
-              const task = userTask.taskId;
-              const isLocked = userTask.status === 'locked';
-              const isApproved = userTask.status === 'approved';
-              const isPending = userTask.status === 'submitted_pending_review';
-              const isRejected = userTask.status === 'rejected';
+            <div className="space-y-4">
+              {userTasks.map((userTask) => {
+                const task = userTask.taskId;
+                const isLocked = userTask.status === 'locked';
+                const isApproved = userTask.status === 'approved';
+                const isPending = userTask.status === 'submitted_pending_review';
+                const isRejected = userTask.status === 'rejected';
 
-              return (
-                <div 
-                  key={userTask._id}
-                  className={`bg-slate-900/20 border rounded-2xl p-6 transition-all duration-300 ${
-                    isLocked ? 'border-slate-950/60 opacity-60' :
-                    isApproved ? 'border-emerald-900/30 bg-emerald-950/5' :
-                    isRejected ? 'border-red-950/30 bg-red-950/5' :
-                    isPending ? 'border-amber-950/30 bg-amber-950/5' :
-                    'border-slate-900 hover:border-slate-800 hover:bg-slate-900/30'
-                  }`}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                    <div>
-                      {/* Step Indicator & Status Badge */}
-                      <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
-                        <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-full text-slate-400">
-                          Step {task.sequenceOrder}
-                        </span>
+                return (
+                  <div 
+                    key={userTask._id}
+                    className={`bg-slate-900/20 border rounded-2xl p-6 transition-all duration-300 ${
+                      isLocked ? 'border-slate-950/60 opacity-60' :
+                      isApproved ? 'border-emerald-900/30 bg-emerald-950/5' :
+                      isRejected ? 'border-red-950/30 bg-red-950/5' :
+                      isPending ? 'border-amber-950/30 bg-amber-950/5' :
+                      'border-slate-900 hover:border-slate-800 hover:bg-slate-900/30'
+                    }`}
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                      <div>
+                        {/* Step Indicator & Status Badge */}
+                        <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
+                          <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-full text-slate-400">
+                            Step {task.sequenceOrder}
+                          </span>
 
-                        {isLocked && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-950 border border-slate-950 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <Lock className="w-3 h-3" /> Locked
-                          </span>
+                          {isLocked && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-950 border border-slate-950 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <Lock className="w-3 h-3" /> Locked
+                            </span>
+                          )}
+                          {isApproved && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/40 border border-emerald-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3" /> Completed
+                            </span>
+                          )}
+                          {isPending && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/40 border border-amber-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <Loader2 className="w-3 h-3 animate-spin" /> Pending Review
+                            </span>
+                          )}
+                          {isRejected && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-950/40 border border-red-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <AlertTriangle className="w-3 h-3" /> Revision Required
+                            </span>
+                          )}
+                          {userTask.status === 'unlocked' && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-400 bg-sky-950/40 border border-sky-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <Unlock className="w-3 h-3 animate-pulse" /> Active Task
+                            </span>
+                          )}
+                        </div>
+
+                        <h4 className="text-lg font-bold text-white mb-2">{task.title}</h4>
+                        <p className="text-slate-400 text-sm font-light leading-relaxed mb-4 max-w-xl">
+                          {task.description}
+                        </p>
+
+                        {/* Display Submitted Links if any */}
+                        {(isApproved || isPending || isRejected) && (
+                          <div className="flex flex-wrap gap-4 text-xs mt-3 pt-3 border-t border-slate-900 text-slate-400">
+                            <a 
+                              href={userTask.submissionRepoLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors"
+                            >
+                              <Github className="w-3.5 h-3.5" />
+                              GitHub Repository
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                            <a 
+                              href={userTask.submissionLiveLink} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors"
+                            >
+                              <Globe className="w-3.5 h-3.5" />
+                              Live Web Application
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          </div>
                         )}
-                        {isApproved && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-950/40 border border-emerald-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3" /> Completed
-                          </span>
-                        )}
-                        {isPending && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/40 border border-amber-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <Loader2 className="w-3 h-3 animate-spin" /> Pending Review
-                          </span>
-                        )}
-                        {isRejected && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-950/40 border border-red-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <AlertTriangle className="w-3 h-3" /> Revision Required
-                          </span>
-                        )}
-                        {userTask.status === 'unlocked' && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-sky-400 bg-sky-950/40 border border-sky-900/30 px-2 py-0.5 rounded-full flex items-center gap-1">
-                            <Unlock className="w-3 h-3 animate-pulse" /> Active Task
-                          </span>
+
+                        {/* Feedback Panel */}
+                        {userTask.adminFeedback && (
+                          <div className="mt-4 p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex gap-2.5 items-start text-xs max-w-xl">
+                            <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                            <div>
+                              <div className="font-bold text-slate-300">Administrator Feedback:</div>
+                              <p className="text-slate-400 font-light mt-0.5 leading-relaxed">{userTask.adminFeedback}</p>
+                            </div>
+                          </div>
                         )}
                       </div>
 
-                      <h4 className="text-lg font-bold text-white mb-2">{task.title}</h4>
-                      <p className="text-slate-400 text-sm font-light leading-relaxed mb-4 max-w-xl">
-                        {task.description}
-                      </p>
-
-                      {/* Display Submitted Links if any */}
-                      {(isApproved || isPending || isRejected) && (
-                        <div className="flex flex-wrap gap-4 text-xs mt-3 pt-3 border-t border-slate-900 text-slate-400">
-                          <a 
-                            href={userTask.submissionRepoLink} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors"
+                      {/* Action Button */}
+                      <div className="shrink-0">
+                        {isLocked && (
+                          <button 
+                            disabled 
+                            className="px-4 py-2 bg-slate-950 border border-slate-900 text-slate-600 text-xs font-semibold rounded-lg flex items-center gap-1.5 cursor-not-allowed"
                           >
-                            <Github className="w-3.5 h-3.5" />
-                            GitHub Repository
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                          <a 
-                            href={userTask.submissionLiveLink} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 hover:text-emerald-400 transition-colors"
+                            <Lock className="w-3.5 h-3.5" />
+                            Task Locked
+                          </button>
+                        )}
+
+                        {userTask.status === 'unlocked' && (
+                          <button
+                            onClick={() => handleOpenSubmission(userTask)}
+                            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold rounded-lg transition-all shadow-md shadow-emerald-500/10 hover:scale-[1.02] cursor-pointer"
                           >
-                            <Globe className="w-3.5 h-3.5" />
-                            Live Web Application
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        </div>
-                      )}
+                            Submit Assignment
+                          </button>
+                        )}
 
-                      {/* Feedback Panel */}
-                      {userTask.adminFeedback && (
-                        <div className="mt-4 p-3.5 bg-slate-950/60 border border-slate-800 rounded-xl flex gap-2.5 items-start text-xs max-w-xl">
-                          <MessageSquare className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                          <div>
-                            <div className="font-bold text-slate-300">Administrator Feedback:</div>
-                            <p className="text-slate-400 font-light mt-0.5 leading-relaxed">{userTask.adminFeedback}</p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                        {isPending && (
+                          <button
+                            disabled
+                            className="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-400 text-xs font-semibold rounded-lg"
+                          >
+                            Under Evaluation
+                          </button>
+                        )}
 
-                    {/* Action Button */}
-                    <div className="shrink-0">
-                      {isLocked && (
-                        <button 
-                          disabled 
-                          className="px-4 py-2 bg-slate-950 border border-slate-900 text-slate-600 text-xs font-semibold rounded-lg flex items-center gap-1.5 cursor-not-allowed"
-                        >
-                          <Lock className="w-3.5 h-3.5" />
-                          Task Locked
-                        </button>
-                      )}
+                        {isRejected && (
+                          <button
+                            onClick={() => handleOpenSubmission(userTask)}
+                            className="px-4 py-2 bg-red-950/30 hover:bg-red-950/50 border border-red-900/40 text-red-300 hover:text-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer"
+                          >
+                            Revise & Re-submit
+                          </button>
+                        )}
 
-                      {userTask.status === 'unlocked' && (
-                        <button
-                          onClick={() => handleOpenSubmission(userTask)}
-                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold rounded-lg transition-all shadow-md shadow-emerald-500/10 hover:scale-[1.02] cursor-pointer"
-                        >
-                          Submit Assignment
-                        </button>
-                      )}
-
-                      {isPending && (
-                        <button
-                          disabled
-                          className="px-4 py-2 bg-slate-900 border border-slate-800 text-slate-400 text-xs font-semibold rounded-lg"
-                        >
-                          Under Evaluation
-                        </button>
-                      )}
-
-                      {isRejected && (
-                        <button
-                          onClick={() => handleOpenSubmission(userTask)}
-                          className="px-4 py-2 bg-red-950/30 hover:bg-red-950/50 border border-red-900/40 text-red-300 hover:text-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer"
-                        >
-                          Revise & Re-submit
-                        </button>
-                      )}
-
-                      {isApproved && (
-                        <button
-                          disabled
-                          className="px-4 py-2 bg-emerald-950/20 border border-emerald-900/20 text-emerald-400 text-xs font-semibold rounded-lg flex items-center gap-1"
-                        >
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          Approved
-                        </button>
-                      )}
+                        {isApproved && (
+                          <button
+                            disabled
+                            className="px-4 py-2 bg-emerald-950/20 border border-emerald-900/20 text-emerald-400 text-xs font-semibold rounded-lg flex items-center gap-1"
+                          >
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Approved
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </main>
 
       {/* Submission Modal */}

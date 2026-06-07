@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
-import { getOrCreateUser } from '@/lib/auth-sync';
+import { currentUser } from '@clerk/nextjs/server';
 import { connectToDatabase } from '@/lib/db';
+import User from '@/models/User';
 import UserTask from '@/models/UserTask';
 import Task from '@/models/Task'; // Keep here so the model is registered
 import Certificate from '@/models/Certificate';
@@ -9,9 +10,19 @@ import StudentDashboard from '@/components/StudentDashboard';
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const dbUser = await getOrCreateUser();
-  if (!dbUser) {
+  const clerkUser = await currentUser();
+  if (!clerkUser) {
     redirect('/sign-in');
+  }
+
+  await connectToDatabase();
+  
+  // Post-Login check: immediately find student in MongoDB
+  const dbUser = await User.findOne({ clerkId: clerkUser.id });
+
+  // Redirection Logic: If user is authenticated in Clerk but does NOT exist in MongoDB or hasn't filled onboarding, redirect to onboarding
+  if (!dbUser || !dbUser.universityName) {
+    redirect('/onboarding');
   }
 
   // Admin redirect
@@ -19,16 +30,15 @@ export default async function DashboardPage() {
     redirect('/admin');
   }
 
-  // Registration statuses redirects
-  if (dbUser.accountStatus === 'pending_approval') {
+  // If student is pending review or rejected, send to pending-review
+  if (dbUser.accountStatus === 'pending_approval' || dbUser.accountStatus === 'rejected') {
     redirect('/pending-review');
   }
 
-  if (dbUser.accountStatus === 'rejected') {
-    redirect('/pending-review');
+  // If active student has not selected a track, redirect to track selection page
+  if (dbUser.accountStatus === 'active' && !dbUser.enrolledTrack) {
+    redirect('/dashboard/select-track');
   }
-
-  await connectToDatabase();
 
   // Fetch student's specific task list
   const rawUserTasks = await UserTask.find({ userId: dbUser._id })

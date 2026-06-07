@@ -1,8 +1,11 @@
 import { redirect } from 'next/navigation';
-import { getOrCreateUser } from '@/lib/auth-sync';
 import { currentUser } from '@clerk/nextjs/server';
+import { connectToDatabase } from '@/lib/db';
+import User from '@/models/User';
 import OnboardingForm from '@/components/OnboardingForm';
 import { Shield } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
 
 export default async function OnboardingPage() {
   const clerkUser = await currentUser();
@@ -10,23 +13,19 @@ export default async function OnboardingPage() {
     redirect('/sign-in');
   }
 
-  // Get or sync the user in MongoDB
-  const dbUser = await getOrCreateUser();
-  if (!dbUser) {
-    redirect('/sign-in');
-  }
+  // Check if user profile already exists in MongoDB
+  await connectToDatabase();
+  const dbUser = await User.findOne({ clerkId: clerkUser.id });
 
-  // Handle redirects based on status/role
-  if (dbUser.role === 'admin') {
-    redirect('/admin');
-  }
-
-  if (dbUser.accountStatus === 'active') {
+  // If user already exists in MongoDB and has completed onboarding, redirect to dashboard/admin/review
+  if (dbUser && dbUser.universityName) {
+    if (dbUser.role === 'admin') {
+      redirect('/admin');
+    }
+    if (dbUser.accountStatus === 'pending_approval' || dbUser.accountStatus === 'rejected') {
+      redirect('/pending-review');
+    }
     redirect('/dashboard');
-  }
-
-  if (dbUser.accountStatus === 'pending_approval') {
-    redirect('/pending-review');
   }
 
   const initialName = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'New Student';
@@ -35,7 +34,7 @@ export default async function OnboardingPage() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden min-h-screen py-16 px-6">
       {/* Background patterns */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
       
       {/* Brand Header */}
       <div className="relative z-10 flex items-center gap-3 mb-10">

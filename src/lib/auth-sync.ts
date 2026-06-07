@@ -15,27 +15,23 @@ export async function getOrCreateUser(): Promise<IUser | null> {
   await seedDatabase();
 
   let user = await User.findOne({ clerkId: clerkUser.id });
-
+  
   if (!user) {
     const email = clerkUser.emailAddresses[0]?.emailAddress;
     const fullName = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'New Student';
     
-    if (!email) {
-      return null;
+    if (email) {
+      user = await User.create({
+        clerkId: clerkUser.id,
+        fullName,
+        email,
+        accountStatus: 'pending_approval',
+        role: 'student',
+      });
+      console.log(`Synced student ${email} automatically.`);
     }
-
-    const isDefaultAdmin = email.toLowerCase().startsWith('admin@') || email.toLowerCase() === 'gkuma@gmail.com';
-
-    user = await User.create({
-      clerkId: clerkUser.id,
-      fullName,
-      email,
-      accountStatus: isDefaultAdmin ? 'active' : 'pending_approval',
-      role: isDefaultAdmin ? 'admin' : 'student',
-    });
-    console.log(`Synced user ${email} on-demand.`);
   }
-
+  
   return user;
 }
 
