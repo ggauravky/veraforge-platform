@@ -29,7 +29,19 @@ export default async function Home() {
             </div>
           </div>
 
-          <nav className="flex items-center gap-6">
+          <nav className="flex items-center gap-6 md:gap-8">
+            <Link 
+              href="/about"
+              className="text-xs text-slate-450 hover:text-slate-100 font-bold tracking-wider uppercase transition-colors"
+            >
+              About
+            </Link>
+            <Link 
+              href="/contact"
+              className="text-xs text-slate-455 hover:text-slate-100 font-bold tracking-wider uppercase transition-colors"
+            >
+              Contact
+            </Link>
             {isUserSignedIn ? (
               <Link 
                 href="/dashboard"
@@ -289,15 +301,18 @@ export default async function Home() {
 
           {/* Links and hidden Admin Gateway */}
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-xs text-slate-500">
+            <Link href="/about" className="hover:text-slate-350 transition-colors">
+              About Us
+            </Link>
+            <Link href="/contact" className="hover:text-slate-350 transition-colors">
+              Contact Us
+            </Link>
             <Link href="/privacy-policy" className="hover:text-slate-350 transition-colors">
               Privacy Policy
             </Link>
             <Link href="/terms-of-service" className="hover:text-slate-350 transition-colors">
               Terms of Service
             </Link>
-            <a href="mailto:support@veraforge.com" className="hover:text-slate-350 transition-colors">
-              Contact Us
-            </a>
             <Link 
               href="/admin-login" 
               className="text-[9px] text-slate-800 hover:text-slate-500 transition-colors tracking-wide self-center md:self-end mt-2 md:mt-0 font-medium"
