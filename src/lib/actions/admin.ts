@@ -13,8 +13,13 @@ import crypto from 'crypto';
 async function checkAdmin() {
   const cookieStore = await cookies();
   const session = cookieStore.get('admin_session');
-  if (!session || session.value !== 'veraforge_admin_secure_session_token') {
-    throw new Error('Unauthorized. Admin access required.');
+  if (!session) {
+    throw new Error('Unauthorized');
+  }
+  const { verifyJWT } = await import('@/lib/jwt');
+  const payload = await verifyJWT(session.value);
+  if (!payload || payload.role !== 'admin') {
+    throw new Error('Unauthorized');
   }
 }
 
@@ -154,6 +159,7 @@ export async function issueCertificateAction(studentId: string) {
     const certificate = await Certificate.create({
       certificateId,
       userId: studentId,
+      trackName: student.enrolledTrack || 'Web Development',
       issueDate: new Date(),
     });
 

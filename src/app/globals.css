@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
+@theme {
+  --color-cyber-navy-dark: #0b131f;
+  --color-cyber-navy-light: #0f172a;
+}
+
 :root {
-  --background: #020617; /* slate-950 */
-  --foreground: #f8fafc; /* slate-50 */
+  --background: #0b131f;
+  --foreground: #f8fafc;
 }
 
 body {

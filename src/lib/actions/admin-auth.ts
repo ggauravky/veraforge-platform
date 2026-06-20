@@ -10,11 +10,14 @@ export async function adminLoginAction(data: { email: string; password: string }
     const expectedPassword = process.env.ADMIN_PASSWORD || 'VeraForgeAdmin2026Secure';
 
     if (email === expectedEmail && password === expectedPassword) {
+      const { signJWT } = await import('@/lib/jwt');
+      const token = await signJWT({ role: 'admin' });
+      
       const cookieStore = await cookies();
-      cookieStore.set('admin_session', 'veraforge_admin_secure_session_token', {
+      cookieStore.set('admin_session', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
+        sameSite: 'lax',
         maxAge: 60 * 60 * 24, // 1 day
         path: '/',
       });

@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
-  Shield, ArrowLeft, Mail, Clock, Send, 
+  ArrowLeft, Mail, Clock, Send, 
   CheckCircle2, HelpCircle, MessageSquare 
 } from 'lucide-react';
+import VeraForgeLogo from '@/components/VeraForgeLogo';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -49,14 +50,14 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-950 relative overflow-hidden min-h-screen text-slate-350">
+    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-slate-900 bg-cyber-navy-light/80 backdrop-blur-md relative z-10">
         <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link 
             href="/" 
@@ -66,7 +67,7 @@ export default function ContactPage() {
             Back to Home
           </Link>
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-indigo-500" />
+            <VeraForgeLogo className="w-5 h-5" />
             <span className="font-extrabold text-lg tracking-wider text-white">VERAFORGE</span>
           </div>
         </div>
@@ -277,10 +278,10 @@ export default function ContactPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-900/80 bg-slate-950 py-10 text-center relative z-10 mt-auto">
+      <footer className="border-t border-slate-900/80 bg-cyber-navy-dark py-10 text-center relative z-10 mt-auto">
         <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4 text-indigo-500" />
+            <VeraForgeLogo className="w-4 h-4" />
             <span className="font-extrabold text-xs tracking-wider text-white uppercase">VeraForge Secure Mailbox</span>
           </div>
           <p className="text-[10px] text-slate-500">

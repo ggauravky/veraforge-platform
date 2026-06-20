@@ -6,9 +6,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
-  Shield, CheckCircle2, Lock, Unlock, ExternalLink, Globe, 
+  CheckCircle2, Lock, Unlock, ExternalLink, Globe, 
   Award, AlertTriangle, MessageSquare, Loader2, ArrowRight, X, BookOpen 
 } from 'lucide-react';
+import VeraForgeLogo from '@/components/VeraForgeLogo';
 import { Github } from '@/components/icons';
 import { submitTaskAction } from '@/lib/actions/student';
 import { UserButton } from '@clerk/nextjs';
@@ -90,20 +91,20 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-950 relative min-h-screen text-slate-100">
+    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-slate-900 bg-cyber-navy-light/80 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg">
-              <Shield className="w-6 h-6 text-slate-950" />
+            <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg">
+              <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
               <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[10px] text-emerald-400 font-bold tracking-[0.2em] uppercase">Student Dashboard</span>
+              <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-4">

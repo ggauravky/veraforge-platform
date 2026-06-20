@@ -21,7 +21,12 @@ export default clerkMiddleware(async (auth, req) => {
   // 1. If it's an admin route, verify the cookie and bypass Clerk completely
   if (isAdminRoute(req)) {
     const adminSession = req.cookies.get('admin_session');
-    if (!adminSession || adminSession.value !== 'veraforge_admin_secure_session_token') {
+    if (!adminSession) {
+      return NextResponse.redirect(new URL('/admin-login', req.url));
+    }
+    const { verifyJWT } = await import('@/lib/jwt');
+    const payload = await verifyJWT(adminSession.value);
+    if (!payload || payload.role !== 'admin') {
       return NextResponse.redirect(new URL('/admin-login', req.url));
     }
     return NextResponse.next();

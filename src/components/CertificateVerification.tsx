@@ -7,6 +7,7 @@ import {
 import Link from 'next/link';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import VeraForgeLogo from '@/components/VeraForgeLogo';
 
 interface CertificateVerificationProps {
   certificate: any;
@@ -26,35 +27,21 @@ export default function CertificateVerification({ certificate, student }: Certif
   const trackName = student.enrolledTrack || 'Web Development';
 
   const handleDownloadPDF = async () => {
-    if (!certificateRef.current) return;
     setDownloading(true);
-
     try {
-      const element = certificateRef.current;
+      const element = document.getElementById('certificate-render-canvas');
+      if (!element) throw new Error('Render canvas not found');
       
-      // Render the HTML element as a high-res canvas (scale 2 for sharpness, CORS true, logging false)
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#f8fafc', // matching slate-50
+        backgroundColor: '#fcfbf7'
       });
-
       const imgData = canvas.toDataURL('image/png');
-      
-      // A4 landscape sizing: 297mm x 210mm
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'mm',
-        format: 'a4',
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-
-      // Fit canvas image directly onto the A4 landscape sheet
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`VeraForge_Certificate_${student.fullName.replace(/\s+/g, '_')}.pdf`);
+      const pdf = new jsPDF('l', 'mm', 'a4');
+      pdf.addImage(imgData, 'PNG', 0, 0, 297, 210);
+      pdf.save(`VeraForge_Certificate_${certificate.certificateId}.pdf`);
     } catch (error) {
       console.error('Error generating PDF certificate:', error);
       alert('Failed to generate PDF. Please try printing the page manually (Ctrl+P) or try again.');
@@ -69,15 +56,15 @@ export default function CertificateVerification({ certificate, student }: Certif
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Verification Registry Header */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md relative z-10 mb-10">
+      <header className="border-b border-slate-900 bg-cyber-navy-light/80 backdrop-blur-md relative z-10 mb-10">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl shadow-lg">
-              <Shield className="w-6 h-6 text-white" />
+            <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg">
+              <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
               <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
-              <span className="block text-[10px] text-indigo-400 font-bold tracking-[0.2em] uppercase">Credential Registry</span>
+              <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </Link>
           <div className="flex items-center gap-3">
@@ -131,7 +118,8 @@ export default function CertificateVerification({ certificate, student }: Certif
           {/* Certificate Fixed Sized A4 Landscape Container */}
           <div 
             ref={certificateRef}
-            className="w-[1123px] h-[794px] bg-slate-50 border-[24px] border-double border-[#0f172a] p-16 relative flex flex-col justify-between overflow-hidden text-[#0f172a] shadow-2xl shrink-0 select-none"
+            id="certificate-render-canvas"
+            className="w-[1123px] h-[794px] bg-[#fcfbf7] border-[24px] border-double border-[#0f172a] p-16 relative flex flex-col justify-between overflow-hidden text-[#0f172a] shadow-2xl shrink-0 select-none"
             style={{ fontFamily: 'Georgia, serif' }}
           >
             {/* Elegant Inner Accent Line */}
@@ -187,7 +175,7 @@ export default function CertificateVerification({ certificate, student }: Certif
                   <path d="M25 25 C 45 15, 65 35, 95 20" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
                 </svg>
                 <div className="h-[1px] bg-slate-300 w-40 mt-1 mb-1.5" />
-                <span className="text-[8px] text-slate-500 font-bold tracking-widest uppercase font-sans block">Program Director</span>
+                <span className="text-[8px] text-slate-500 font-bold tracking-widest uppercase font-sans block">Program Board Director</span>
               </div>
 
               {/* Gold Seal Center */}
@@ -221,13 +209,8 @@ export default function CertificateVerification({ certificate, student }: Certif
             </div>
 
             {/* Verification Footer Link */}
-            <div className="absolute bottom-4 inset-x-0 flex justify-between px-16 text-[8px] text-slate-450 font-sans z-10">
-              <div>
-                Certificate ID: <span className="font-mono text-slate-600">{certificate.certificateId}</span>
-              </div>
-              <div className="text-right">
-                To verify the authenticity of this document, visit <span className="font-semibold text-indigo-900">veraforge.com/verify/{certificate.certificateId.slice(0, 8)}</span>
-              </div>
+            <div className="absolute bottom-4 inset-x-0 text-center text-[7px] text-slate-500 font-sans z-10 tracking-wider">
+              Certificate ID: {certificate.certificateId} | Publicly verifiable at veraforge.com/verify/{certificate.certificateId}
             </div>
 
           </div>

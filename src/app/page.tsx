@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { 
-  Shield, ArrowRight, CheckCircle2, Award, Lock, Sparkles, 
+  ArrowRight, CheckCircle2, Award, Lock, Sparkles, 
   Layers, CheckSquare, Zap, Eye, CheckCircle 
 } from 'lucide-react';
+import VeraForgeLogo from '@/components/VeraForgeLogo';
 
 export default async function Home() {
   const { userId } = await auth();
@@ -17,15 +18,15 @@ export default async function Home() {
       <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-slate-950/70 backdrop-blur-md relative z-20">
+      <header className="border-b border-slate-900 bg-cyber-navy-light/70 backdrop-blur-md relative z-20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-indigo-700 rounded-xl shadow-lg shadow-indigo-500/20">
-              <Shield className="w-6 h-6 text-white" />
+            <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg shadow-emerald-500/5">
+              <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
               <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[10px] text-indigo-400 font-bold tracking-[0.2em] uppercase">Engineering Platform</span>
+              <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
 
@@ -287,14 +288,14 @@ export default async function Home() {
       </section>
 
       {/* Corporate Legitimate Footer */}
-      <footer className="mt-auto border-t border-slate-900/80 bg-slate-950 py-12 relative z-10">
+      <footer className="mt-auto border-t border-slate-900/80 bg-cyber-navy-dark py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
             <div className="flex items-center gap-2">
-              <Shield className="w-4 h-4 text-indigo-500" />
+              <VeraForgeLogo className="w-4 h-4" />
               <span className="font-extrabold text-sm tracking-wider text-white">VERAFORGE</span>
             </div>
-            <p className="text-[10px] text-slate-500 font-light mt-1">
+            <p className="text-[9px] text-slate-500 font-light mt-1">
               &copy; {new Date().getFullYear()} VeraForge Platform. All rights reserved.
             </p>
           </div>
@@ -317,7 +318,7 @@ export default async function Home() {
               href="/admin-login" 
               className="text-[9px] text-slate-800 hover:text-slate-500 transition-colors tracking-wide self-center md:self-end mt-2 md:mt-0 font-medium"
             >
-              Admin Access
+              Admin Console
             </Link>
           </div>
         </div>

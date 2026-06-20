@@ -2,7 +2,7 @@ import { connectToDatabase } from '@/lib/db';
 import Certificate from '@/models/Certificate';
 import User from '@/models/User';
 import CertificateVerification from '@/components/CertificateVerification';
-import { Shield, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { AlertTriangle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +23,7 @@ export default async function VerifyPage({ params }: VerifyPageProps) {
   const rawCertificate = await Certificate.findOne({ certificateId }).lean();
   if (!rawCertificate) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden min-h-screen py-16 px-6">
+      <div className="flex-1 flex flex-col items-center justify-center bg-cyber-navy-dark relative overflow-hidden min-h-screen py-16 px-6">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
         
         <div className="relative z-10 w-full max-w-md bg-slate-900/40 backdrop-blur-xl border border-slate-900 rounded-3xl p-8 text-center shadow-2xl">
@@ -55,7 +55,7 @@ export default async function VerifyPage({ params }: VerifyPageProps) {
   const rawStudent = await User.findById(certificate.userId).lean();
   if (!rawStudent) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden min-h-screen py-16 px-6">
+      <div className="flex-1 flex flex-col items-center justify-center bg-cyber-navy-dark relative overflow-hidden min-h-screen py-16 px-6">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
         
         <div className="relative z-10 w-full max-w-md bg-slate-900/40 backdrop-blur-xl border border-slate-900 rounded-3xl p-8 text-center shadow-2xl">

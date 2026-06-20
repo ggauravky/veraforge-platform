@@ -3,7 +3,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import { connectToDatabase } from '@/lib/db';
 import User from '@/models/User';
 import OnboardingForm from '@/components/OnboardingForm';
-import { Shield } from 'lucide-react';
+import VeraForgeLogo from '@/components/VeraForgeLogo';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,18 +32,20 @@ export default async function OnboardingPage() {
   const initialEmail = clerkUser.emailAddresses[0]?.emailAddress || '';
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-slate-950 relative overflow-hidden min-h-screen py-16 px-6">
+    <div className="flex-1 flex flex-col items-center justify-center bg-cyber-navy-dark relative overflow-hidden min-h-screen py-16 px-6">
       {/* Background patterns */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
       
       {/* Brand Header */}
-      <div className="relative z-10 flex items-center gap-3 mb-10">
-        <div className="p-2.5 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl shadow-lg shadow-emerald-500/20">
-          <Shield className="w-6 h-6 text-slate-950" />
-        </div>
-        <div>
-          <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-          <span className="block text-[10px] text-emerald-400 font-bold tracking-[0.2em] uppercase">Workspace Setup</span>
+      <div className="relative z-10 flex flex-col items-center mb-8">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg shadow-emerald-500/5">
+            <VeraForgeLogo className="w-6 h-6" />
+          </div>
+          <div>
+            <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
+            <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+          </div>
         </div>
       </div>
 

@@ -12,7 +12,12 @@ export const dynamic = 'force-dynamic';
 export default async function AdminDashboardPage() {
   const cookieStore = await cookies();
   const session = cookieStore.get('admin_session');
-  if (!session || session.value !== 'veraforge_admin_secure_session_token') {
+  if (!session) {
+    redirect('/admin-login');
+  }
+  const { verifyJWT } = await import('@/lib/jwt');
+  const payload = await verifyJWT(session.value);
+  if (!payload || payload.role !== 'admin') {
     redirect('/admin-login');
   }
 

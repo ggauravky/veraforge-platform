@@ -12,7 +12,7 @@ import { submitOnboarding } from '@/lib/actions/onboarding';
 const onboardingSchema = z.object({
   fullName: z.string().min(2, 'Full Name must be at least 2 characters'),
   universityName: z.string().min(2, 'University Name must be at least 2 characters'),
-  graduationYear: z.number().min(2020, 'Year must be 2020 or later').max(2035, 'Year must be 2035 or earlier'),
+  graduationYear: z.string().regex(/^\d{4}$/, 'Must be a 4-digit year'),
   githubUrl: z.string().url('Invalid URL').regex(/github\.com/, 'Must be a GitHub profile URL (e.g. github.com/username)'),
   linkedinUrl: z.string().url('Invalid URL').regex(/linkedin\.com/, 'Must be a LinkedIn profile URL'),
   portfolioUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
@@ -39,7 +39,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
     defaultValues: {
       fullName: initialName,
       universityName: '',
-      graduationYear: new Date().getFullYear(),
+      graduationYear: new Date().getFullYear().toString(),
       githubUrl: '',
       linkedinUrl: '',
       portfolioUrl: '',
@@ -143,9 +143,9 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
             </label>
             <input
               id="graduationYear"
-              type="number"
+              type="text"
               placeholder="e.g. 2026"
-              {...register('graduationYear', { valueAsNumber: true })}
+              {...register('graduationYear')}
               className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-600 transition-all text-sm outline-none"
             />
             {errors.graduationYear && (

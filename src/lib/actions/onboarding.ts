@@ -9,7 +9,7 @@ import { currentUser } from '@clerk/nextjs/server';
 const onboardingSchema = z.object({
   fullName: z.string().min(2, 'Full Name must be at least 2 characters'),
   universityName: z.string().min(2, 'University Name must be at least 2 characters'),
-  graduationYear: z.number().min(2020, 'Year must be 2020 or later').max(2035, 'Year must be 2035 or earlier'),
+  graduationYear: z.string().regex(/^\d{4}$/, 'Must be a 4-digit year'),
   githubUrl: z.string().url('Invalid URL').regex(/github\.com/, 'Must be a GitHub profile URL'),
   linkedinUrl: z.string().url('Invalid URL').regex(/linkedin\.com/, 'Must be a LinkedIn profile URL'),
   portfolioUrl: z.string().url('Invalid URL').optional().or(z.literal('')),

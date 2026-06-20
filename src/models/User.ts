@@ -21,7 +21,7 @@ const UserSchema = new Schema<IUser>({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   universityName: { type: String },
-  graduationYear: { type: Number },
+  graduationYear: { type: String },
   githubUrl: { type: String },
   linkedinUrl: { type: String },
   portfolioUrl: { type: String },

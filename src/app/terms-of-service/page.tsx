@@ -1,23 +1,24 @@
 import Link from 'next/link';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
+import VeraForgeLogo from '@/components/VeraForgeLogo';
 
 export const dynamic = 'force-dynamic';
 
 export default function TermsOfServicePage() {
   return (
-    <div className="flex-1 flex flex-col bg-slate-950 relative overflow-hidden min-h-screen text-slate-350">
+    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-slate-950/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-slate-900 bg-cyber-navy-light/80 backdrop-blur-md relative z-10">
         <div className="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition-colors">
             <ArrowLeft className="w-4 h-4" />
             Back to Home
           </Link>
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-indigo-500" />
+            <VeraForgeLogo className="w-5 h-5" />
             <span className="font-extrabold text-lg tracking-wider text-white">VERAFORGE</span>
           </div>
         </div>
