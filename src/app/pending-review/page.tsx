@@ -30,15 +30,15 @@ export default async function PendingReviewPage() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-cyber-navy-light/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl">
+            <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
               <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
-              <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -50,8 +50,8 @@ export default async function PendingReviewPage() {
       {/* Status Card Panel */}
       <main className="flex-1 flex items-center justify-center p-6 relative z-10">
         {dbUser.accountStatus === 'rejected' ? (
-          <div className="w-full max-w-lg bg-slate-900/40 backdrop-blur-xl border border-red-950/30 rounded-3xl p-8 md:p-10 text-center shadow-2xl">
-            <div className="mx-auto w-16 h-16 bg-red-950/60 border border-red-500/20 rounded-2xl flex items-center justify-center mb-6">
+          <div className="w-full max-w-lg glass-panel border-red-950/30 rounded-3xl p-8 md:p-10 text-center shadow-2xl">
+            <div className="mx-auto w-16 h-16 bg-red-950/60 border border-red-500/20 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_15px_rgba(239,68,68,0.15)]">
               <XCircle className="w-8 h-8 text-red-500" />
             </div>
             
@@ -77,16 +77,16 @@ export default async function PendingReviewPage() {
             </div>
           </div>
         ) : (
-          <div className="w-full max-w-lg bg-slate-900/40 backdrop-blur-xl border border-slate-900 rounded-3xl p-8 md:p-10 text-center shadow-2xl">
-            <div className="mx-auto w-16 h-16 bg-emerald-950/60 border border-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 animate-pulse">
-              <Clock className="w-8 h-8 text-emerald-400" />
+          <div className="w-full max-w-lg glass-panel rounded-3xl p-8 md:p-10 text-center shadow-2xl">
+            <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/20 rounded-2xl flex items-center justify-center mb-6 animate-pulse shadow-[0_0_15px_rgba(0,255,255,0.08)]">
+              <Clock className="w-8 h-8 text-electric-cyan text-cyan-glow" />
             </div>
             
             <h2 className="text-2xl font-bold text-white mb-3">Application Under Review</h2>
             <p className="text-slate-400 text-sm leading-relaxed mb-6 font-light">
               Your profile (<span className="text-slate-300 font-medium">{dbUser.fullName}</span>) has been successfully recorded. An administrator is currently validating your credentials. 
             </p>
-            <div className="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 text-xs text-left text-slate-400 space-y-2.5 mb-8">
+            <div className="bg-cyber-navy-dark/65 border border-cyber-navy-light/40 rounded-2xl p-4 text-xs text-left text-slate-400 space-y-2.5 mb-8">
               <div className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">Submitted Metadata</div>
               <div className="flex justify-between">
                 <span>University:</span>
@@ -101,18 +101,18 @@ export default async function PendingReviewPage() {
                 <span className="text-slate-300 truncate max-w-[180px]">{dbUser.githubUrl}</span>
               </div>
             </div>
-
+ 
             <div className="flex flex-col gap-3">
               <a 
                 href="/pending-review" 
-                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-2"
+                className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(0,255,255,0.15)]"
               >
                 <RefreshCw className="w-4 h-4 animate-spin-slow" />
                 Refresh Review Status
               </a>
               <Link 
                 href="/" 
-                className="inline-flex items-center justify-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan transition-colors"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 Return to Home

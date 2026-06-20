@@ -39,12 +39,12 @@ export default async function OnboardingPage() {
       {/* Brand Header */}
       <div className="relative z-10 flex flex-col items-center mb-8">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg shadow-emerald-500/5">
+          <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg shadow-electric-cyan/5">
             <VeraForgeLogo className="w-6 h-6" />
           </div>
           <div>
             <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-            <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+            <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
           </div>
         </div>
       </div>

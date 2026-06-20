@@ -29,7 +29,7 @@ export default function RootLayout({
       appearance={{
         baseTheme: dark,
         variables: {
-          colorPrimary: '#10b981', // emerald-500
+          colorPrimary: '#00ffff', // electric cyan
         },
       }}
     >

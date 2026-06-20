@@ -1,12 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cyber-navy-dark: #0b131f;
-  --color-cyber-navy-light: #0f172a;
+  --color-cyber-navy-dark: #080f1a;
+  --color-cyber-navy-light: #0d1b2a;
+  --color-electric-cyan: #00ffff;
+  --color-electric-blue: #0ea5e9;
 }
 
 :root {
-  --background: #0b131f;
+  --background: #080f1a;
   --foreground: #f8fafc;
 }
 
@@ -15,16 +17,42 @@ body {
   color: var(--foreground);
 }
 
-/* Custom micro-animations */
+/* Glassmorphism Panel */
+.glass-panel {
+  background: rgba(13, 27, 42, 0.25);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(14, 165, 233, 0.1);
+}
+
+/* Neon Cyan Glow */
+.glow-cyan-hover {
+  transition: all 0.3s ease;
+}
+.glow-cyan-hover:hover {
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
+  border-color: rgba(0, 255, 255, 0.4);
+}
+
+.text-cyan-glow {
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+/* Custom neural-net animation */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.12; }
+  50% { opacity: 0.32; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 6s ease-in-out infinite;
+}
+
 @keyframes spin-slow {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .animate-spin-slow {
-  animation: spin-slow 12s linear infinite;
+  animation: spin-slow 15s linear infinite;
 }

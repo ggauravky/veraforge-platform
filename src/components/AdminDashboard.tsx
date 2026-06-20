@@ -203,19 +203,19 @@ export default function AdminDashboard({
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-slate-900 bg-cyber-navy-light/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg">
+            <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
               <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-indigo-400 font-medium bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full hidden sm:inline">
+            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,255,255,0.05)] hidden sm:inline">
               Super Admin Control
             </span>
             <button
@@ -224,7 +224,7 @@ export default function AdminDashboard({
                 router.push('/admin-login');
                 router.refresh();
               }}
-              className="text-xs text-red-400 hover:text-red-300 font-medium bg-slate-900 hover:bg-slate-850 border border-red-900/30 px-3.5 py-1.5 rounded-full transition-colors cursor-pointer"
+              className="text-xs text-red-400 hover:text-red-350 font-medium bg-cyber-navy-dark hover:bg-cyber-navy-light/40 border border-red-900/30 px-3.5 py-1.5 rounded-full transition-colors cursor-pointer"
             >
               Sign Out
             </button>
@@ -236,7 +236,7 @@ export default function AdminDashboard({
       <main className="flex-1 max-w-7xl mx-auto px-6 py-12 relative z-10 w-full">
         
         {/* Statistics & Notices */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10 pb-6 border-b border-slate-900">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10 pb-6 border-b border-cyber-navy-light/35">
           <div>
             <h2 className="text-3xl font-extrabold text-white">Platform Administration</h2>
             <p className="text-slate-400 text-sm font-light mt-1">
@@ -246,7 +246,7 @@ export default function AdminDashboard({
 
           <button 
             onClick={() => { router.refresh(); setActionSuccess('Sync completed.'); }}
-            className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-xl text-xs font-semibold text-slate-300 hover:text-white transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light border border-cyber-navy-light/40 rounded-xl text-xs font-semibold text-electric-cyan hover:text-white transition-all shadow-[0_0_10px_rgba(0,255,255,0.05)] cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Reload Data
@@ -262,26 +262,26 @@ export default function AdminDashboard({
         )}
 
         {actionSuccess && (
-          <div className="mb-6 p-4 bg-emerald-950/20 border border-emerald-900/40 rounded-xl text-emerald-300 text-xs font-bold flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+          <div className="mb-6 p-4 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+            <CheckCircle2 className="w-4 h-4 text-electric-cyan shrink-0" />
             <span>{actionSuccess}</span>
           </div>
         )}
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-slate-900 mb-8 gap-2">
+        <div className="flex border-b border-cyber-navy-light/35 mb-8 gap-2">
           <button
             onClick={() => setActiveTab('registrations')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all relative ${
+            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all relative cursor-pointer ${
               activeTab === 'registrations' 
-                ? 'border-indigo-500 text-white bg-indigo-500/5' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
+                : 'border-transparent text-slate-400 hover:text-slate-250'
             }`}
           >
             <UserPlus className="w-4 h-4" />
             Pending Approvals
             {pendingStudents.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-indigo-600 text-white text-[10px] font-extrabold rounded-full">
+              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.25)]">
                 {pendingStudents.length}
               </span>
             )}
@@ -289,16 +289,16 @@ export default function AdminDashboard({
 
           <button
             onClick={() => setActiveTab('submissions')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all ${
+            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'submissions' 
-                ? 'border-indigo-500 text-white bg-indigo-500/5' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
+                : 'border-transparent text-slate-400 hover:text-slate-250'
             }`}
           >
             <CheckSquare className="w-4 h-4" />
             Task Submissions
             {pendingSubmissions.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-amber-600 text-white text-[10px] font-extrabold rounded-full animate-pulse">
+              <span className="ml-1.5 px-2 py-0.5 bg-electric-blue text-white text-[10px] font-extrabold rounded-full animate-pulse">
                 {pendingSubmissions.length}
               </span>
             )}
@@ -306,16 +306,16 @@ export default function AdminDashboard({
 
           <button
             onClick={() => setActiveTab('graduations')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all ${
+            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'graduations' 
-                ? 'border-indigo-500 text-white bg-indigo-500/5' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
+                : 'border-transparent text-slate-400 hover:text-slate-250'
             }`}
           >
             <Award className="w-4 h-4" />
             Graduations
             {graduationCandidates.filter(c => !c.certificateId).length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-emerald-600 text-white text-[10px] font-extrabold rounded-full">
+              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.25)]">
                 {graduationCandidates.filter(c => !c.certificateId).length}
               </span>
             )}
@@ -323,16 +323,16 @@ export default function AdminDashboard({
 
           <button
             onClick={() => setActiveTab('students')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all ${
+            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'students' 
-                ? 'border-indigo-500 text-white bg-indigo-500/5' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
+                : 'border-transparent text-slate-400 hover:text-slate-250'
             }`}
           >
             <Users className="w-4 h-4" />
             Student Directory
             {allStudents.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-slate-800 text-slate-350 text-[10px] font-extrabold rounded-full">
+              <span className="ml-1.5 px-2 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/60 text-slate-300 text-[10px] font-extrabold rounded-full">
                 {allStudents.length}
               </span>
             )}
@@ -340,7 +340,7 @@ export default function AdminDashboard({
         </div>
 
         {/* Tab Panel contents */}
-        <div className="bg-slate-900/10 border border-slate-900 rounded-3xl p-6 shadow-xl min-h-[300px]">
+        <div className="glass-panel rounded-3xl p-6 shadow-xl min-h-[300px]">
           
           {/* TAB 1: PENDING STUDENTS */}
           {activeTab === 'registrations' && (
@@ -353,16 +353,16 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-900 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Education</th>
                       <th className="pb-4 font-semibold">Reference Profiles</th>
                       <th className="pb-4 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-900/50">
+                  <tbody className="divide-y divide-cyber-navy-light/25">
                     {pendingStudents.map((student) => (
-                      <tr key={student._id} className="hover:bg-slate-900/10 transition-colors">
+                      <tr key={student._id} className="hover:bg-cyber-navy-light/10 transition-colors">
                         <td className="py-4">
                           <div className="font-bold text-white text-base">{student.fullName}</div>
                           <div className="text-slate-400 text-xs mt-0.5">{student.email}</div>
@@ -376,7 +376,7 @@ export default function AdminDashboard({
                             href={student.githubUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-xs text-slate-400 hover:text-emerald-400 w-fit transition-colors"
+                            className="flex items-center gap-1 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
                           >
                             <Github className="w-3.5 h-3.5" />
                             GitHub Profile
@@ -385,7 +385,7 @@ export default function AdminDashboard({
                             href={student.linkedinUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-xs text-slate-400 hover:text-emerald-400 w-fit transition-colors"
+                            className="flex items-center gap-1 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
                           >
                             <Linkedin className="w-3.5 h-3.5" />
                             LinkedIn Profile
@@ -403,7 +403,7 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleApproveStudent(student._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-slate-950 disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer"
+                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.1)]"
                             >
                               {loadingId === student._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -432,22 +432,22 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-900 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Task Details</th>
                       <th className="pb-4 font-semibold">Deliverable Links</th>
                       <th className="pb-4 font-semibold text-right">Evaluation</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-900/50">
+                  <tbody className="divide-y divide-cyber-navy-light/25">
                     {pendingSubmissions.map((sub) => (
-                      <tr key={sub._id} className="hover:bg-slate-900/10 transition-colors">
+                      <tr key={sub._id} className="hover:bg-cyber-navy-light/10 transition-colors">
                         <td className="py-4">
                           <div className="font-bold text-white text-base">{sub.userId?.fullName || 'Unknown Student'}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">{sub.userId?.email}</div>
+                          <div className="text-slate-505 text-xs mt-0.5">{sub.userId?.email}</div>
                         </td>
                         <td className="py-4">
-                          <span className="inline-block px-2.5 py-0.5 bg-slate-950 border border-slate-800 rounded-full text-slate-400 font-medium text-[10px] tracking-wide mb-1">
+                          <span className="inline-block px-2.5 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/50 rounded-full text-slate-400 font-medium text-[10px] tracking-wide mb-1">
                             Step {sub.taskId?.sequenceOrder}
                           </span>
                           <div className="text-slate-200 font-bold text-sm">{sub.taskId?.title}</div>
@@ -457,9 +457,9 @@ export default function AdminDashboard({
                             href={sub.submissionRepoLink} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-emerald-400 w-fit transition-colors"
+                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
                           >
-                            <Github className="w-3.5 h-3.5 text-slate-500" />
+                            <Github className="w-3.5 h-3.5 text-slate-550" />
                             Repository Code
                             <ExternalLink className="w-3 h-3" />
                           </a>
@@ -467,9 +467,9 @@ export default function AdminDashboard({
                             href={sub.submissionLiveLink} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-emerald-400 w-fit transition-colors"
+                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
                           >
-                            <Globe className="w-3.5 h-3.5 text-slate-500" />
+                            <Globe className="w-3.5 h-3.5 text-slate-550" />
                             Live Host Application
                             <ExternalLink className="w-3 h-3" />
                           </a>
@@ -486,7 +486,7 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleApproveTask(sub._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-800 text-slate-950 disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer"
+                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.1)]"
                             >
                               {loadingId === sub._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -515,32 +515,32 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-900 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Institution</th>
                       <th className="pb-4 font-semibold">Credential State</th>
                       <th className="pb-4 font-semibold text-right">Certificate Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-900/50">
+                  <tbody className="divide-y divide-cyber-navy-light/25">
                     {graduationCandidates.map((candidate) => (
-                      <tr key={candidate._id} className="hover:bg-slate-900/10 transition-colors">
+                      <tr key={candidate._id} className="hover:bg-cyber-navy-light/10 transition-colors">
                         <td className="py-4">
                           <div className="font-bold text-white text-base">{candidate.fullName}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">{candidate.email}</div>
+                          <div className="text-slate-505 text-xs mt-0.5">{candidate.email}</div>
                         </td>
                         <td className="py-4">
                           <div className="text-slate-300 font-medium">{candidate.universityName}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">Class of {candidate.graduationYear}</div>
+                          <div className="text-slate-505 text-xs mt-0.5">Class of {candidate.graduationYear}</div>
                         </td>
                         <td className="py-4">
                           {candidate.certificateId ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-950/40 border border-emerald-900/30 text-emerald-400 text-xs font-semibold rounded-full">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/10 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.05)]">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               Issued
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-950/40 border border-indigo-900/30 text-indigo-400 text-xs font-semibold rounded-full animate-pulse">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-blue/15 border border-electric-blue/20 text-electric-blue text-xs font-semibold rounded-full animate-pulse">
                               Ready for Certificate
                             </span>
                           )}
@@ -549,7 +549,7 @@ export default function AdminDashboard({
                           {candidate.certificateId ? (
                             <a
                               href={`/verify/${candidate.certificateId}`}
-                              className="inline-flex items-center gap-1.5 px-4 py-2 border border-slate-800 hover:border-slate-700 bg-slate-900/60 hover:bg-slate-900 text-slate-300 hover:text-white text-xs font-bold rounded-lg transition-all"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 border border-cyber-navy-light/40 hover:border-cyber-navy-light bg-cyber-navy-dark hover:bg-cyber-navy-light/20 text-slate-300 hover:text-white text-xs font-bold rounded-lg transition-all"
                             >
                               Verify Portal
                               <ExternalLink className="w-3.5 h-3.5" />
@@ -558,7 +558,7 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleIssueCertificate(candidate._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-extrabold text-xs rounded-lg shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/30 transition-all cursor-pointer"
+                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.1)]"
                             >
                               {loadingId === candidate._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -587,16 +587,16 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-900 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student Name / Email</th>
                       <th className="pb-4 font-semibold">Onboarding Details</th>
                       <th className="pb-4 font-semibold">Verification Status</th>
                       <th className="pb-4 font-semibold text-right">Directory Management</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-900/50">
+                  <tbody className="divide-y divide-cyber-navy-light/25">
                     {allStudents.map((student) => (
-                      <tr key={student._id} className="hover:bg-slate-900/10 transition-colors">
+                      <tr key={student._id} className="hover:bg-cyber-navy-light/10 transition-colors">
                         <td className="py-4">
                           <div className="font-bold text-white text-base">{student.fullName}</div>
                           <div className="text-slate-450 text-xs mt-0.5">{student.email}</div>
@@ -613,12 +613,12 @@ export default function AdminDashboard({
                         </td>
                         <td className="py-4">
                           {student.accountStatus === 'active' && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-950/40 border border-emerald-900/30 text-emerald-400 text-xs font-semibold rounded-full">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/15 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.05)]">
                               Active Student
                             </span>
                           )}
                           {student.accountStatus === 'pending_approval' && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-indigo-950/40 border border-indigo-900/30 text-indigo-400 text-xs font-semibold rounded-full animate-pulse">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-blue/15 border border-electric-blue/20 text-electric-blue text-xs font-semibold rounded-full animate-pulse">
                               Pending Review
                             </span>
                           )}
@@ -634,7 +634,7 @@ export default function AdminDashboard({
                               <button
                                 onClick={() => handleResetTasks(student._id)}
                                 disabled={loadingId !== null}
-                                className="px-3 py-1.5 border border-indigo-900/30 text-indigo-450 bg-indigo-950/10 hover:bg-indigo-950/20 disabled:opacity-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                                className="px-3 py-1.5 border border-cyber-navy-light/30 text-slate-350 bg-cyber-navy-dark hover:bg-cyber-navy-light/35 disabled:opacity-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
                                 title="Reset student's task progress and re-assign tasks"
                               >
                                 <RotateCw className="w-3.5 h-3.5" />
@@ -666,16 +666,16 @@ export default function AdminDashboard({
       {feedbackTaskId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-cyber-navy-dark/80 backdrop-blur-md"
             onClick={() => { if (loadingId === null) setFeedbackTaskId(null); }}
           />
 
-          <div className="relative bg-slate-900 border border-slate-850 rounded-3xl p-6 w-full max-w-md shadow-2xl animate-in fade-in zoom-in-95 duration-150">
+          <div className="relative glass-panel rounded-3xl p-6 w-full max-w-md shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55">
             <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-indigo-400" />
+              <MessageSquare className="w-5 h-5 text-electric-cyan text-cyan-glow" />
               Request Assignment Revision
             </h3>
-            <p className="text-slate-400 text-xs font-light leading-relaxed mb-4">
+            <p className="text-slate-405 text-xs font-light leading-relaxed mb-4">
               Explain why this submission requires revisions and what specific updates the student must apply.
             </p>
 
@@ -685,7 +685,7 @@ export default function AdminDashboard({
                 onChange={(e) => setAdminFeedback(e.target.value)}
                 placeholder="e.g. Please refactor your CSS layout to be fully responsive. The calculator grid overflows on narrow screens."
                 rows={4}
-                className="w-full bg-slate-950 border border-slate-850 focus:border-indigo-500 rounded-xl p-3 text-slate-100 placeholder-slate-650 text-xs outline-none resize-none"
+                className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-600 text-xs outline-none resize-none"
               />
 
               <div className="flex items-center justify-end gap-2.5 mt-2">
@@ -699,7 +699,7 @@ export default function AdminDashboard({
                 <button
                   onClick={handleRejectTaskSubmit}
                   disabled={loadingId !== null}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white text-xs font-extrabold rounded-lg shadow-lg shadow-indigo-500/20 transition-all cursor-pointer"
+                  className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark text-xs font-extrabold rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
                 >
                   {loadingId === feedbackTaskId ? (
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />

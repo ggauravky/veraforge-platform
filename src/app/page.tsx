@@ -2,51 +2,110 @@ import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { 
   ArrowRight, CheckCircle2, Award, Lock, Sparkles, 
-  Layers, CheckSquare, Zap, Eye, CheckCircle 
+  Layers, CheckSquare, Zap, Eye, CheckCircle, ShieldAlert 
 } from 'lucide-react';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
+
+export const dynamic = 'force-dynamic';
+
+function NeuralNetworkBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <svg className="absolute w-full h-full opacity-[0.06] animate-pulse-slow" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 0 50 L 2000 50 M 0 180 L 2000 180 M 0 310 L 2000 310 M 0 440 L 2000 440 M 0 570 L 2000 570 M 0 700 L 2000 700" stroke="#00ffff" strokeWidth="0.5" />
+        <path d="M 120 0 L 120 2000 M 340 0 L 340 2000 M 560 0 L 560 2000 M 780 0 L 780 2000 M 1000 0 L 1000 2000 M 1220 0 L 1220 2000" stroke="#0ea5e9" strokeWidth="0.5" />
+        
+        <line x1="120" y1="180" x2="340" y2="310" stroke="#00ffff" strokeWidth="1" strokeDasharray="3 3" />
+        <line x1="340" y1="310" x2="560" y2="180" stroke="#00ffff" strokeWidth="1.5" />
+        <line x1="560" y1="180" x2="780" y2="440" stroke="#0ea5e9" strokeWidth="1" />
+        <line x1="340" y1="310" x2="340" y2="570" stroke="#00ffff" strokeWidth="0.75" />
+        <line x1="780" y1="440" x2="1000" y2="310" stroke="#00ffff" strokeWidth="1.5" />
+        <line x1="1000" y1="310" x2="1220" y2="440" stroke="#0ea5e9" strokeWidth="1" />
+        
+        <circle cx="120" cy="180" r="3.5" fill="#00ffff" />
+        <circle cx="340" cy="310" r="5" fill="#0ea5e9" />
+        <circle cx="560" cy="180" r="3.5" fill="#00ffff" />
+        <circle cx="780" cy="440" r="6" fill="#00ffff" />
+        <circle cx="340" cy="570" r="4.5" fill="#0ea5e9" />
+        <circle cx="1000" cy="310" r="4" fill="#00ffff" />
+        <circle cx="1220" cy="440" r="5.5" fill="#0ea5e9" />
+      </svg>
+    </div>
+  );
+}
+
+function ConvergingHeroGraphic() {
+  return (
+    <div className="relative w-full max-w-[480px] h-[340px] mx-auto flex items-center justify-center pointer-events-none mt-12 lg:mt-0">
+      <div className="absolute w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
+      
+      <svg className="w-full h-full" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="cyanBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#00ffff" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.2" />
+          </linearGradient>
+        </defs>
+        
+        {/* Connection flow streams converging to center */}
+        <path d="M 40 40 C 140 40, 140 150, 200 150" stroke="url(#cyanBlueGrad)" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 40 100 C 140 100, 140 150, 200 150" stroke="url(#cyanBlueGrad)" strokeWidth="1.5" strokeDasharray="3 3" />
+        <path d="M 40 260 C 140 260, 140 150, 200 150" stroke="url(#cyanBlueGrad)" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 40 200 C 140 200, 140 150, 200 150" stroke="url(#cyanBlueGrad)" strokeWidth="2" />
+        
+        <path d="M 360 40 C 260 40, 260 150, 200 150" stroke="url(#cyanBlueGrad)" strokeWidth="2.5" strokeLinecap="round" />
+        <path d="M 360 260 C 260 260, 260 150, 200 150" stroke="url(#cyanBlueGrad)" strokeWidth="1.5" strokeDasharray="4 2" />
+        
+        {/* Main Career Convergence Node */}
+        <circle cx="200" cy="150" r="16" fill="#080f1a" stroke="#00ffff" strokeWidth="3.5" className="drop-shadow-[0_0_15px_#00ffff]" />
+        <circle cx="200" cy="150" r="7" fill="#00ffff" />
+        
+        {/* Concentric neural shells */}
+        <circle cx="200" cy="150" r="32" stroke="#0ea5e9" strokeWidth="1" strokeOpacity="0.4" strokeDasharray="5 3" />
+        <circle cx="200" cy="150" r="50" stroke="#00ffff" strokeWidth="1" strokeOpacity="0.2" />
+      </svg>
+    </div>
+  );
+}
 
 export default async function Home() {
   const { userId } = await auth();
   const isUserSignedIn = !!userId;
 
   return (
-    <div className="flex-1 flex flex-col bg-slate-950 relative overflow-hidden min-h-screen">
-      {/* Premium background mesh & grid patterns */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_35%,#000_70%,transparent_100%)] pointer-events-none" />
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen">
+      <NeuralNetworkBackground />
 
-      {/* Header */}
-      <header className="border-b border-slate-900 bg-cyber-navy-light/70 backdrop-blur-md relative z-20">
+      {/* Header Navigation */}
+      <header className="border-b border-slate-900 bg-cyber-navy-light/40 backdrop-blur-xl relative z-20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-slate-900/60 border border-slate-800 rounded-xl shadow-lg shadow-emerald-500/5">
+            <div className="p-2.5 bg-cyber-navy-dark border border-sky-950/80 rounded-xl shadow-lg shadow-cyan-500/5">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[8px] text-emerald-450 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 via-slate-200 to-slate-400 bg-clip-text text-transparent">VERAFORGE</span>
+              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
 
           <nav className="flex items-center gap-6 md:gap-8">
             <Link 
               href="/about"
-              className="text-xs text-slate-450 hover:text-slate-100 font-bold tracking-wider uppercase transition-colors"
+              className="text-xs text-slate-400 hover:text-electric-cyan font-bold tracking-wider uppercase transition-colors"
             >
               About
             </Link>
             <Link 
               href="/contact"
-              className="text-xs text-slate-455 hover:text-slate-100 font-bold tracking-wider uppercase transition-colors"
+              className="text-xs text-slate-400 hover:text-electric-cyan font-bold tracking-wider uppercase transition-colors"
             >
               Contact
             </Link>
             {isUserSignedIn ? (
               <Link 
                 href="/dashboard"
-                className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-md transition-all duration-300"
+                className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-sky-600 hover:from-sky-600 hover:to-cyan-500 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg shadow-cyan-500/10 hover:shadow-cyan-500/30 transition-all duration-300"
               >
                 Go to Dashboard
               </Link>
@@ -60,7 +119,7 @@ export default async function Home() {
                 </Link>
                 <Link 
                   href="/sign-up"
-                  className="px-5 py-2.5 bg-slate-900 hover:bg-slate-850 text-indigo-400 border border-indigo-500/20 hover:border-indigo-500/40 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5"
+                  className="px-5 py-2.5 bg-cyber-navy-light/60 hover:bg-cyber-navy-light text-electric-cyan border border-electric-cyan/20 hover:border-electric-cyan/50 font-bold text-xs rounded-xl transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(0,255,255,0.02)] hover:shadow-[0_0_15px_rgba(0,255,255,0.1)]"
                 >
                   Apply as Student
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -72,223 +131,219 @@ export default async function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-28 pb-20 flex flex-col items-center text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-950/40 border border-indigo-500/20 text-indigo-300 rounded-full text-xs font-semibold mb-8 backdrop-blur-sm shadow-inner shadow-indigo-500/5">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-          <span>Next-Generation Virtual Internship Track</span>
+      <section className="relative z-10 max-w-7xl mx-auto px-6 pt-24 pb-20 w-full grid lg:grid-cols-12 gap-8 items-center">
+        <div className="lg:col-span-7 flex flex-col items-start text-left">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-cyan-950/40 border border-electric-cyan/25 text-electric-cyan rounded-full text-xs font-semibold mb-8 backdrop-blur-md shadow-[0_0_15px_rgba(0,255,255,0.05)]">
+            <Sparkles className="w-3.5 h-3.5 text-electric-cyan" />
+            <span>AI-Driven Cryptographic Internship Validation</span>
+          </div>
+
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight text-white mb-6 leading-[1.08] uppercase">
+            Launch Your Tech <br />
+            Career with <br />
+            <span className="bg-gradient-to-r from-electric-cyan via-sky-400 to-indigo-300 bg-clip-text text-transparent text-cyan-glow">
+              Verified Experience.
+            </span>
+          </h1>
+
+          <p className="text-slate-450 text-base md:text-lg max-w-xl mb-10 leading-relaxed font-light">
+            Skip paper credentials. Prove your skills by executing strict, sandboxed curriculum tracks reviewed by experts, securing a verified neural network portfolio.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto">
+            {isUserSignedIn ? (
+              <Link 
+                href="/dashboard"
+                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-electric-cyan to-sky-500 hover:from-sky-500 hover:to-electric-cyan text-slate-950 font-extrabold rounded-xl shadow-xl shadow-cyan-500/10 hover:shadow-cyan-500/30 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer"
+              >
+                Internship Dashboard
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            ) : (
+              <>
+                <Link 
+                  href="/sign-up"
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-electric-cyan to-sky-500 hover:from-sky-500 hover:to-electric-cyan text-slate-950 font-extrabold rounded-xl shadow-xl shadow-cyan-500/10 hover:shadow-cyan-500/30 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 text-xs uppercase tracking-wider cursor-pointer"
+                >
+                  Apply as Student
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link 
+                  href="/sign-in"
+                  className="w-full sm:w-auto px-8 py-4 bg-cyber-navy-light/30 hover:bg-cyber-navy-light/60 text-slate-300 hover:text-white font-bold rounded-xl border border-slate-800 hover:border-slate-700 transition-all text-xs uppercase tracking-wider"
+                >
+                  Sign In
+                </Link>
+              </>
+            )}
+          </div>
         </div>
 
-        <h1 className="text-5xl md:text-8xl font-black tracking-tight text-white mb-6 max-w-5xl leading-[1.05] uppercase">
-          Launch Your Tech Career With <br />
-          <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-300 bg-clip-text text-transparent">
-            Verified Experience.
-          </span>
-        </h1>
-
-        <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-12 leading-relaxed font-light">
-          Skip the boilerplate. Join VeraForge to execute rigorous, sequential system architecture tasks reviewed by experts, and secure a cryptographically verifiable internship certificate.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          {isUserSignedIn ? (
-            <Link 
-              href="/dashboard"
-              className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-extrabold rounded-xl shadow-xl shadow-indigo-500/10 hover:shadow-indigo-500/25 hover:scale-[1.02] transition-all flex items-center gap-2 text-sm uppercase tracking-wider"
-            >
-              Enter Internship Dashboard
-              <ArrowRight className="w-4.5 h-4.5" />
-            </Link>
-          ) : (
-            <>
-              <Link 
-                href="/sign-up"
-                className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-500 text-white font-extrabold rounded-xl shadow-xl shadow-indigo-500/10 hover:shadow-indigo-500/25 hover:scale-[1.02] transition-all flex items-center gap-2 text-sm uppercase tracking-wider"
-              >
-                Apply as Student
-                <ArrowRight className="w-4.5 h-4.5" />
-              </Link>
-              <Link 
-                href="/sign-in"
-                className="px-8 py-4 bg-slate-900/60 hover:bg-slate-850/80 text-slate-300 hover:text-white font-bold rounded-xl border border-slate-850 transition-all text-sm uppercase tracking-wider"
-              >
-                Sign In
-              </Link>
-            </>
-          )}
+        <div className="lg:col-span-5 w-full flex items-center justify-center">
+          <ConvergingHeroGraphic />
         </div>
       </section>
 
       {/* Trust Badges Banner */}
-      <section className="relative z-10 border-y border-slate-900/60 bg-slate-950/40 backdrop-blur-sm py-10">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-slate-500 text-[10px] font-bold tracking-[0.25em] uppercase mb-8">
-            Trusted by developers from leading industry teams
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20 opacity-40 hover:opacity-60 transition-opacity">
-            {/* Logo 1 - Acme */}
-            <svg className="h-6 w-auto text-slate-300 fill-current" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 5 L5 25 H25 Z M42 22 L38 12 L34 22 H42 M38 8 L46 25 H38 H30 Z M58 8 C62 8 66 10 66 14 C66 18 62 20 58 20 H54 V25 H50 V8 H58 M58 12 H54 V16 H58 C60 16 62 15 62 14 C62 13 60 12 58 12 Z M76 8 C80 8 83 10 85 13 L81 16 C80 14 78 12 76 12 C72 12 70 15 70 18 C70 21 72 24 76 24 C78 24 80 22 81 20 L85 23 C83 26 80 28 76 28 C69 28 65 23 65 18 C65 13 69 8 76 8 Z M95 8 H105 V12 H99 V15 H103 V18 H99 V21 H105 V25 H95 V8 Z" />
+      <section className="relative z-10 border-y border-slate-900/60 bg-cyber-navy-light/20 backdrop-blur-sm py-8">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-widest">
+            Interns Placed At Leading Companies
+          </span>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-40">
+            {/* Logo 1 */}
+            <svg className="h-6 w-20 text-sky-400" viewBox="0 0 100 30" fill="currentColor">
+              <rect x="0" y="5" width="20" height="20" rx="3" />
+              <text x="28" y="20" fontSize="13" fontWeight="bold">TECHNE</text>
             </svg>
-            {/* Logo 2 - Globex */}
-            <svg className="h-6 w-auto text-slate-300 fill-current" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 15 C15 22 20 27 27 27 C34 27 39 22 39 15 C39 8 34 3 27 3 C20 3 15 8 15 15 Z M27 6 C32 6 36 10 36 15 C36 20 32 24 27 24 C22 24 18 20 18 15 C18 10 22 6 27 6 Z M48 8 H52 V22 H60 V25 H48 V8 Z M70 8 C75 8 79 10 79 14 C79 18 75 20 70 20 H66 V25 H62 V8 H70 M70 12 H66 V16 H70 C72 16 74 15 74 14 C74 13 72 12 70 12 Z M86 8 H98 V12 H90 V15 H96 V18 H90 V21 H98 V25 H86 V8 Z M106 8 L101 16 L106 25 H101 L97.5 19.5 L94 25 H89 L94 16 L89 8 H94 L97.5 13.5 L101 8 H106 Z" />
+            {/* Logo 2 */}
+            <svg className="h-6 w-20 text-sky-400" viewBox="0 0 100 30" fill="currentColor">
+              <circle cx="15" cy="15" r="10" />
+              <text x="32" y="20" fontSize="13" fontWeight="bold">CORE</text>
             </svg>
-            {/* Logo 3 - Initech */}
-            <svg className="h-6 w-auto text-slate-300 fill-current" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10 8 H14 V25 H10 V8 Z M22 8 L32 20 V8 H36 V25 H32 L22 13 V25 H18 V8 H22 Z M44 8 H48 V25 H44 V8 Z M58 8 H70 V12 H64 V25 H60 V12 H58 V8 Z M76 8 H88 V12 H80 V15 H86 V18 H80 V21 H88 V25 H76 V8 Z M98 8 C103 8 107 10 109 13 L105 16 C104 14 102 12 98 12 C94 12 92 15 92 18 C92 21 94 24 98 24 C102 24 104 22 105 20 L109 23 C107 26 103 28 98 28 C91 28 87 23 87 18 C87 13 91 8 98 8 Z" />
+            {/* Logo 3 */}
+            <svg className="h-6 w-20 text-sky-400" viewBox="0 0 100 30" fill="currentColor">
+              <polygon points="15,5 25,25 5,25" />
+              <text x="35" y="20" fontSize="13" fontWeight="bold">APEX</text>
             </svg>
-            {/* Logo 4 - Stark */}
-            <svg className="h-6 w-auto text-slate-300 fill-current" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 8 H28 V12 H20 V25 H16 V12 H12 V8 Z M34 8 H46 V12 H38 V15 H44 V18 H38 V21 H46 V25 H34 V8 Z M58 8 L54 18 L50 8 H45 L52 25 H56 L63 8 H58 Z M72 8 C76 8 80 10 80 14 C80 18 76 20 72 20 H68 V25 H64 V8 H72 M72 12 H68 V16 H72 C74 16 76 15 76 14 C76 13 74 12 72 12 Z M84 8 H88 V25 H84 V8 Z M96 8 L104 16 V8 H108 V25 H104 L96 17 V25 H92 V8 H96 Z" />
+            {/* Logo 4 */}
+            <svg className="h-6 w-20 text-sky-400" viewBox="0 0 100 30" fill="currentColor">
+              <path d="M5,15 L15,5 L25,15 L15,25 Z" />
+              <text x="35" y="20" fontSize="13" fontWeight="bold">NODE</text>
             </svg>
           </div>
         </div>
       </section>
 
-      {/* The Selection Process Section */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 py-28 w-full">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
-            The Selection Process
+      {/* Selection Process Glowing Vertical Timeline */}
+      <section className="relative z-10 max-w-6xl mx-auto px-6 py-24 w-full">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-xs text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">
+            Admission Pipeline
+          </span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-3 uppercase tracking-tight">
+            Our Automated Verification Flow
           </h2>
-          <p className="text-slate-400 text-sm mt-3 font-light max-w-lg mx-auto">
-            A linear progression designed to benchmark, test, and authenticate software engineers.
+          <p className="text-slate-450 text-sm font-light mt-3 leading-relaxed">
+            A secure vetting roadmap verifying educational background parameters, repository builds, and graduations.
           </p>
         </div>
 
-        <div className="relative border-l border-slate-900 max-w-4xl mx-auto pl-8 md:pl-12 space-y-16">
-          {/* Step 1 */}
-          <div className="relative">
-            {/* Glowing timeline dot */}
-            <div className="absolute -left-[41px] md:-left-[57px] top-1.5 w-6 h-6 bg-slate-950 border border-slate-900 flex items-center justify-center rounded-full">
-              <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse" />
-            </div>
-            <div className="bg-slate-900/10 border border-slate-900 rounded-3xl p-6 md:p-8 hover:border-slate-850 transition-colors">
-              <span className="text-[10px] text-indigo-400 font-extrabold uppercase tracking-[0.2em]">Step 01</span>
-              <h3 className="text-xl font-bold text-white mt-1">Application & Review</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed">
-                Submit your credentials, educational details, and professional portfolio link. Our administration reviews every applicant profile against academic and project benchmarks to grant platform access.
-              </p>
-            </div>
-          </div>
+        <div className="relative">
+          {/* Vertical timeline center line */}
+          <div className="absolute left-6 md:left-1/2 top-4 bottom-4 w-0.5 bg-gradient-to-b from-electric-cyan via-sky-600 to-indigo-950 pointer-events-none" />
 
-          {/* Step 2 */}
-          <div className="relative">
-            {/* Glowing timeline dot */}
-            <div className="absolute -left-[41px] md:-left-[57px] top-1.5 w-6 h-6 bg-slate-950 border border-slate-900 flex items-center justify-center rounded-full">
-              <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full" />
-            </div>
-            <div className="bg-slate-900/10 border border-slate-900 rounded-3xl p-6 md:p-8 hover:border-slate-850 transition-colors">
-              <span className="text-[10px] text-indigo-400 font-extrabold uppercase tracking-[0.2em]">Step 02</span>
-              <h3 className="text-xl font-bold text-white mt-1">Sequential Execution</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed">
-                Unlock real-world architectural assignments one-by-one. Build responsive calculators, construct full-stack databases, or optimize APIs, deploying them to public servers for testing.
-              </p>
-            </div>
-          </div>
+          {/* Steps */}
+          <div className="space-y-12">
+            {[
+              {
+                step: '01',
+                title: 'Onboarding & Validation',
+                description: 'Sync your account via Clerk and submit your academic coordinates, GitHub handle, and portfolio metrics for administrator verification.',
+                tag: 'Step 1: Security Audit',
+                align: 'left'
+              },
+              {
+                step: '02',
+                title: 'Track Specialization & Sandbox',
+                description: 'Select your internship category (AI, Data Science, Web Dev, Backend). Instantly unlock sequential sandbox challenges requiring active repositories and live links.',
+                tag: 'Step 2: Practical Lab',
+                align: 'right'
+              },
+              {
+                step: '03',
+                title: 'Verification & Graduation',
+                description: 'Upon successful task completion, receive a unique cryptographic UUID and download your verified A4 landscape certificate registered on the platform registry.',
+                tag: 'Step 3: Verification',
+                align: 'left'
+              }
+            ].map((item, idx) => (
+              <div 
+                key={idx} 
+                className={`relative flex flex-col md:flex-row items-start ${
+                  item.align === 'right' ? 'md:flex-row-reverse' : ''
+                }`}
+              >
+                {/* Timeline node icon */}
+                <div className="absolute left-6 md:left-1/2 -translate-x-[11px] w-6 h-6 rounded-full bg-cyber-navy-dark border-[3px] border-electric-cyan shadow-[0_0_10px_#00ffff] flex items-center justify-center z-10" />
 
-          {/* Step 3 */}
-          <div className="relative">
-            {/* Glowing timeline dot */}
-            <div className="absolute -left-[41px] md:-left-[57px] top-1.5 w-6 h-6 bg-slate-950 border border-slate-900 flex items-center justify-center rounded-full">
-              <div className="w-2.5 h-2.5 bg-indigo-500 rounded-full" />
-            </div>
-            <div className="bg-slate-900/10 border border-slate-900 rounded-3xl p-6 md:p-8 hover:border-slate-850 transition-colors">
-              <span className="text-[10px] text-indigo-400 font-extrabold uppercase tracking-[0.2em]">Step 03</span>
-              <h3 className="text-xl font-bold text-white mt-1">Verified Credentialing</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed">
-                After completing your track, our team reviews each submission. Approved students receive a cryptographically signed digital certificate verifying their skills to prospective employers.
-              </p>
-            </div>
+                {/* Card Container */}
+                <div className="w-full md:w-1/2 pl-12 md:pl-0 md:px-8">
+                  <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/30 hover:shadow-[0_0_20px_rgba(0,252,255,0.06)] transition-all duration-300">
+                    <span className="text-[9px] text-electric-cyan font-bold tracking-widest uppercase block mb-2">
+                      {item.tag}
+                    </span>
+                    <h3 className="text-xl font-bold text-white mb-3">
+                      {item.title}
+                    </h3>
+                    <p className="text-slate-450 text-xs font-light leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="hidden md:block w-1/2" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Feature Bento Grid Section */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 py-28 w-full">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
-            High-Performance Internship Infrastructure
+      {/* Features Bento Grid */}
+      <section className="relative z-10 max-w-6xl mx-auto px-6 pb-24 w-full">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-xs text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">
+            Core Mechanics
+          </span>
+          <h2 className="text-3xl font-extrabold text-white mt-3 uppercase tracking-tight">
+            Security Shielded Features
           </h2>
-          <p className="text-slate-400 text-sm mt-3 font-light max-w-lg mx-auto">
-            Everything you need to test code, check deployment integrity, and authenticate records.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Card 1: Automated Review */}
-          <div className="md:col-span-2 bg-slate-900/10 border border-slate-900 rounded-3xl p-8 hover:border-slate-850/80 transition-all flex flex-col justify-between group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors pointer-events-none" />
-            <div>
-              <div className="p-3 bg-indigo-950/40 border border-indigo-900/30 w-fit rounded-2xl mb-6">
-                <CheckSquare className="w-6 h-6 text-indigo-400" />
+        <div className="grid md:grid-cols-3 gap-6">
+          {[
+            {
+              title: 'Rigorous Sandbox Tracks',
+              description: 'Four specialized tracks loaded with progressive easy/hard challenges mapping capabilities directly to repository commits.',
+              icon: Layers,
+              badge: '4 Tracks Available'
+            },
+            {
+              title: 'Automated Admin Review',
+              description: 'Clean administrative reviews interface. Review task repositories, provide constructive feedback, and unlock next-stage tasks instantly.',
+              icon: CheckSquare,
+              badge: 'Live Evaluation'
+            },
+            {
+              title: 'Cryptographic Validation',
+              description: 'Graduation candidate directories generate landscape completion certificates with verification ID lookups.',
+              icon: Award,
+              badge: 'A4 Landscape PDF'
+            }
+          ].map((item, idx) => (
+            <div 
+              key={idx}
+              className="glass-panel rounded-3xl p-8 flex flex-col justify-between hover:border-electric-cyan/30 hover:shadow-[0_0_25px_rgba(0,252,255,0.06)] transition-all duration-300 relative group"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 pointer-events-none transition-colors" />
+              <div>
+                <div className="p-3 bg-cyber-navy-light/60 border border-slate-800/80 w-fit rounded-2xl mb-6">
+                  <item.icon className="w-6 h-6 text-electric-cyan" />
+                </div>
+                <h3 className="text-lg font-bold text-white tracking-tight">{item.title}</h3>
+                <p className="text-slate-400 text-xs font-light mt-3 leading-relaxed">
+                  {item.description}
+                </p>
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Structured Admin Evaluation</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed max-w-md">
-                No automatic machine approvals. Every Github repository link and codebase submission goes through an active administrator evaluation queue. Receive actionable code reviews.
-              </p>
-            </div>
-            <div className="mt-8 flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
-              <span>Human-in-the-loop validation</span>
-              <CheckCircle className="w-4 h-4" />
-            </div>
-          </div>
-
-          {/* Card 2: Live URL Tracking */}
-          <div className="bg-slate-900/10 border border-slate-900 rounded-3xl p-8 hover:border-slate-850/80 transition-all flex flex-col justify-between group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none" />
-            <div>
-              <div className="p-3 bg-indigo-950/40 border border-indigo-900/30 w-fit rounded-2xl mb-6">
-                <Zap className="w-6 h-6 text-indigo-400" />
+              <div className="mt-8 text-[9px] text-slate-500 font-bold uppercase tracking-wider">
+                <span>{item.badge}</span>
               </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Live URL Tracking</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed">
-                Submit repository code and live URL links together. Our reviewers check actual, operating production apps running live on modern platforms.
-              </p>
             </div>
-            <div className="mt-8 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-              <span>Vercel / Netlify / Render supported</span>
-            </div>
-          </div>
-
-          {/* Card 3: Public Verification */}
-          <div className="bg-slate-900/10 border border-slate-900 rounded-3xl p-8 hover:border-slate-850/80 transition-all flex flex-col justify-between group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl pointer-events-none" />
-            <div>
-              <div className="p-3 bg-indigo-950/40 border border-indigo-900/30 w-fit rounded-2xl mb-6">
-                <Award className="w-6 h-6 text-indigo-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Public Verification</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed">
-                Generate high-fidelity completion certificates with a unique ID searchable on the platform registry for instant background checks.
-              </p>
-            </div>
-            <div className="mt-8 text-[10px] text-slate-500 font-bold uppercase tracking-wider">
-              <span>Verifiable Cryptographic UUIDs</span>
-            </div>
-          </div>
-
-          {/* Card 4: Enterprise Access Controls */}
-          <div className="md:col-span-2 bg-slate-900/10 border border-slate-900 rounded-3xl p-8 hover:border-slate-850/80 transition-all flex flex-col justify-between group relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-colors pointer-events-none" />
-            <div>
-              <div className="p-3 bg-indigo-950/40 border border-indigo-900/30 w-fit rounded-2xl mb-6">
-                <Lock className="w-6 h-6 text-indigo-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-white tracking-tight">Administrative Control Gateway</h3>
-              <p className="text-slate-400 text-sm font-light mt-3 leading-relaxed max-w-md">
-                Admin controls are shielded by secure server-side session controls and secure cookies. Separate credentials lock access to student registries, assignment evaluations, and credential issuance.
-              </p>
-            </div>
-            <div className="mt-8 flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
-              <span>HTTP-Only Security Shield</span>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Corporate Legitimate Footer */}
-      <footer className="mt-auto border-t border-slate-900/80 bg-cyber-navy-dark py-12 relative z-10">
+      {/* Corporate Footer */}
+      <footer className="mt-auto border-t border-slate-900 bg-cyber-navy-dark py-12 relative z-10">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-1">
             <div className="flex items-center gap-2">
@@ -300,23 +355,22 @@ export default async function Home() {
             </p>
           </div>
 
-          {/* Links and hidden Admin Gateway */}
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-xs text-slate-500">
-            <Link href="/about" className="hover:text-slate-350 transition-colors">
+            <Link href="/about" className="hover:text-electric-cyan transition-colors">
               About Us
             </Link>
-            <Link href="/contact" className="hover:text-slate-350 transition-colors">
+            <Link href="/contact" className="hover:text-electric-cyan transition-colors">
               Contact Us
             </Link>
-            <Link href="/privacy-policy" className="hover:text-slate-350 transition-colors">
+            <Link href="/privacy-policy" className="hover:text-electric-cyan transition-colors">
               Privacy Policy
             </Link>
-            <Link href="/terms-of-service" className="hover:text-slate-350 transition-colors">
+            <Link href="/terms-of-service" className="hover:text-electric-cyan transition-colors">
               Terms of Service
             </Link>
             <Link 
               href="/admin-login" 
-              className="text-[9px] text-slate-800 hover:text-slate-500 transition-colors tracking-wide self-center md:self-end mt-2 md:mt-0 font-medium"
+              className="text-[9px] text-slate-700 hover:text-electric-cyan transition-colors tracking-wide self-center md:self-end mt-2 md:mt-0 font-medium"
             >
               Admin Console
             </Link>
