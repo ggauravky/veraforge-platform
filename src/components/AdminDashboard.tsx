@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { 
   Users, CheckSquare, Award, CheckCircle2, XCircle, 
   ExternalLink, Globe, Loader2, MessageSquare, AlertCircle, RefreshCw,
-  UserPlus, Trash2, RotateCw
+  UserPlus, Trash2, RotateCw, Sparkles
 } from 'lucide-react';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
 import { Github, Linkedin } from '@/components/icons';
@@ -15,7 +15,8 @@ import {
   reviewTaskAction, 
   issueCertificateAction,
   removeStudentAction,
-  resetStudentTasksAction
+  resetStudentTasksAction,
+  generateAIFeedbackAction
 } from '@/lib/actions/admin';
 import { adminLogoutAction } from '@/lib/actions/admin-auth';
 
@@ -41,6 +42,28 @@ export default function AdminDashboard({
   const [adminFeedback, setAdminFeedback] = useState('');
   const [actionError, setActionError] = useState('');
   const [actionSuccess, setActionSuccess] = useState('');
+  const [generatingAI, setGeneratingAI] = useState(false);
+
+  const handleGenerateAIFeedback = async (taskIdToUse?: string) => {
+    const id = taskIdToUse || feedbackTaskId;
+    if (!id) return;
+    setGeneratingAI(true);
+    setActionError('');
+    setActionSuccess('');
+    try {
+      const res = await generateAIFeedbackAction(id);
+      if (res.success && res.feedback) {
+        setAdminFeedback(res.feedback);
+        setActionSuccess('AI feedback report successfully generated.');
+      } else {
+        setActionError(res.error || 'Failed to generate AI feedback.');
+      }
+    } catch (err: any) {
+      setActionError(err.message || 'An error occurred during AI report generation.');
+    } finally {
+      setGeneratingAI(false);
+    }
+  };
 
   const handleApproveStudent = async (studentId: string) => {
     setLoadingId(studentId);
@@ -473,6 +496,16 @@ export default function AdminDashboard({
                             Live Host Application
                             <ExternalLink className="w-3 h-3" />
                           </a>
+                          <button
+                            onClick={() => {
+                              handleOpenRejectTask(sub._id);
+                              handleGenerateAIFeedback(sub._id);
+                            }}
+                            className="mt-1 flex items-center gap-1 text-[10px] text-electric-cyan hover:text-white bg-cyber-navy-dark/40 hover:bg-cyber-navy-light/35 border border-electric-cyan/20 px-2 py-1 rounded-md transition-all cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.05)] w-fit"
+                          >
+                            <Sparkles className="w-3 h-3 text-cyan-glow" />
+                            Generate Automated AI Code Report
+                          </button>
                         </td>
                         <td className="py-4 text-right">
                           <div className="flex items-center justify-end gap-2">
@@ -680,12 +713,32 @@ export default function AdminDashboard({
             </p>
 
             <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <button
+                  type="button"
+                  onClick={() => handleGenerateAIFeedback()}
+                  disabled={generatingAI}
+                  className="px-3 py-1.5 bg-electric-cyan/10 hover:bg-electric-cyan/20 border border-electric-cyan/30 text-electric-cyan disabled:opacity-50 text-[10px] font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.05)] font-sans"
+                >
+                  {generatingAI ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      Analyzing Submission...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      Generate Automated AI Code Report
+                    </>
+                  )}
+                </button>
+              </div>
               <textarea
                 value={adminFeedback}
                 onChange={(e) => setAdminFeedback(e.target.value)}
                 placeholder="e.g. Please refactor your CSS layout to be fully responsive. The calculator grid overflows on narrow screens."
-                rows={4}
-                className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-600 text-xs outline-none resize-none"
+                rows={6}
+                className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-600 text-xs outline-none resize-none font-sans"
               />
 
               <div className="flex items-center justify-end gap-2.5 mt-2">

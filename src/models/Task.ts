@@ -5,6 +5,11 @@ export interface ITask extends Document {
   description: string;
   sequenceOrder: number;
   trackCategory: 'Web Development' | 'Data Science' | 'Artificial Intelligence' | 'Backend Engineering';
+  quizQuestions: {
+    question: string;
+    options: string[];
+    correctAnswerIndex: number;
+  }[];
 }
 
 const TaskSchema = new Schema<ITask>({
@@ -16,6 +21,11 @@ const TaskSchema = new Schema<ITask>({
     enum: ['Web Development', 'Data Science', 'Artificial Intelligence', 'Backend Engineering'],
     required: true,
   },
+  quizQuestions: [{
+    question: { type: String, required: true },
+    options: [{ type: String, required: true }],
+    correctAnswerIndex: { type: Number, required: true }
+  }]
 });
 
 // Compound unique index for track and sequence order

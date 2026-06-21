@@ -12,7 +12,7 @@ interface TrackSelectionFormProps {
   user: any;
 }
 
-type FilterCategory = 'All' | 'Frontend' | 'Backend' | 'Data & AI';
+type FilterCategory = 'All' | 'Core Dev' | 'Data & AI';
 
 interface TrackCard {
   id: string;
@@ -30,7 +30,7 @@ const trackCards: TrackCard[] = [
     name: 'Web Development',
     icon: Globe,
     description: 'Construct responsive marketing pages and full-stack React dashboards. Master state management, routing conventions, and database synchronization in modern ecosystems.',
-    subCategory: 'Frontend',
+    subCategory: 'Core Dev',
     difficulty: 'Intermediate',
     tasks: [
       'Task 1: Build a Responsive Landing Page (HTML/Tailwind)',
@@ -42,7 +42,7 @@ const trackCards: TrackCard[] = [
     name: 'Backend Engineering',
     icon: Server,
     description: 'Design secure, modular RESTful APIs and model robust database schemas. Implement session handling, validation middleware, and advanced aggregation pipelines.',
-    subCategory: 'Backend',
+    subCategory: 'Core Dev',
     difficulty: 'Advanced',
     tasks: [
       'Task 1: Create a REST API with Node.js & Express',
@@ -153,7 +153,7 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
 
         {/* Filter Pills */}
         <div className="flex items-center justify-center gap-2 mb-10 pb-4 border-b border-cyber-navy-light/30">
-          {(['All', 'Frontend', 'Backend', 'Data & AI'] as FilterCategory[]).map((category) => (
+          {(['All', 'Core Dev', 'Data & AI'] as FilterCategory[]).map((category) => (
             <button
               key={category}
               onClick={() => setActiveFilter(category)}

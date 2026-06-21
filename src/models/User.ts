@@ -5,13 +5,14 @@ export interface IUser extends Document {
   fullName: string;
   email: string;
   universityName?: string;
-  graduationYear?: number;
+  graduationYear?: string;
   githubUrl?: string;
   linkedinUrl?: string;
   portfolioUrl?: string;
   enrolledTrack?: string;
   accountStatus: 'pending_approval' | 'active' | 'rejected';
   role: 'student' | 'admin';
+  graduated?: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -35,7 +36,8 @@ const UserSchema = new Schema<IUser>({
     type: String, 
     enum: ['student', 'admin'], 
     default: 'student' 
-  }
+  },
+  graduated: { type: Boolean, default: false }
 }, { timestamps: true });
 
 export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

@@ -30,8 +30,8 @@ export default async function DashboardPage() {
     redirect('/admin');
   }
 
-  // If student is pending review or rejected, send to pending-review
-  if (dbUser.accountStatus === 'pending_approval' || dbUser.accountStatus === 'rejected') {
+  // If student is rejected, send to pending-review
+  if (dbUser.accountStatus === 'rejected') {
     redirect('/pending-review');
   }
 

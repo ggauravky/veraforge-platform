@@ -35,8 +35,8 @@ export async function submitTaskAction(data: {
       return { success: false, error: 'Task not found or unauthorized' };
     }
 
-    if (userTask.status === 'locked') {
-      return { success: false, error: 'This task is locked' };
+    if (userTask.status === 'locked' || userTask.status === 'quiz_pending') {
+      return { success: false, error: 'This task is locked or requires a quiz' };
     }
 
     // Update user task status and submissions
@@ -83,6 +83,7 @@ export async function enrollInTrackAction(trackName: string) {
 
     // 1. Save track selection
     student.enrolledTrack = trackName;
+    student.graduated = false;
     await student.save();
 
     // 2. Fetch the tasks for this track
@@ -94,10 +95,10 @@ export async function enrollInTrackAction(trackName: string) {
     // 3. Delete any stale progress
     await UserTask.deleteMany({ userId: student._id });
 
-    // 4. Assign the track's tasks
+    // 4. Assign the track's tasks: Task 1 is quiz_pending, Task 2 is locked
     for (let i = 0; i < tasks.length; i++) {
       const task = tasks[i];
-      const initialStatus = task.sequenceOrder === 1 ? 'unlocked' : 'locked';
+      const initialStatus = task.sequenceOrder === 1 ? 'quiz_pending' : 'locked';
       await UserTask.create({
         userId: student._id,
         taskId: task._id,
@@ -109,6 +110,58 @@ export async function enrollInTrackAction(trackName: string) {
     return { success: true };
   } catch (error: any) {
     console.error('Enroll in track error:', error);
+    return { success: false, error: error.message || 'Something went wrong' };
+  }
+}
+
+export async function submitQuizAction(userTaskId: string, answers: number[]) {
+  try {
+    const activeUser = await getOrCreateUser();
+    if (!activeUser) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    await connectToDatabase();
+
+    const userTask = await UserTask.findOne({ _id: userTaskId, userId: activeUser._id }).populate('taskId');
+    if (!userTask) {
+      return { success: false, error: 'Task assignment not found' };
+    }
+
+    if (userTask.status !== 'quiz_pending') {
+      return { success: false, error: 'Quiz is not active for this task' };
+    }
+
+    const task = userTask.taskId as any;
+    const questions = task.quizQuestions;
+
+    if (!questions || questions.length === 0) {
+      // If no questions, unlock task directly
+      userTask.status = 'unlocked';
+      await userTask.save();
+      revalidatePath('/dashboard');
+      return { success: true };
+    }
+
+    // Verify all answers match the correct indexes
+    let allCorrect = true;
+    for (let i = 0; i < questions.length; i++) {
+      if (answers[i] !== questions[i].correctAnswerIndex) {
+        allCorrect = false;
+        break;
+      }
+    }
+
+    if (allCorrect) {
+      userTask.status = 'unlocked';
+      await userTask.save();
+      revalidatePath('/dashboard');
+      return { success: true };
+    } else {
+      return { success: false, error: 'Incorrect answers. Cooldown activated.' };
+    }
+  } catch (error: any) {
+    console.error('Submit quiz error:', error);
     return { success: false, error: error.message || 'Something went wrong' };
   }
 }

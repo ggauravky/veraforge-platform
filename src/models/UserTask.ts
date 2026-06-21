@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from 'mongoose';
 export interface IUserTask extends Document {
   userId: mongoose.Types.ObjectId;
   taskId: mongoose.Types.ObjectId;
-  status: 'locked' | 'unlocked' | 'submitted_pending_review' | 'approved' | 'rejected';
+  status: 'locked' | 'quiz_pending' | 'unlocked' | 'scanning' | 'submitted_pending_review' | 'approved' | 'rejected';
   submissionRepoLink?: string;
   submissionLiveLink?: string;
   adminFeedback?: string;
@@ -16,7 +16,7 @@ const UserTaskSchema = new Schema<IUserTask>({
   taskId: { type: Schema.Types.ObjectId, ref: 'Task', required: true },
   status: { 
     type: String, 
-    enum: ['locked', 'unlocked', 'submitted_pending_review', 'approved', 'rejected'], 
+    enum: ['locked', 'quiz_pending', 'unlocked', 'scanning', 'submitted_pending_review', 'approved', 'rejected'], 
     default: 'locked' 
   },
   submissionRepoLink: { type: String },
