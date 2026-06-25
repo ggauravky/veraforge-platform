@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { 
   CheckCircle2, Lock, Unlock, ExternalLink, Globe, 
-  Award, AlertTriangle, MessageSquare, Loader2, ArrowRight, X, BookOpen, Copy, Check
+  Award, AlertTriangle, MessageSquare, Loader2, ArrowRight, X, BookOpen, Copy, Check, Cpu, Activity, Sparkles
 } from 'lucide-react';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
 import { Github } from '@/components/icons';
@@ -154,7 +154,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
     const liveLink = data.submissionLiveLink;
 
     const logs = [
-      `> Connecting to Remote repository: ${repoLink}... SUCCESS`,
+      `> Connecting to remote repository: ${repoLink}... SUCCESS`,
       `> Querying static dependency vulnerabilities... 0 critical bugs found`,
       `> Performing DOM accessibility and responsive paint analysis... OK`,
       `> Package compiled successfully. Submitting architecture artifacts to review queue.`
@@ -197,8 +197,8 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
 
   return (
     <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100">
-      {/* Background decorations */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      {/* Moving background grid */}
+      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
 
       {/* Header */}
       <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
@@ -228,11 +228,11 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
         <div className="space-y-8 lg:col-span-1">
           
           {/* Welcome Card */}
-          <div className="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none" />
+          <div className="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
             <span className="text-xs text-electric-cyan font-bold uppercase tracking-wider block mb-1 text-cyan-glow">Welcome back</span>
             <h2 className="text-2xl font-bold text-white mb-2">{user.fullName}</h2>
-            <p className="text-slate-400 text-xs font-light leading-relaxed">
+            <p className="text-slate-405 text-xs font-light leading-relaxed">
               Virtual {user.enrolledTrack || 'Web Development'} Internship Track at VeraForge.
             </p>
             
@@ -249,7 +249,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
           </div>
  
           {/* Progress Tracker Card */}
-          <div className="glass-panel rounded-3xl p-6 shadow-xl">
+          <div className="glass-panel rounded-3xl p-6 shadow-xl bg-cyber-navy-light/10">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-sm font-bold uppercase tracking-wider text-slate-350">Track Progress</h3>
               <span className="text-2xl font-extrabold text-electric-cyan text-cyan-glow">{progressPercent}%</span>
@@ -271,7 +271,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
 
           {/* Graduation & Certificate Card */}
           {progressPercent === 100 && (
-            <div className="glass-panel border-electric-cyan/20 rounded-3xl p-6 shadow-xl relative overflow-hidden">
+            <div className="glass-panel border-electric-cyan/20 rounded-3xl p-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
               <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/10 rounded-full blur-3xl pointer-events-none" />
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-electric-cyan/25 rounded-xl border border-electric-cyan/20">
@@ -282,7 +282,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   <p className="text-[10px] text-electric-cyan font-bold tracking-wider uppercase text-cyan-glow">{user.enrolledTrack || 'Web Development'} Track</p>
                 </div>
               </div>
-              <p className="text-slate-450 text-xs font-light leading-relaxed mb-6">
+              <p className="text-slate-400 text-xs font-light leading-relaxed mb-6">
                 Congratulations! You have successfully completed all internship tasks. 
               </p>
  
@@ -302,19 +302,123 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
               )}
             </div>
           )}
+
+          {/* Resume Booster Card */}
+          {progressPercent === 100 && (
+            <div className="glass-panel border-electric-blue/20 rounded-3xl p-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none" />
+              <div className="flex items-center gap-2 mb-4 border-b border-cyber-navy-light/45 pb-3">
+                <Sparkles className="w-5 h-5 text-electric-cyan text-cyan-glow animate-pulse" />
+                <h4 className="text-sm font-bold uppercase tracking-wider text-white">Resume Booster</h4>
+              </div>
+              
+              <div className="flex gap-2 mb-4 border-b border-cyber-navy-light/35 pb-2">
+                <button
+                  onClick={() => setResumeTab('bullets')}
+                  className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer ${
+                    resumeTab === 'bullets' 
+                      ? 'bg-electric-cyan text-cyber-navy-dark shadow-[0_0_8px_rgba(0,255,255,0.25)]' 
+                      : 'bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  Resume Bullets
+                </button>
+                <button
+                  onClick={() => setResumeTab('linkedin')}
+                  className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer ${
+                    resumeTab === 'linkedin' 
+                      ? 'bg-electric-cyan text-cyber-navy-dark shadow-[0_0_8px_rgba(0,255,255,0.25)]' 
+                      : 'bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 hover:text-slate-200'
+                  }`}
+                >
+                  LinkedIn Template
+                </button>
+              </div>
+
+              {resumeTab === 'bullets' ? (
+                <div className="space-y-3">
+                  <p className="text-[10px] text-slate-500 font-light leading-relaxed">
+                    Tailored bullet points verifying your {user.enrolledTrack} achievements:
+                  </p>
+                  <div className="bg-slate-950/80 border border-slate-900 rounded-xl p-3.5 space-y-2 text-[10px] text-slate-450 leading-relaxed font-mono">
+                    {getResumeBullets(user.enrolledTrack).map((bullet, idx) => (
+                      <div key={idx} className="flex gap-1.5 items-start">
+                        <span className="text-electric-cyan shrink-0">•</span>
+                        <span>{bullet}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={handleCopyBullets}
+                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.02)]"
+                  >
+                    {copiedBullets ? (
+                      <>
+                        <Check className="w-3.5 h-3.5" />
+                        Copied to Clipboard!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        Copy Resume Bullets
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <p className="text-[10px] text-slate-505 font-light leading-relaxed">
+                    Share your achievements with your professional network:
+                  </p>
+                  <div className="bg-slate-950/80 border border-slate-900 rounded-xl p-3.5 text-[10px] text-slate-450 leading-relaxed font-mono whitespace-pre-wrap select-all">
+                    {getLinkedInTemplate(user.enrolledTrack)}
+                  </div>
+                  <button
+                    onClick={handleCopyLinkedIn}
+                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.02)]"
+                  >
+                    {copiedLinkedIn ? (
+                      <>
+                        <Check className="w-3.5 h-3.5" />
+                        Copied to Clipboard!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        Copy LinkedIn Template
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Right column: Sequential Tasks */}
         {user.accountStatus === 'pending_approval' ? (
-          <div className="lg:col-span-2 space-y-6">
-            <div className="glass-panel rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none" />
+          <div className="lg:col-span-2 space-y-6 animate-in fade-in duration-300">
+            <div className="glass-panel rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
+              
               <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/20 rounded-2xl flex items-center justify-center animate-pulse shadow-[0_0_15px_rgba(0,255,255,0.08)]">
                 <AlertTriangle className="w-8 h-8 text-electric-cyan text-cyan-glow" />
               </div>
               
               <div className="max-w-md mx-auto space-y-3 font-sans">
-                <h3 className="text-xl font-bold text-white uppercase tracking-wider">Security Audit Notice</h3>
+                <h3 className="text-xl font-bold text-white uppercase tracking-wider text-cyan-glow">Security Audit Notice</h3>
+                
+                {/* Visual Status Meter */}
+                <div className="py-2">
+                  <div className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-full h-2 p-[1px] relative">
+                    <div className="bg-electric-cyan h-full rounded-full animate-pulse shadow-[0_0_8px_#00ffff]" style={{ width: '40%' }} />
+                  </div>
+                  <div className="flex justify-between text-[9px] text-slate-500 mt-1.5 font-mono">
+                    <span>ONBOARDING: OK</span>
+                    <span>SECURITY CHECK: IN PROGRESS (40%)</span>
+                  </div>
+                </div>
+
                 <p className="text-slate-400 text-xs leading-relaxed font-light">
                   Your credentials are undergoing administrative verification. The audit engine will release your dashboard upon confirmation.
                 </p>
@@ -322,7 +426,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             </div>
           </div>
         )
- : (
+  : (
           <div className="lg:col-span-2 space-y-6">
             <div className="flex items-center justify-between pb-2 border-b border-cyber-navy-light/35">
               <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
@@ -343,10 +447,10 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 return (
                   <div 
                     key={userTask._id}
-                    className={`bg-cyber-navy-light/10 border rounded-2xl p-6 transition-all duration-300 ${
+                    className={`bg-cyber-navy-light/5 border rounded-2xl p-6 transition-all duration-300 ${
                       isLocked ? 'border-cyber-navy-light/20 opacity-40' :
                       isApproved ? 'border-electric-cyan/25 bg-electric-cyan/5 shadow-[0_0_15px_rgba(0,255,255,0.02)]' :
-                      isRejected ? 'border-red-950/30 bg-red-950/5' :
+                      isRejected ? 'border-red-950/30 bg-red-950/5 shadow-[0_0_15px_rgba(239,68,68,0.02)]' :
                       isPending ? 'border-electric-blue/25 bg-electric-blue/5' :
                       'border-cyber-navy-light/40 hover:border-electric-cyan/35 hover:bg-cyber-navy-light/15 hover:shadow-[0_0_15px_rgba(0,255,255,0.04)]'
                     }`}
@@ -365,7 +469,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                             </span>
                           )}
                           {isApproved && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan bg-electric-cyan/10 border border-electric-cyan/20 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_8px_rgba(0,255,255,0.1)] font-sans">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan bg-electric-cyan/10 border border-electric-cyan/20 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_8px_rgba(0,255,255,0.1)] font-sans text-cyan-glow">
                               <CheckCircle2 className="w-3 h-3" /> Completed
                             </span>
                           )}
@@ -385,7 +489,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                             </span>
                           )}
                           {userTask.status === 'quiz_pending' && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-950/20 border border-amber-900/30 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.1)] font-sans">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-955/20 border border-amber-900/30 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.1)] font-sans">
                               <BookOpen className="w-3 h-3 animate-pulse" /> Quiz Pending
                             </span>
                           )}
@@ -425,7 +529,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {/* Feedback Panel */}
                         {userTask.adminFeedback && (
                           <div className="mt-4 p-3.5 bg-cyber-navy-dark/60 border border-cyber-navy-light/40 rounded-xl flex gap-2.5 items-start text-xs max-w-xl font-sans">
-                            <MessageSquare className="w-4 h-4 text-electric-cyan shrink-0 mt-0.5" />
+                            <MessageSquare className="w-4 h-4 text-electric-cyan shrink-0 mt-0.5 animate-pulse" />
                             <div>
                               <div className="font-bold text-slate-300">Administrator Feedback:</div>
                               <p className="text-slate-400 font-light mt-0.5 leading-relaxed">{userTask.adminFeedback}</p>
@@ -477,7 +581,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {isRejected && (
                           <button
                             onClick={() => handleOpenSubmission(userTask)}
-                            className="px-4 py-2 bg-red-950/30 hover:bg-red-950/50 border border-red-900/40 text-red-300 hover:text-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer"
+                            className="px-4 py-2 bg-red-955/30 hover:bg-red-955/50 border border-red-900/40 text-red-300 hover:text-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.1)]"
                           >
                             Revise & Re-submit
                           </button>
@@ -510,7 +614,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             onClick={() => { if (!loading) setSelectedTask(null); }}
           />
  
-          <div className="relative glass-panel rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 font-sans">
+          <div className="relative glass-panel rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 font-sans bg-cyber-navy-dark/95">
             <button
               onClick={() => setSelectedTask(null)}
               disabled={loading}
@@ -532,7 +636,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             </div>
  
             {error && (
-              <div className="mb-4 p-3 bg-red-950/30 border border-red-900/50 rounded-xl text-red-300 text-xs font-semibold font-sans">
+              <div className="mb-4 p-3 bg-red-955/30 border border-red-900/50 rounded-xl text-red-300 text-xs font-semibold font-sans">
                 {error}
               </div>
             )}
@@ -545,35 +649,54 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
 
             {isScanning ? (
               <div className="space-y-4">
-                <div className="bg-slate-950 p-4 rounded-xl border border-cyber-navy-light font-mono text-[11px] leading-relaxed text-slate-300 min-h-[180px] shadow-[0_0_20px_rgba(0,255,255,0.02)] relative overflow-hidden flex flex-col justify-between">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2 border-b border-cyber-navy-light pb-2 mb-2 text-xs text-electric-cyan">
-                      <div className="w-2.5 h-2.5 rounded-full bg-electric-cyan animate-pulse" />
-                      <span>VERAFORGE CI/CD SECURITY ANALYZER v2.5</span>
-                    </div>
-                    {terminalLogs.map((log, idx) => (
-                      <div key={idx} className="animate-in fade-in slide-in-from-bottom-1 duration-200">
-                        {log}
-                      </div>
-                    ))}
+                <div className="bg-slate-950 p-5 rounded-2xl border border-cyan-500/25 font-mono text-[11px] leading-relaxed text-slate-300 min-h-[220px] shadow-[0_0_30px_rgba(0,255,255,0.08)] relative overflow-hidden flex flex-col justify-between">
+                  {/* Vertical Scanline */}
+                  <div className="scanning-line" />
+                  
+                  <div className="space-y-2 relative z-20">
+                     <div className="flex items-center gap-2 border-b border-cyber-navy-light pb-2 mb-2 text-xs text-electric-cyan font-bold tracking-wider text-cyan-glow">
+                       <span className="w-2 h-2 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#00ffff]" />
+                       <span>VERAFORGE CI/CD TELEMETRY SCANNER v2.5</span>
+                     </div>
+                    {terminalLogs.map((log, idx) => {
+                      const isSuccess = log.includes('SUCCESS') || log.includes('OK') || log.includes('0 critical');
+                      return (
+                        <div 
+                          key={idx} 
+                          className={`animate-in fade-in slide-in-from-bottom-1 duration-250 ${
+                            isSuccess ? 'text-emerald-450 font-semibold' : 'text-slate-300'
+                          }`}
+                        >
+                          {log}
+                        </div>
+                      );
+                    })}
+                     
+                     {/* Blinking cursor for the active scanner log */}
+                     {terminalLogs.length < 4 && (
+                       <div className="text-electric-cyan/70 typing-caret">
+                         &gt; Telemetry analyze active...
+                       </div>
+                     )}
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-slate-500 animate-pulse mt-4">
-                    <span>STATUS: SECURITY INTRUSION CHECK IN PROGRESS...</span>
+                  <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-cyber-navy-light/45 pt-2 mt-4 relative z-20">
+                     <span className="animate-pulse">SECURITY AUDIT ENGINE: RUNNING</span>
+                     <span>THREADS: 0x2A4</span>
                   </div>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-450 flex items-center gap-1.5">
-                    <Github className="w-3.5 h-3.5 text-slate-500" />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <Github className="w-3.5 h-3.5 text-slate-400" />
                     GitHub Repository URL
                   </label>
                   <input
                     type="url"
                     placeholder="e.g. https://github.com/username/calculator"
                     {...register('submissionRepoLink')}
-                    className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-600 transition-all text-xs outline-none"
+                    className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-650 transition-all text-xs outline-none shadow-inner"
                   />
                   {errors.submissionRepoLink && (
                     <p className="text-[10px] text-red-400 font-semibold">{errors.submissionRepoLink.message}</p>
@@ -581,15 +704,15 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 </div>
  
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-450 flex items-center gap-1.5">
-                    <Globe className="w-3.5 h-3.5 text-slate-500" />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-slate-400" />
                     Live Hosted URL
                   </label>
                   <input
                     type="url"
                     placeholder="e.g. https://calculator-demo.vercel.app"
                     {...register('submissionLiveLink')}
-                    className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-600 transition-all text-xs outline-none"
+                    className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-650 transition-all text-xs outline-none shadow-inner"
                   />
                   {errors.submissionLiveLink && (
                     <p className="text-[10px] text-red-400 font-semibold">{errors.submissionLiveLink.message}</p>
@@ -597,12 +720,12 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 </div>
  
                 {selectedTask.adminFeedback && (
-                  <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-xs space-y-1">
+                  <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/45 rounded-xl text-xs space-y-1">
                     <div className="font-bold text-slate-300 flex items-center gap-1">
                       <MessageSquare className="w-3.5 h-3.5 text-electric-cyan text-cyan-glow" />
                       Previous Revision Request:
                     </div>
-                    <p className="text-slate-450 leading-relaxed font-light">{selectedTask.adminFeedback}</p>
+                    <p className="text-slate-400 leading-relaxed font-light">{selectedTask.adminFeedback}</p>
                   </div>
                 )}
  
@@ -628,7 +751,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             onClick={() => { if (!quizLoading && !cooldownActive) setActiveQuizTask(null); }}
           />
 
-          <div className="relative glass-panel rounded-3xl p-6 md:p-8 w-full max-w-xl shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 overflow-hidden font-sans">
+          <div className="relative glass-panel rounded-3xl p-6 md:p-8 w-full max-w-xl shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 overflow-hidden font-sans bg-cyber-navy-dark/95">
             
             {cooldownActive ? (
               /* Cooldown Screen Overlay */
@@ -667,7 +790,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             </div>
 
             {quizError && (
-              <div className="mb-4 p-3 bg-red-950/30 border border-red-900/50 rounded-xl text-red-350 text-xs font-semibold font-sans">
+              <div className="mb-4 p-3 bg-red-955/30 border border-red-900/50 rounded-xl text-red-350 text-xs font-semibold font-sans">
                 {quizError}
               </div>
             )}
@@ -690,9 +813,9 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                             onClick={() => {
                               setQuizAnswers((prev) => {
                                 const next = [...prev];
-                                next[qIdx] = optIdx;
-                                return next;
-                              });
+                                  next[qIdx] = optIdx;
+                                  return next;
+                                });
                             }}
                             className={`w-full text-left px-4 py-2.5 text-xs rounded-xl border transition-all cursor-pointer font-sans ${
                               isSelected
@@ -728,7 +851,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   </>
                 ) : (
                   <>
-                    Submit Work for Review
+                    Unlock Submission Terminal
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}

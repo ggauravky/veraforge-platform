@@ -29,6 +29,44 @@ interface AdminDashboardProps {
 
 type TabType = 'registrations' | 'submissions' | 'graduations' | 'students';
 
+function parseAIFeedback(feedback: string) {
+  if (!feedback) return null;
+  
+  let strengths: string[] = [];
+  let optimizations: string[] = [];
+  let security = '';
+  
+  const lines = feedback.split('\n');
+  let currentSection = '';
+  
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed.toLowerCase().includes('code strengths')) {
+      currentSection = 'strengths';
+    } else if (trimmed.toLowerCase().includes('optimization ideas') || trimmed.toLowerCase().includes('optimization')) {
+      currentSection = 'optimizations';
+    } else if (trimmed.toLowerCase().includes('security review') || trimmed.toLowerCase().includes('security note') || trimmed.toLowerCase().includes('security review note')) {
+      currentSection = 'security';
+    } else if (trimmed.startsWith('*') || trimmed.startsWith('-')) {
+      const bullet = trimmed.replace(/^[\*\-\s]+/, '');
+      if (bullet) {
+        if (currentSection === 'strengths') strengths.push(bullet);
+        if (currentSection === 'optimizations') optimizations.push(bullet);
+      }
+    } else if (trimmed) {
+      if (currentSection === 'security') {
+        security += (security ? ' ' : '') + trimmed;
+      } else if (currentSection === 'strengths' && !strengths.length) {
+        strengths.push(trimmed);
+      } else if (currentSection === 'optimizations' && !optimizations.length) {
+        optimizations.push(trimmed);
+      }
+    }
+  });
+
+  return { strengths, optimizations, security };
+}
+
 export default function AdminDashboard({ 
   pendingStudents, 
   pendingSubmissions, 
@@ -180,6 +218,7 @@ export default function AdminDashboard({
       setLoadingId(null);
     }
   };
+
   const handleRemoveStudent = async (studentId: string) => {
     if (!confirm('Are you sure you want to permanently remove this student and delete all their progress/certificates?')) return;
     setLoadingId(studentId);
@@ -222,8 +261,8 @@ export default function AdminDashboard({
 
   return (
     <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100">
-      {/* Background decorations */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      {/* Moving background grid */}
+      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
 
       {/* Header */}
       <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
@@ -278,8 +317,8 @@ export default function AdminDashboard({
 
         {/* Global Action Notifications */}
         {actionError && (
-          <div className="mb-6 p-4 bg-red-950/20 border border-red-900/40 rounded-xl text-red-300 text-xs font-bold flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+          <div className="mb-6 p-4 bg-red-955/20 border border-red-900/40 rounded-xl text-red-300 text-xs font-bold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-505 shrink-0" />
             <span>{actionError}</span>
           </div>
         )}
@@ -298,7 +337,7 @@ export default function AdminDashboard({
             className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all relative cursor-pointer ${
               activeTab === 'registrations' 
                 ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-250'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <UserPlus className="w-4 h-4" />
@@ -315,7 +354,7 @@ export default function AdminDashboard({
             className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'submissions' 
                 ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-250'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <CheckSquare className="w-4 h-4" />
@@ -332,7 +371,7 @@ export default function AdminDashboard({
             className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'graduations' 
                 ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-250'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <Award className="w-4 h-4" />
@@ -349,7 +388,7 @@ export default function AdminDashboard({
             className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'students' 
                 ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-250'
+                : 'border-transparent text-slate-400 hover:text-slate-200'
             }`}
           >
             <Users className="w-4 h-4" />
@@ -363,11 +402,11 @@ export default function AdminDashboard({
         </div>
 
         {/* Tab Panel contents */}
-        <div className="glass-panel rounded-3xl p-6 shadow-xl min-h-[300px]">
+        <div className="glass-panel rounded-3xl p-6 shadow-xl min-h-[300px] bg-cyber-navy-light/10">
           
           {/* TAB 1: PENDING STUDENTS */}
           {activeTab === 'registrations' && (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto animate-in fade-in duration-200">
               {pendingStudents.length === 0 ? (
                 <div className="text-center py-16 text-slate-500 text-sm">
                   <Users className="w-12 h-12 mx-auto mb-3 text-slate-700" />
@@ -376,7 +415,7 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Education</th>
                       <th className="pb-4 font-semibold">Reference Profiles</th>
@@ -446,7 +485,7 @@ export default function AdminDashboard({
 
           {/* TAB 2: TASK SUBMISSIONS */}
           {activeTab === 'submissions' && (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto animate-in fade-in duration-200">
               {pendingSubmissions.length === 0 ? (
                 <div className="text-center py-16 text-slate-500 text-sm">
                   <CheckSquare className="w-12 h-12 mx-auto mb-3 text-slate-700" />
@@ -455,7 +494,7 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Task Details</th>
                       <th className="pb-4 font-semibold">Deliverable Links</th>
@@ -467,7 +506,7 @@ export default function AdminDashboard({
                       <tr key={sub._id} className="hover:bg-cyber-navy-light/10 transition-colors">
                         <td className="py-4">
                           <div className="font-bold text-white text-base">{sub.userId?.fullName || 'Unknown Student'}</div>
-                          <div className="text-slate-505 text-xs mt-0.5">{sub.userId?.email}</div>
+                          <div className="text-slate-500 text-xs mt-0.5">{sub.userId?.email}</div>
                         </td>
                         <td className="py-4">
                           <span className="inline-block px-2.5 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/50 rounded-full text-slate-400 font-medium text-[10px] tracking-wide mb-1">
@@ -482,7 +521,7 @@ export default function AdminDashboard({
                             rel="noopener noreferrer"
                             className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
                           >
-                            <Github className="w-3.5 h-3.5 text-slate-550" />
+                            <Github className="w-3.5 h-3.5 text-slate-500" />
                             Repository Code
                             <ExternalLink className="w-3 h-3" />
                           </a>
@@ -492,7 +531,7 @@ export default function AdminDashboard({
                             rel="noopener noreferrer"
                             className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
                           >
-                            <Globe className="w-3.5 h-3.5 text-slate-550" />
+                            <Globe className="w-3.5 h-3.5 text-slate-500" />
                             Live Host Application
                             <ExternalLink className="w-3 h-3" />
                           </a>
@@ -501,9 +540,9 @@ export default function AdminDashboard({
                               handleOpenRejectTask(sub._id);
                               handleGenerateAIFeedback(sub._id);
                             }}
-                            className="mt-1 flex items-center gap-1 text-[10px] text-electric-cyan hover:text-white bg-cyber-navy-dark/40 hover:bg-cyber-navy-light/35 border border-electric-cyan/20 px-2 py-1 rounded-md transition-all cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.05)] w-fit"
+                            className="mt-1 flex items-center gap-1 text-[10px] text-electric-cyan hover:text-white bg-cyber-navy-dark/40 hover:bg-cyber-navy-light/35 border border-electric-cyan/20 px-2 py-1 rounded-md transition-all cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.05)] w-fit font-bold"
                           >
-                            <Sparkles className="w-3 h-3 text-cyan-glow" />
+                            <Sparkles className="w-3 h-3 text-cyan-glow animate-pulse" />
                             Generate Automated AI Code Report
                           </button>
                         </td>
@@ -539,7 +578,7 @@ export default function AdminDashboard({
 
           {/* TAB 3: GRADUATION & CERTIFICATE ISSUANCE */}
           {activeTab === 'graduations' && (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto animate-in fade-in duration-200">
               {graduationCandidates.length === 0 ? (
                 <div className="text-center py-16 text-slate-500 text-sm">
                   <Award className="w-12 h-12 mx-auto mb-3 text-slate-700" />
@@ -548,7 +587,7 @@ export default function AdminDashboard({
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Institution</th>
                       <th className="pb-4 font-semibold">Credential State</th>
@@ -560,11 +599,11 @@ export default function AdminDashboard({
                       <tr key={candidate._id} className="hover:bg-cyber-navy-light/10 transition-colors">
                         <td className="py-4">
                           <div className="font-bold text-white text-base">{candidate.fullName}</div>
-                          <div className="text-slate-505 text-xs mt-0.5">{candidate.email}</div>
+                          <div className="text-slate-500 text-xs mt-0.5">{candidate.email}</div>
                         </td>
                         <td className="py-4">
                           <div className="text-slate-300 font-medium">{candidate.universityName}</div>
-                          <div className="text-slate-505 text-xs mt-0.5">Class of {candidate.graduationYear}</div>
+                          <div className="text-slate-500 text-xs mt-0.5">Class of {candidate.graduationYear}</div>
                         </td>
                         <td className="py-4">
                           {candidate.certificateId ? (
@@ -611,16 +650,16 @@ export default function AdminDashboard({
 
           {/* TAB 4: STUDENT DIRECTORY */}
           {activeTab === 'students' && (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto animate-in fade-in duration-200">
               {allStudents.length === 0 ? (
-                <div className="text-center py-16 text-slate-500 text-sm">
+                <div className="text-center py-16 text-slate-505 text-sm">
                   <Users className="w-12 h-12 mx-auto mb-3 text-slate-700" />
                   No students registered on the platform.
                 </div>
               ) : (
                 <table className="w-full text-left text-sm border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-405 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student Name / Email</th>
                       <th className="pb-4 font-semibold">Onboarding Details</th>
                       <th className="pb-4 font-semibold">Verification Status</th>
@@ -641,7 +680,7 @@ export default function AdminDashboard({
                               <div className="text-slate-500 text-xs mt-0.5">Class of {student.graduationYear}</div>
                             </>
                           ) : (
-                            <span className="text-slate-650 text-xs italic">Pending Onboarding Form</span>
+                            <span className="text-slate-600 text-xs italic">Pending Onboarding Form</span>
                           )}
                         </td>
                         <td className="py-4">
@@ -703,64 +742,123 @@ export default function AdminDashboard({
             onClick={() => { if (loadingId === null) setFeedbackTaskId(null); }}
           />
 
-          <div className="relative glass-panel rounded-3xl p-6 w-full max-w-md shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55">
+          <div className={`relative glass-panel rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 bg-cyber-navy-dark/95 w-full ${adminFeedback ? 'max-w-4xl' : 'max-w-md'}`}>
+            <button
+              onClick={() => setFeedbackTaskId(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 transition-colors"
+            >
+              <XCircle className="w-5 h-5" />
+            </button>
+
             <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-electric-cyan text-cyan-glow" />
+              <MessageSquare className="w-5 h-5 text-electric-cyan text-cyan-glow animate-pulse" />
               Request Assignment Revision
             </h3>
-            <p className="text-slate-405 text-xs font-light leading-relaxed mb-4">
+            <p className="text-slate-400 text-xs font-light leading-relaxed mb-4">
               Explain why this submission requires revisions and what specific updates the student must apply.
             </p>
 
-            <div className="space-y-4">
-              <div className="flex justify-between items-center">
-                <button
-                  type="button"
-                  onClick={() => handleGenerateAIFeedback()}
-                  disabled={generatingAI}
-                  className="px-3 py-1.5 bg-electric-cyan/10 hover:bg-electric-cyan/20 border border-electric-cyan/30 text-electric-cyan disabled:opacity-50 text-[10px] font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.05)] font-sans"
-                >
-                  {generatingAI ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      Analyzing Submission...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Generate Automated AI Code Report
-                    </>
-                  )}
-                </button>
-              </div>
-              <textarea
-                value={adminFeedback}
-                onChange={(e) => setAdminFeedback(e.target.value)}
-                placeholder="e.g. Please refactor your CSS layout to be fully responsive. The calculator grid overflows on narrow screens."
-                rows={6}
-                className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-600 text-xs outline-none resize-none font-sans"
-              />
+            <div className={`grid gap-6 ${adminFeedback ? 'md:grid-cols-2' : 'grid-cols-1'}`}>
+              {/* Left Column: Form & Actions */}
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <button
+                    type="button"
+                    onClick={() => handleGenerateAIFeedback()}
+                    disabled={generatingAI}
+                    className="px-3 py-1.5 bg-electric-cyan/10 hover:bg-electric-cyan/20 border border-electric-cyan/30 text-electric-cyan disabled:opacity-50 text-[10px] font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.05)] font-sans"
+                  >
+                    {generatingAI ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Analyzing Submission...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Generate Automated AI Code Report
+                      </>
+                    )}
+                  </button>
+                </div>
+                
+                <textarea
+                  value={adminFeedback}
+                  onChange={(e) => setAdminFeedback(e.target.value)}
+                  placeholder="e.g. Please refactor your CSS layout to be fully responsive. The calculator grid overflows on narrow screens."
+                  rows={8}
+                  className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-650 text-xs outline-none resize-none font-sans shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                />
 
-              <div className="flex items-center justify-end gap-2.5 mt-2">
-                <button
-                  onClick={() => setFeedbackTaskId(null)}
-                  disabled={loadingId !== null}
-                  className="px-4 py-2 text-slate-400 hover:text-slate-200 text-xs font-bold rounded-lg transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleRejectTaskSubmit}
-                  disabled={loadingId !== null}
-                  className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark text-xs font-extrabold rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
-                >
-                  {loadingId === feedbackTaskId ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    'Submit Feedback'
-                  )}
-                </button>
+                <div className="flex items-center justify-end gap-2.5 mt-2">
+                  <button
+                    onClick={() => setFeedbackTaskId(null)}
+                    disabled={loadingId !== null}
+                    className="px-4 py-2 text-slate-400 hover:text-slate-205 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleRejectTaskSubmit}
+                    disabled={loadingId !== null}
+                    className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark text-xs font-extrabold rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+                  >
+                    {loadingId === feedbackTaskId ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      'Submit Feedback'
+                    )}
+                  </button>
+                </div>
               </div>
+
+              {/* Right Column: AI Report Bento-Style Visualizer */}
+              {adminFeedback && (
+                <div className="bg-slate-950/70 border border-cyber-navy-light/45 rounded-2xl p-4 max-h-[300px] md:max-h-none md:h-full overflow-y-auto space-y-4 font-sans text-xs flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-1.5 text-electric-cyan font-bold border-b border-cyber-navy-light/35 pb-2 uppercase text-[10px]">
+                      <Sparkles className="w-3.5 h-3.5 animate-pulse text-cyan-glow" />
+                      <span>Structured AI Feedback Report</span>
+                    </div>
+                    
+                    {(() => {
+                      const report = parseAIFeedback(adminFeedback);
+                      if (!report) return <p className="text-slate-400 font-mono text-[10px] whitespace-pre-wrap mt-2">{adminFeedback}</p>;
+                      return (
+                        <div className="space-y-4 mt-3">
+                          {report.strengths.length > 0 && (
+                            <div className="bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl p-3">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block mb-1">Code Strengths</span>
+                              <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px] font-light">
+                                {report.strengths.map((s, i) => <li key={i}>{s}</li>)}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {report.optimizations.length > 0 && (
+                            <div className="bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl p-3">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-electric-blue block mb-1">Optimizations</span>
+                              <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px] font-light">
+                                {report.optimizations.map((o, i) => <li key={i}>{o}</li>)}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {report.security && (
+                            <div className="bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl p-3">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500 block mb-1">Security Audit</span>
+                              <p className="text-slate-400 text-[11px] leading-relaxed font-light">{report.security}</p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+                  </div>
+                  <div className="text-[9px] text-slate-500 border-t border-cyber-navy-light/30 pt-2 font-mono mt-4">
+                    ANALYZER MODEL: gemini-2.5-flash-preview
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

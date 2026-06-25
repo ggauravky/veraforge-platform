@@ -75,6 +75,13 @@ const trackCards: TrackCard[] = [
   }
 ];
 
+function getTechPills(trackId: string): string[] {
+  if (trackId === 'webdev') return ['Next.js 16', 'React 19', 'Tailwind v4', 'MongoDB'];
+  if (trackId === 'backend') return ['Node.js', 'Express', 'JWT Auth', 'Mongoose ODM'];
+  if (trackId === 'datasci') return ['Python 3', 'Pandas', 'NumPy', 'Scikit-Learn'];
+  return ['Gemini API', 'LLM RAG', 'Python', 'System Prompts'];
+}
+
 export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
   const router = useRouter();
   const [activeFilter, setActiveFilter] = useState<FilterCategory>('All');
@@ -106,8 +113,9 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
 
   return (
     <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100 pb-20">
-      {/* Background patterns */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      {/* Moving background grid */}
+      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-electric-blue/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
@@ -134,19 +142,19 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
         {/* Intro */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/35 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-6 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
-            <Sparkles className="w-3.5 h-3.5 text-electric-cyan" />
+            <Sparkles className="w-3.5 h-3.5 text-electric-cyan animate-pulse" />
             <span>Select Your Specialization Track</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase">
             Choose Your Technology Specialization
           </h1>
           <p className="text-slate-400 text-sm mt-3 font-light leading-relaxed">
-            Welcome, <span className="text-slate-200 font-medium">{user.fullName}</span>. Please choose your career specialization track. Once enrolled, you will unlock your sequential development tasks.
+            Welcome, <span className="text-slate-250 font-medium">{user.fullName}</span>. Please choose your career specialization track. Once enrolled, you will unlock your sequential development tasks.
           </p>
         </div>
 
         {actionError && (
-          <div className="mb-8 p-4 bg-red-950/20 border border-red-900/40 rounded-xl text-red-300 text-xs font-bold text-center">
+          <div className="mb-8 p-4 bg-red-955/20 border border-red-900/40 rounded-xl text-red-300 text-xs font-bold text-center">
             {actionError}
           </div>
         )}
@@ -160,7 +168,7 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
               className={`px-4 py-2 text-xs font-bold rounded-full transition-all border cursor-pointer ${
                 activeFilter === category
                   ? 'bg-electric-cyan border-electric-cyan text-cyber-navy-dark shadow-lg shadow-electric-cyan/20'
-                  : 'bg-cyber-navy-dark border-cyber-navy-light/40 text-slate-450 hover:text-slate-250 hover:border-electric-cyan/40'
+                  : 'bg-cyber-navy-dark border-cyber-navy-light/40 text-slate-450 hover:text-slate-200 hover:border-electric-cyan/40'
               }`}
             >
               {category}
@@ -177,7 +185,7 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
             return (
               <div 
                 key={track.id} 
-                className="glass-panel glow-cyan-hover rounded-3xl p-8 transition-all flex flex-col justify-between group relative overflow-hidden shadow-xl"
+                className="glass-panel glow-cyan-hover rounded-3xl p-8 transition-all flex flex-col justify-between group relative overflow-hidden shadow-xl bg-cyber-navy-light/10"
               >
                 {/* Decorative glow */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl group-hover:bg-electric-cyan/10 transition-colors pointer-events-none" />
@@ -188,7 +196,11 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
                     <div className="p-3 bg-cyber-navy-dark/60 border border-cyber-navy-light/40 w-fit rounded-2xl">
                       <IconComponent className="w-6 h-6 text-electric-cyan text-cyan-glow" />
                     </div>
-                    <span className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest bg-cyber-navy-dark/80 border border-cyber-navy-light/50 px-2.5 py-1 rounded-full">
+                    <span className={`text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border ${
+                      track.difficulty === 'Advanced' 
+                        ? 'border-amber-500/25 bg-amber-500/10 text-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.08)]' 
+                        : 'border-electric-cyan/25 bg-electric-cyan/10 text-electric-cyan shadow-[0_0_8px_rgba(0,255,255,0.08)]'
+                    }`}>
                       {track.difficulty}
                     </span>
                   </div>
@@ -198,6 +210,15 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
                   <p className="text-slate-400 text-xs font-light mt-3 leading-relaxed">
                     {track.description}
                   </p>
+
+                  {/* Tech stack badges */}
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {getTechPills(track.id).map((tech) => (
+                      <span key={tech} className="text-[9px] font-mono text-slate-500 border border-cyber-navy-light/45 px-2 py-0.5 rounded bg-cyber-navy-dark/40 hover:border-electric-cyan/35 hover:text-slate-300 transition-colors">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
 
                   {/* Tasks List Summary */}
                   <div className="mt-6 pt-5 border-t border-cyber-navy-light/40 space-y-2.5">

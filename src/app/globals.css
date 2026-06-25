@@ -22,26 +22,31 @@ body {
   background: rgba(13, 27, 42, 0.25);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.08);
 }
 
 /* Neon Cyan Glow */
 .glow-cyan-hover {
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .glow-cyan-hover:hover {
-  box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
-  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.05);
+  border-color: rgba(0, 255, 255, 0.35);
+  transform: translateY(-2px);
 }
 
 .text-cyan-glow {
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.text-blue-glow {
+  text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
 }
 
 /* Custom neural-net animation */
 @keyframes pulse-slow {
   0%, 100% { opacity: 0.12; }
-  50% { opacity: 0.32; }
+  50% { opacity: 0.38; }
 }
 
 .animate-pulse-slow {
@@ -54,5 +59,84 @@ body {
 }
 
 .animate-spin-slow {
-  animation: spin-slow 15s linear infinite;
+  animation: spin-slow 20s linear infinite;
 }
+
+/* Vertical terminal scanline animation */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+.scanning-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 255, 255, 0.35), transparent);
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Typing Caret Blinking */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typing-caret::after {
+  content: '▋';
+  color: #00ffff;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+/* Moving grid background */
+@keyframes grid-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 4rem 4rem; }
+}
+
+.cyber-grid-moving {
+  background-image: 
+    linear-gradient(to right, rgba(15, 23, 42, 0.45) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.45) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  animation: grid-move 20s linear infinite;
+}
+
+/* Custom scrollbar for dark cyber theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080f1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(13, 27, 42, 0.8);
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 255, 0.25);
+  border-color: rgba(0, 255, 255, 0.4);
+}
+
+/* Signal Flow Paths */
+@keyframes dash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-dash {
+  stroke-dasharray: 8 12;
+  animation: dash 2.5s linear infinite;
+}
+

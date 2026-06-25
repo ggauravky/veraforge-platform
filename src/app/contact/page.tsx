@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   ArrowLeft, Mail, Clock, Send, 
-  CheckCircle2, HelpCircle, MessageSquare 
+  CheckCircle2, HelpCircle, MessageSquare, Activity, ShieldAlert, Cpu
 } from 'lucide-react';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
 
@@ -20,6 +20,18 @@ export default function ContactPage() {
   const [isSending, setIsSending] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [error, setError] = useState('');
+
+  // Live monitor states
+  const [ping, setPing] = useState(14);
+  const [cpuLoad, setCpuLoad] = useState(4.2);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPing(Math.floor(Math.random() * 12) + 11);
+      setCpuLoad(Number((Math.random() * 3 + 2.5).toFixed(1)));
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,8 +63,8 @@ export default function ContactPage() {
 
   return (
     <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350">
-      {/* Background decorations */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      {/* Moving background grid */}
+      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
       <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-electric-blue/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -77,25 +89,56 @@ export default function ContactPage() {
       <main className="flex-1 max-w-5xl mx-auto px-6 py-16 relative z-10 w-full flex flex-col justify-center">
         <div className="grid md:grid-cols-12 gap-8 items-start">
           
-          {/* Info Side (4 Columns) */}
+          {/* Info Side (5 Columns) */}
           <div className="md:col-span-5 space-y-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/30 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-4 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
-                <MessageSquare className="w-3.5 h-3.5 text-electric-cyan" />
+                <MessageSquare className="w-3.5 h-3.5 text-electric-cyan animate-pulse" />
                 <span>Contact Registry Support</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight uppercase">
                 Get In <br />
-                <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Touch.</span>
+                <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent text-cyan-glow">Touch.</span>
               </h1>
               <p className="text-slate-400 text-sm font-light leading-relaxed mt-4">
                 Have questions regarding the virtual internship tracks, certificate verification procedures, or custom corporate partnerships? Drop us a message.
               </p>
             </div>
 
+            {/* Live Monitor Widget */}
+            <div className="glass-panel rounded-2xl p-5 border-cyan-550/20 bg-slate-950/30 space-y-3 shadow-[0_0_15px_rgba(0,255,255,0.02)]">
+              <div className="flex items-center justify-between border-b border-cyber-navy-light/45 pb-2 text-[10px] font-mono text-slate-400">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#00ffff]" />
+                  <span>SECURE GATEWAY MONITOR</span>
+                </div>
+                <span className="font-bold text-electric-cyan">ONLINE</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-[10px] font-mono">
+                <div className="bg-cyber-navy-dark/60 p-2.5 border border-cyber-navy-light/40 rounded-xl">
+                  <div className="text-slate-500 mb-0.5">CPU OCCUPANCY</div>
+                  <div className="text-white font-bold flex items-center gap-1">
+                    <Cpu className="w-3.5 h-3.5 text-electric-blue" />
+                    {cpuLoad}%
+                  </div>
+                </div>
+                <div className="bg-cyber-navy-dark/60 p-2.5 border border-cyber-navy-light/40 rounded-xl">
+                  <div className="text-slate-500 mb-0.5">PING LATENCY</div>
+                  <div className="text-white font-bold flex items-center gap-1">
+                    <Activity className="w-3.5 h-3.5 text-electric-cyan" />
+                    {ping}ms
+                  </div>
+                </div>
+              </div>
+              <div className="text-[9px] font-mono text-slate-500 flex justify-between items-center px-1">
+                <span>PGP ENCRYPTED CHANNEL</span>
+                <span className="text-emerald-400 font-semibold">ACTIVE</span>
+              </div>
+            </div>
+
             <div className="space-y-4 pt-6 border-t border-cyber-navy-light/35">
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-electric-blue mt-0.5">
+                <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-electric-blue mt-0.5 shadow-md">
                   <Mail className="w-4.5 h-4.5" />
                 </div>
                 <div>
@@ -106,9 +149,9 @@ export default function ContactPage() {
                   <p className="text-[10px] text-slate-505 mt-0.5">Response within 24 business hours</p>
                 </div>
               </div>
- 
+  
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-electric-cyan mt-0.5">
+                <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-electric-cyan mt-0.5 shadow-md">
                   <Clock className="w-4.5 h-4.5" />
                 </div>
                 <div>
@@ -117,9 +160,9 @@ export default function ContactPage() {
                   <p className="text-xs font-light text-slate-500">09:00 AM &ndash; 06:00 PM EST</p>
                 </div>
               </div>
- 
+  
               <div className="flex items-start gap-4">
-                <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-electric-blue mt-0.5">
+                <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-xl text-electric-blue mt-0.5 shadow-md">
                   <HelpCircle className="w-4.5 h-4.5" />
                 </div>
                 <div>
@@ -134,9 +177,9 @@ export default function ContactPage() {
 
           {/* Form Side (7 Columns) */}
           <div className="md:col-span-7">
-            <div className="glass-panel rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none" />
- 
+            <div className="glass-panel rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden bg-cyber-navy-light/10">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
+  
               {isSent ? (
                 <div className="text-center py-12 space-y-6">
                   <div className="w-16 h-16 bg-electric-cyan/10 border border-electric-cyan/20 rounded-2xl flex items-center justify-center mx-auto animate-pulse shadow-[0_0_10px_rgba(0,255,255,0.05)]">
@@ -144,7 +187,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white uppercase">Message Sent Successfully!</h3>
-                    <p className="text-slate-405 text-sm font-light mt-2 max-w-sm mx-auto leading-relaxed">
+                    <p className="text-slate-400 text-sm font-light mt-2 max-w-sm mx-auto leading-relaxed">
                       Thank you for contacting VeraForge. Our engineering coordinator will review your inquiry and follow up shortly.
                     </p>
                   </div>
@@ -170,7 +213,7 @@ export default function ContactPage() {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label htmlFor="name" className="text-xs font-bold text-slate-450 uppercase tracking-wider">
+                      <label htmlFor="name" className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                         Full Name <span className="text-red-500">*</span>
                       </label>
                       <input 
@@ -179,13 +222,13 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         placeholder="John Doe"
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-2 focus:ring-electric-cyan/10 placeholder-slate-650 transition-all"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
                         required
                       />
                     </div>
  
                     <div className="space-y-2">
-                      <label htmlFor="email" className="text-xs font-bold text-slate-450 uppercase tracking-wider">
+                      <label htmlFor="email" className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                         Email Address <span className="text-red-500">*</span>
                       </label>
                       <input 
@@ -194,7 +237,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         placeholder="john@example.com"
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-2 focus:ring-electric-cyan/10 placeholder-slate-650 transition-all"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
                         required
                       />
                     </div>
@@ -202,14 +245,14 @@ export default function ContactPage() {
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label htmlFor="role" className="text-xs font-bold text-slate-455 uppercase tracking-wider">
+                      <label htmlFor="role" className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                         Your Role
                       </label>
                       <select 
                         id="role"
                         value={formData.role}
                         onChange={(e) => setFormData({...formData, role: e.target.value})}
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-300 text-sm font-light focus:outline-none focus:ring-2 focus:ring-electric-cyan/10 transition-all cursor-pointer"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-300 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 transition-all cursor-pointer shadow-inner"
                       >
                         <option value="Student">Intern / Student</option>
                         <option value="Employer">Employer / Recruiter</option>
@@ -219,7 +262,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <label htmlFor="subject" className="text-xs font-bold text-slate-455 uppercase tracking-wider">
+                      <label htmlFor="subject" className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                         Subject <span className="text-red-500">*</span>
                       </label>
                       <input 
@@ -228,14 +271,14 @@ export default function ContactPage() {
                         value={formData.subject}
                         onChange={(e) => setFormData({...formData, subject: e.target.value})}
                         placeholder="internship inquiry"
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-2 focus:ring-electric-cyan/10 placeholder-slate-650 transition-all"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
                         required
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="message" className="text-xs font-bold text-slate-455 uppercase tracking-wider">
+                    <label htmlFor="message" className="text-xs font-bold text-slate-300 uppercase tracking-wider">
                       Message <span className="text-red-500">*</span>
                     </label>
                     <textarea 
@@ -244,7 +287,7 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
                       placeholder="Type your message here..."
-                      className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-2 focus:ring-electric-cyan/10 placeholder-slate-650 transition-all resize-none"
+                      className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all resize-none shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
                       required
                     />
                   </div>

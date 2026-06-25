@@ -6,9 +6,9 @@ export const dynamic = 'force-dynamic';
 
 export default function AboutPage() {
   return (
-    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-300">
-      {/* Background grid mask */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350">
+      {/* Moving background grid */}
+      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
       <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-electric-blue/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none" />
 
@@ -34,12 +34,12 @@ export default function AboutPage() {
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/30 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-6 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
-            <Compass className="w-3.5 h-3.5 text-electric-cyan" />
+            <Compass className="w-3.5 h-3.5 text-electric-cyan animate-pulse" />
             <span>Our Vision & Philosophy</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
             Redefining Practical <br />
-            <span className="bg-gradient-to-r from-electric-blue via-electric-cyan to-blue-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-electric-blue via-electric-cyan to-blue-400 bg-clip-text text-transparent text-cyan-glow">
               Skill Validation.
             </span>
           </h1>
@@ -50,7 +50,7 @@ export default function AboutPage() {
 
         {/* The Paradox Section (Two Columns) */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/20 hover:shadow-[0_0_15px_rgba(0,255,255,0.04)] transition-all flex flex-col justify-between">
+          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/35 hover:shadow-[0_0_25px_rgba(0,255,255,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-cyber-navy-light/10">
             <div>
               <span className="text-[10px] text-electric-blue font-bold uppercase tracking-widest block mb-2">The Challenge</span>
               <h2 className="text-2xl font-bold text-white mb-4">The Resume Paradox</h2>
@@ -63,7 +63,7 @@ export default function AboutPage() {
             </div>
           </div>
  
-          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/20 hover:shadow-[0_0_15px_rgba(0,255,255,0.04)] transition-all flex flex-col justify-between">
+          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/35 hover:shadow-[0_0_25px_rgba(0,255,255,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-cyber-navy-light/10">
             <div>
               <span className="text-[10px] text-electric-cyan font-bold uppercase tracking-widest block mb-2 text-cyan-glow">Our Answer</span>
               <h2 className="text-2xl font-bold text-white mb-4">Cryptographic Execution</h2>
@@ -78,7 +78,62 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* System Methodology (Horizontal Timeline/Steps) */}
+        {/* Dynamic Vetting Comparison Diagram */}
+        <div className="glass-panel rounded-3xl p-8 md:p-10 mb-16 border-cyber-navy-light/45 relative overflow-hidden bg-cyber-navy-light/5">
+          <div className="absolute top-0 right-0 w-48 h-48 bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
+          
+          <div className="text-center max-w-2xl mx-auto mb-10">
+            <span className="text-[10px] text-electric-cyan font-bold tracking-widest uppercase block mb-2 text-cyan-glow">VETTING METHODOLOGY COMPARISON</span>
+            <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Static Credentials vs. Active Vetting</h3>
+          </div>
+          
+          <div className="grid md:grid-cols-12 gap-8 items-center">
+            {/* Left: Traditional */}
+            <div className="md:col-span-5 bg-slate-950/40 border border-slate-900 rounded-2xl p-6 text-center space-y-4">
+              <div className="text-red-400 font-bold uppercase tracking-wider text-xs">Traditional Vetting</div>
+              <div className="h-28 flex items-center justify-center relative">
+                <svg className="w-16 h-16 text-slate-650" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                {/* Red warning cross */}
+                <div className="absolute bg-red-950/80 border border-red-500/50 rounded-lg px-2 py-1 text-red-400 font-bold text-[8px] tracking-wider animate-pulse">
+                  UNVERIFIED DATA
+                </div>
+              </div>
+              <p className="text-slate-500 text-xs font-light">Resumes with keywords, copy-pasted bootcamps, and unchecked portfolio links.</p>
+            </div>
+            
+            {/* Center Flow */}
+            <div className="md:col-span-2 flex flex-col items-center justify-center py-4">
+              <span className="text-[8px] text-slate-505 font-bold uppercase tracking-wider mb-2">VS</span>
+              <svg className="w-10 h-10 text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
+              </svg>
+            </div>
+            
+            {/* Right: Cryptographic */}
+            <div className="md:col-span-5 bg-cyber-navy-dark/80 border border-electric-cyan/20 rounded-2xl p-6 text-center space-y-4 shadow-[0_0_20px_rgba(0,255,255,0.02)]">
+              <div className="text-electric-cyan font-bold uppercase tracking-wider text-xs text-cyan-glow">VeraForge Verification</div>
+              <div className="h-28 flex items-center justify-center relative">
+                <svg className="w-16 h-16 text-electric-cyan animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" strokeWidth="1.5" />
+                </svg>
+                {/* Glowing check banner */}
+                <div className="absolute bg-cyan-950/90 border border-electric-cyan/45 rounded-lg px-2 py-1 text-electric-cyan font-mono text-[8px] tracking-wider text-cyan-glow">
+                  CRYPTO SECURED
+                </div>
+              </div>
+              <p className="text-slate-400 text-xs font-light">Sandboxed repo execution, automated code telemetry, and public registry certification.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* System Methodology (Horizontal Steps) */}
         <div className="mb-20">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold text-white uppercase tracking-tight">The Intern Lifecycle</h2>
@@ -118,7 +173,7 @@ export default function AboutPage() {
             ].map((item, idx) => (
               <div 
                 key={idx} 
-                className="glass-panel rounded-2xl p-6 hover:border-electric-cyan/25 hover:shadow-[0_0_12px_rgba(0,255,255,0.03)] transition-all flex flex-col relative"
+                className="glass-panel rounded-2xl p-6 hover:border-electric-cyan/35 hover:shadow-[0_0_20px_rgba(0,255,255,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col relative bg-cyber-navy-light/10"
               >
                 <div className="absolute top-4 right-4 text-3xl font-black text-cyber-navy-light select-none">
                   {item.step}
@@ -134,7 +189,7 @@ export default function AboutPage() {
         </div>
 
         {/* Technical Architecture Bento */}
-        <div className="glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden group border-cyber-navy-light/45">
+        <div className="glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden group border-cyber-navy-light/45 bg-cyber-navy-light/5">
           <div className="absolute top-0 right-0 w-48 h-48 bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none group-hover:bg-electric-cyan/10 transition-colors" />
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-6">
@@ -151,7 +206,7 @@ export default function AboutPage() {
               {['Next.js 16 (App Router)', 'Clerk Auth', 'MongoDB', 'Mongoose ODM', 'html2canvas + jsPDF', 'Lucide Vector System'].map((tech, i) => (
                 <span 
                   key={i} 
-                  className="px-3 py-1 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-lg text-xs text-slate-450 font-semibold"
+                  className="px-3 py-1 bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-lg text-xs text-slate-450 font-semibold hover:border-electric-cyan/30 transition-colors"
                 >
                   {tech}
                 </span>
@@ -168,7 +223,7 @@ export default function AboutPage() {
             <VeraForgeLogo className="w-4 h-4" />
             <span className="font-extrabold text-xs tracking-wider text-white uppercase">VeraForge Credentialing</span>
           </div>
-          <p className="text-[10px] text-slate-505">
+          <p className="text-[10px] text-slate-500">
             &copy; {new Date().getFullYear()} VeraForge Platform. Built for validated talent discovery.
           </p>
         </div>
