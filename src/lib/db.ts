@@ -1,4 +1,16 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
+
+// Override global DNS servers in Node.js to use public DNS resolvers (1.1.1.1, 8.8.8.8)
+// to fix querySrv ECONNREFUSED issues caused by local ISP/DNS blockers for mongodb+srv records.
+try {
+  const currentServers = dns.getServers();
+  if (currentServers && !currentServers.includes('1.1.1.1')) {
+    dns.setServers(['1.1.1.1', '8.8.8.8', ...currentServers]);
+  }
+} catch (e) {
+  console.warn('Failed to set global DNS servers override:', e);
+}
 
 const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/veraforge';
 
