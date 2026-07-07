@@ -65,8 +65,8 @@ export default function ContactPage() {
     <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350">
       {/* Moving background grid */}
       <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-electric-blue/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-amber-550/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-yellow-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
@@ -92,24 +92,24 @@ export default function ContactPage() {
           {/* Info Side (5 Columns) */}
           <div className="md:col-span-5 space-y-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/30 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-4 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/30 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-4 shadow-[0_0_10px_rgba(245,158,11,0.05)]">
                 <MessageSquare className="w-3.5 h-3.5 text-electric-cyan animate-pulse" />
                 <span>Contact Registry Support</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight uppercase">
                 Get In <br />
-                <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent text-cyan-glow">Touch.</span>
+                <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent text-cyan-glow">Touch.</span>
               </h1>
-              <p className="text-slate-400 text-sm font-light leading-relaxed mt-4">
+              <p className="text-slate-400 text-sm font-light leading-relaxed mt-4 font-sans">
                 Have questions regarding the virtual internship tracks, certificate verification procedures, or custom corporate partnerships? Drop us a message.
               </p>
             </div>
 
             {/* Live Monitor Widget */}
-            <div className="glass-panel rounded-2xl p-5 border-cyan-550/20 bg-slate-950/30 space-y-3 shadow-[0_0_15px_rgba(0,255,255,0.02)]">
+            <div className="glass-panel rounded-2xl p-5 border-amber-500/20 bg-slate-950/30 space-y-3 shadow-[0_0_15px_rgba(245,158,11,0.02)]">
               <div className="flex items-center justify-between border-b border-cyber-navy-light/45 pb-2 text-[10px] font-mono text-slate-400">
                 <div className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#00ffff]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#fbbf24]" />
                   <span>SECURE GATEWAY MONITOR</span>
                 </div>
                 <span className="font-bold text-electric-cyan">ONLINE</span>
@@ -157,7 +157,7 @@ export default function ContactPage() {
                 <div>
                   <h4 className="text-xs font-bold text-white uppercase tracking-wider">Office Hours</h4>
                   <p className="text-sm font-light text-slate-400 mt-1">Monday &ndash; Friday</p>
-                  <p className="text-xs font-light text-slate-500">09:00 AM &ndash; 06:00 PM EST</p>
+                  <p className="text-xs font-light text-slate-505 font-sans">09:00 AM &ndash; 06:00 PM EST</p>
                 </div>
               </div>
   
@@ -178,11 +178,11 @@ export default function ContactPage() {
           {/* Form Side (7 Columns) */}
           <div className="md:col-span-7">
             <div className="glass-panel rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden bg-cyber-navy-light/10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
   
               {isSent ? (
                 <div className="text-center py-12 space-y-6">
-                  <div className="w-16 h-16 bg-electric-cyan/10 border border-electric-cyan/20 rounded-2xl flex items-center justify-center mx-auto animate-pulse shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+                  <div className="w-16 h-16 bg-electric-cyan/10 border border-electric-cyan/20 rounded-2xl flex items-center justify-center mx-auto animate-pulse shadow-[0_0_10px_rgba(245,158,11,0.05)]">
                     <CheckCircle2 className="w-8 h-8 text-electric-cyan text-cyan-glow" />
                   </div>
                   <div>
@@ -193,7 +193,7 @@ export default function ContactPage() {
                   </div>
                   <button 
                     onClick={handleReset}
-                    className="px-6 py-2.5 bg-cyber-navy-dark hover:bg-cyber-navy-light text-electric-cyan border border-electric-cyan/20 hover:border-electric-cyan/45 text-xs font-bold rounded-xl transition-all uppercase tracking-wider shadow-[0_0_10px_rgba(0,255,255,0.05)] cursor-pointer"
+                    className="px-6 py-2.5 bg-cyber-navy-dark hover:bg-cyber-navy-light text-electric-cyan border border-electric-cyan/20 hover:border-electric-cyan/45 text-xs font-bold rounded-xl transition-all uppercase tracking-wider shadow-[0_0_10px_rgba(245,158,11,0.05)] cursor-pointer"
                   >
                     Send Another Message
                   </button>
@@ -222,7 +222,7 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({...formData, name: e.target.value})}
                         placeholder="John Doe"
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-750 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(245,158,11,0.05)]"
                         required
                       />
                     </div>
@@ -237,7 +237,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         placeholder="john@example.com"
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-750 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(245,158,11,0.05)]"
                         required
                       />
                     </div>
@@ -271,7 +271,7 @@ export default function ContactPage() {
                         value={formData.subject}
                         onChange={(e) => setFormData({...formData, subject: e.target.value})}
                         placeholder="internship inquiry"
-                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                        className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-750 transition-all shadow-inner focus:shadow-[0_0_10px_rgba(245,158,11,0.05)]"
                         required
                       />
                     </div>
@@ -287,7 +287,7 @@ export default function ContactPage() {
                       value={formData.message}
                       onChange={(e) => setFormData({...formData, message: e.target.value})}
                       placeholder="Type your message here..."
-                      className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-700 transition-all resize-none shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                      className="w-full px-4 py-3 bg-cyber-navy-dark border border-cyber-navy-light/40 focus:border-electric-cyan rounded-xl text-slate-100 text-sm font-light focus:outline-none focus:ring-1 focus:ring-electric-cyan/35 placeholder-slate-750 transition-all resize-none shadow-inner focus:shadow-[0_0_10px_rgba(245,158,11,0.05)]"
                       required
                     />
                   </div>
@@ -295,7 +295,7 @@ export default function ContactPage() {
                   <button 
                     type="submit"
                     disabled={isSending}
-                    className="w-full py-4 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl hover:shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 uppercase tracking-widest cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+                    className="w-full py-4 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl hover:shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 uppercase tracking-widest cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)]"
                   >
                     {isSending ? (
                       <>

@@ -66,7 +66,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
 
   return (
     <div className="w-full max-w-2xl glass-panel rounded-3xl p-8 md:p-10 shadow-2xl relative z-10 bg-cyber-navy-light/10">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
       
       <div className="mb-8 border-b border-cyber-navy-light/50 pb-6">
         <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
@@ -97,7 +97,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="text"
               placeholder="e.g. John Doe"
               {...register('fullName')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(0,255,255,0.05)]"
+              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
             />
             {errors.fullName && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.fullName.message}</p>
@@ -114,7 +114,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="email"
               value={initialEmail}
               disabled
-              className="w-full bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl px-4 py-3 text-slate-500 cursor-not-allowed text-sm outline-none"
+              className="w-full bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl px-4 py-3 text-slate-550 cursor-not-allowed text-sm outline-none"
             />
           </div>
         </div>
@@ -131,7 +131,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="text"
               placeholder="e.g. Stanford University"
               {...register('universityName')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(0,255,255,0.05)]"
+              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
             />
             {errors.universityName && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.universityName.message}</p>
@@ -148,7 +148,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="text"
               placeholder="e.g. 2026"
               {...register('graduationYear')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(0,255,255,0.05)]"
+              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
             />
             {errors.graduationYear && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.graduationYear.message}</p>
@@ -168,7 +168,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="url"
               placeholder="e.g. https://github.com/yourusername"
               {...register('githubUrl')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(0,255,255,0.05)]"
+              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
             />
             {errors.githubUrl && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.githubUrl.message}</p>
@@ -185,7 +185,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="url"
               placeholder="e.g. https://linkedin.com/in/yourprofile"
               {...register('linkedinUrl')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(0,255,255,0.05)]"
+              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
             />
             {errors.linkedinUrl && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.linkedinUrl.message}</p>
@@ -202,7 +202,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="url"
               placeholder="e.g. https://myportfolio.com"
               {...register('portfolioUrl')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(0,255,255,0.05)]"
+              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
             />
             {errors.portfolioUrl && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.portfolioUrl.message}</p>
@@ -214,7 +214,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-6 py-4 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl hover:shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 group cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+          className="w-full mt-6 py-4 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl hover:shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 group cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)]"
         >
           {loading ? (
             <>

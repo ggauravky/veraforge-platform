@@ -21,18 +21,18 @@ export default function VeraForgeLogo({
       {...props}
     >
       <defs>
-        {/* Shield Metallic Silver-Green Gradient */}
+        {/* Shield Metallic Gold-Bronze Gradient */}
         <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#475569" /> {/* slate-600 */}
-          <stop offset="30%" stopColor="#047857" /> {/* emerald-700 */}
-          <stop offset="70%" stopColor="#064e3b" /> {/* emerald-900 */}
-          <stop offset="100%" stopColor="#94a3b8" /> {/* slate-400 */}
+          <stop offset="0%" stopColor="#78350f" /> {/* bronze-900 */}
+          <stop offset="30%" stopColor="#b45309" /> {/* amber-700 */}
+          <stop offset="70%" stopColor="#92400e" /> {/* amber-800 */}
+          <stop offset="100%" stopColor="#f59e0b" /> {/* amber-500 */}
         </linearGradient>
-        {/* Monogram / Arrow Bright Emerald-Mint Gradient */}
+        {/* Monogram / Arrow Bright Gold-Yellow Gradient */}
         <linearGradient id="monogramGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#059669" /> {/* emerald-600 */}
-          <stop offset="50%" stopColor="#10b981" /> {/* emerald-500 */}
-          <stop offset="100%" stopColor="#34d399" /> {/* emerald-400 */}
+          <stop offset="0%" stopColor="#d97706" /> {/* amber-600 */}
+          <stop offset="50%" stopColor="#fbbf24" /> {/* yellow-400 */}
+          <stop offset="100%" stopColor="#fef08a" /> {/* yellow-200 */}
         </linearGradient>
       </defs>
       
@@ -40,7 +40,7 @@ export default function VeraForgeLogo({
       <path
         d="M12 2L21 5V14C21 18.5 17.5 21.5 12 22C6.5 21.5 3 18.5 3 14V5L12 2Z"
         fill={shieldColor}
-        stroke="#10b981"
+        stroke="#fbbf24"
         strokeWidth="1.5"
         strokeLinejoin="round"
       />

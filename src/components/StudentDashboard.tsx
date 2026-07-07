@@ -213,7 +213,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,255,255,0.05)] hidden sm:inline">
+            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.05)] hidden sm:inline">
               Student Workspace
             </span>
             <UserButton />
@@ -258,7 +258,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             {/* Progress Bar */}
             <div className="w-full bg-cyber-navy-dark h-3 rounded-full overflow-hidden border border-cyber-navy-light/40 p-[2px]">
               <div 
-                className="bg-gradient-to-r from-electric-blue to-electric-cyan h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(0,255,255,0.35)]"
+                className="bg-gradient-to-r from-electric-blue to-electric-cyan h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(245,158,11,0.35)]"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -289,13 +289,13 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
               {certificate ? (
                 <a
                   href={`/verify/${certificate.certificateId}`}
-                  className="w-full py-3 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl text-center flex items-center justify-center gap-2 shadow-lg shadow-electric-cyan/20 hover:scale-[1.01] transition-all shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+                  className="w-full py-3 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl text-center flex items-center justify-center gap-2 shadow-lg transition-all"
                 >
                   View Verified Certificate
                   <ExternalLink className="w-4 h-4" />
                 </a>
               ) : (
-                <div className="p-3.5 bg-cyber-navy-dark border border-cyber-navy-light/45 rounded-xl text-center text-xs text-electric-cyan font-semibold flex items-center justify-center gap-2 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+                <div className="p-3.5 bg-cyber-navy-dark border border-cyber-navy-light/45 rounded-xl text-center text-xs text-electric-cyan font-semibold flex items-center justify-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-electric-cyan" />
                   Awaiting Admin Issuance...
                 </div>
@@ -317,7 +317,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   onClick={() => setResumeTab('bullets')}
                   className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer ${
                     resumeTab === 'bullets' 
-                      ? 'bg-electric-cyan text-cyber-navy-dark shadow-[0_0_8px_rgba(0,255,255,0.25)]' 
+                      ? 'bg-electric-cyan text-cyber-navy-dark' 
                       : 'bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -327,7 +327,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   onClick={() => setResumeTab('linkedin')}
                   className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer ${
                     resumeTab === 'linkedin' 
-                      ? 'bg-electric-cyan text-cyber-navy-dark shadow-[0_0_8px_rgba(0,255,255,0.25)]' 
+                      ? 'bg-electric-cyan text-cyber-navy-dark' 
                       : 'bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -350,7 +350,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   </div>
                   <button
                     onClick={handleCopyBullets}
-                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.02)]"
+                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     {copiedBullets ? (
                       <>
@@ -375,7 +375,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   </div>
                   <button
                     onClick={handleCopyLinkedIn}
-                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.02)]"
+                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     {copiedLinkedIn ? (
                       <>
@@ -401,7 +401,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             <div className="glass-panel rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
               <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
               
-              <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/20 rounded-2xl flex items-center justify-center animate-pulse shadow-[0_0_15px_rgba(0,255,255,0.08)]">
+              <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/20 rounded-2xl flex items-center justify-center animate-pulse">
                 <AlertTriangle className="w-8 h-8 text-electric-cyan text-cyan-glow" />
               </div>
               
@@ -411,7 +411,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 {/* Visual Status Meter */}
                 <div className="py-2">
                   <div className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-full h-2 p-[1px] relative">
-                    <div className="bg-electric-cyan h-full rounded-full animate-pulse shadow-[0_0_8px_#00ffff]" style={{ width: '40%' }} />
+                    <div className="bg-electric-cyan h-full rounded-full animate-pulse" style={{ width: '40%' }} />
                   </div>
                   <div className="flex justify-between text-[9px] text-slate-500 mt-1.5 font-mono">
                     <span>ONBOARDING: OK</span>
@@ -449,10 +449,10 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                     key={userTask._id}
                     className={`bg-cyber-navy-light/5 border rounded-2xl p-6 transition-all duration-300 ${
                       isLocked ? 'border-cyber-navy-light/20 opacity-40' :
-                      isApproved ? 'border-electric-cyan/25 bg-electric-cyan/5 shadow-[0_0_15px_rgba(0,255,255,0.02)]' :
-                      isRejected ? 'border-red-950/30 bg-red-950/5 shadow-[0_0_15px_rgba(239,68,68,0.02)]' :
+                      isApproved ? 'border-electric-cyan/25 bg-electric-cyan/5' :
+                      isRejected ? 'border-red-950/30 bg-red-950/5' :
                       isPending ? 'border-electric-blue/25 bg-electric-blue/5' :
-                      'border-cyber-navy-light/40 hover:border-electric-cyan/35 hover:bg-cyber-navy-light/15 hover:shadow-[0_0_15px_rgba(0,255,255,0.04)]'
+                      'border-cyber-navy-light/40 hover:border-electric-cyan/35 hover:bg-cyber-navy-light/15'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -469,8 +469,8 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                             </span>
                           )}
                           {isApproved && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan bg-electric-cyan/10 border border-electric-cyan/20 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_8px_rgba(0,255,255,0.1)] font-sans text-cyan-glow">
-                              <CheckCircle2 className="w-3 h-3" /> Completed
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan bg-electric-cyan/10 border border-electric-cyan/20 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans text-cyan-glow">
+                              <CheckCircle2 className="w-3 h-3 text-electric-cyan" /> Completed
                             </span>
                           )}
                           {isPending && (
@@ -553,7 +553,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {userTask.status === 'quiz_pending' && (
                           <button
                             onClick={() => handleOpenQuiz(userTask)}
-                            className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark text-xs font-bold rounded-lg transition-all shadow-md shadow-electric-cyan/15 hover:scale-[1.02] cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.05)] flex items-center gap-1"
+                            className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark text-xs font-bold rounded-lg transition-all shadow-md shadow-electric-cyan/15 hover:scale-[1.02] cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)] flex items-center gap-1"
                           >
                             <BookOpen className="w-3.5 h-3.5" />
                             Take Quiz
@@ -563,7 +563,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {userTask.status === 'unlocked' && (
                           <button
                             onClick={() => handleOpenSubmission(userTask)}
-                            className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark text-xs font-bold rounded-lg transition-all shadow-md shadow-electric-cyan/15 hover:scale-[1.02] cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                            className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark text-xs font-bold rounded-lg transition-all shadow-md shadow-electric-cyan/15 hover:scale-[1.02] cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)]"
                           >
                             Submit Assignment
                           </button>
@@ -642,20 +642,20 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             )}
  
             {successMsg && (
-              <div className="mb-4 p-3 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-semibold shadow-[0_0_10px_rgba(0,255,255,0.05)] font-sans">
+              <div className="mb-4 p-3 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-semibold shadow-[0_0_10px_rgba(245,158,11,0.05)] font-sans">
                 {successMsg}
               </div>
             )}
 
             {isScanning ? (
               <div className="space-y-4">
-                <div className="bg-slate-950 p-5 rounded-2xl border border-cyan-500/25 font-mono text-[11px] leading-relaxed text-slate-300 min-h-[220px] shadow-[0_0_30px_rgba(0,255,255,0.08)] relative overflow-hidden flex flex-col justify-between">
+                <div className="bg-slate-950 p-5 rounded-2xl border border-amber-500/25 font-mono text-[11px] leading-relaxed text-slate-300 min-h-[220px] shadow-[0_0_30px_rgba(245,158,11,0.08)] relative overflow-hidden flex flex-col justify-between">
                   {/* Vertical Scanline */}
                   <div className="scanning-line" />
                   
                   <div className="space-y-2 relative z-20">
                      <div className="flex items-center gap-2 border-b border-cyber-navy-light pb-2 mb-2 text-xs text-electric-cyan font-bold tracking-wider text-cyan-glow">
-                       <span className="w-2 h-2 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#00ffff]" />
+                       <span className="w-2 h-2 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#fbbf24]" />
                        <span>VERAFORGE CI/CD TELEMETRY SCANNER v2.5</span>
                      </div>
                     {terminalLogs.map((log, idx) => {
@@ -732,7 +732,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-6 shadow-[0_0_15px_rgba(0,255,255,0.15)] font-sans"
+                  className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-6 shadow-[0_0_15px_rgba(245,158,11,0.15)] font-sans"
                 >
                   Submit Work for Review
                   <ArrowRight className="w-4 h-4" />
@@ -819,7 +819,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                             }}
                             className={`w-full text-left px-4 py-2.5 text-xs rounded-xl border transition-all cursor-pointer font-sans ${
                               isSelected
-                                ? 'bg-electric-cyan/15 border-electric-cyan text-white shadow-[0_0_10px_rgba(0,255,255,0.08)]'
+                                ? 'bg-electric-cyan/15 border-electric-cyan text-white shadow-[0_0_10px_rgba(245,158,11,0.08)]'
                                 : 'bg-cyber-navy-dark/60 border-cyber-navy-light/40 text-slate-400 hover:border-cyber-navy-light/80 hover:text-slate-200'
                             }`}
                           >
@@ -842,7 +842,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
               <button
                 type="submit"
                 disabled={quizLoading || quizAnswers.some(a => a === -1)}
-                className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-cyber-navy-light disabled:border-cyber-navy-light/45 disabled:text-slate-500 border border-transparent disabled:cursor-not-allowed text-cyber-navy-dark font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.1)] font-sans"
+                className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-cyber-navy-light disabled:border-cyber-navy-light/45 disabled:text-slate-500 border border-transparent disabled:cursor-not-allowed text-cyber-navy-dark font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.1)] font-sans"
               >
                 {quizLoading ? (
                   <>

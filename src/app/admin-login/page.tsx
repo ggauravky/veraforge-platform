@@ -42,12 +42,12 @@ export default function AdminLoginPage() {
     <div className="flex-1 flex flex-col items-center justify-center bg-cyber-navy-dark relative overflow-hidden min-h-screen py-12 px-4">
       {/* Moving background grid */}
       <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-550/5 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
 
       <div className="relative z-10 w-full max-w-md flex flex-col items-center gap-6">
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg shadow-electric-cyan/5">
+          <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg shadow-amber-550/5">
             <VeraForgeLogo className="w-6 h-6" />
           </div>
           <div>
@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
 
         {/* Login Form Container */}
         <div className="w-full glass-panel rounded-3xl p-8 shadow-2xl relative overflow-hidden bg-cyber-navy-light/10">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-550/5 rounded-full blur-2xl pointer-events-none" />
           
           <div className="text-center mb-6">
             <h2 className="text-lg font-bold text-white uppercase tracking-tight">Administrative Portal</h2>
@@ -107,7 +107,7 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-xl shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-6 shadow-[0_0_15px_rgba(0,255,255,0.1)]"
+              className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-xl shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-6 shadow-[0_0_15px_rgba(245,158,11,0.1)]"
             >
               {loading ? (
                 <>

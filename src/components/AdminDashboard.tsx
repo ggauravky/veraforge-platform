@@ -277,7 +277,7 @@ export default function AdminDashboard({
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(0,255,255,0.05)] hidden sm:inline">
+            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.05)] hidden sm:inline">
               Super Admin Control
             </span>
             <button
@@ -308,7 +308,7 @@ export default function AdminDashboard({
 
           <button 
             onClick={() => { router.refresh(); setActionSuccess('Sync completed.'); }}
-            className="flex items-center gap-1.5 px-4 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light border border-cyber-navy-light/40 rounded-xl text-xs font-semibold text-electric-cyan hover:text-white transition-all shadow-[0_0_10px_rgba(0,255,255,0.05)] cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light border border-cyber-navy-light/40 rounded-xl text-xs font-semibold text-electric-cyan hover:text-white transition-all shadow-[0_0_10px_rgba(245,158,11,0.05)] cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Reload Data
@@ -324,7 +324,7 @@ export default function AdminDashboard({
         )}
 
         {actionSuccess && (
-          <div className="mb-6 p-4 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+          <div className="mb-6 p-4 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(245,158,11,0.05)]">
             <CheckCircle2 className="w-4 h-4 text-electric-cyan shrink-0" />
             <span>{actionSuccess}</span>
           </div>
@@ -343,7 +343,7 @@ export default function AdminDashboard({
             <UserPlus className="w-4 h-4" />
             Pending Approvals
             {pendingStudents.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.25)]">
+              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.25)]">
                 {pendingStudents.length}
               </span>
             )}
@@ -377,7 +377,7 @@ export default function AdminDashboard({
             <Award className="w-4 h-4" />
             Graduations
             {graduationCandidates.filter(c => !c.certificateId).length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.25)]">
+              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.25)]">
                 {graduationCandidates.filter(c => !c.certificateId).length}
               </span>
             )}
@@ -465,7 +465,7 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleApproveStudent(student._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.1)]"
+                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.1)]"
                             >
                               {loadingId === student._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -540,7 +540,7 @@ export default function AdminDashboard({
                               handleOpenRejectTask(sub._id);
                               handleGenerateAIFeedback(sub._id);
                             }}
-                            className="mt-1 flex items-center gap-1 text-[10px] text-electric-cyan hover:text-white bg-cyber-navy-dark/40 hover:bg-cyber-navy-light/35 border border-electric-cyan/20 px-2 py-1 rounded-md transition-all cursor-pointer shadow-[0_0_8px_rgba(0,255,255,0.05)] w-fit font-bold"
+                            className="mt-1 flex items-center gap-1 text-[10px] text-electric-cyan hover:text-white bg-cyber-navy-dark/40 hover:bg-cyber-navy-light/35 border border-electric-cyan/20 px-2 py-1 rounded-md transition-all cursor-pointer shadow-[0_0_8px_rgba(245,158,11,0.05)] w-fit font-bold"
                           >
                             <Sparkles className="w-3 h-3 text-cyan-glow animate-pulse" />
                             Generate Automated AI Code Report
@@ -558,7 +558,7 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleApproveTask(sub._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.1)]"
+                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.1)]"
                             >
                               {loadingId === sub._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -607,7 +607,7 @@ export default function AdminDashboard({
                         </td>
                         <td className="py-4">
                           {candidate.certificateId ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/10 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.05)]">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/10 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.05)]">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               Issued
                             </span>
@@ -630,7 +630,7 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleIssueCertificate(candidate._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.1)]"
+                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.1)]"
                             >
                               {loadingId === candidate._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -685,7 +685,7 @@ export default function AdminDashboard({
                         </td>
                         <td className="py-4">
                           {student.accountStatus === 'active' && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/15 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(0,255,255,0.05)]">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/15 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.05)]">
                               Active Student
                             </span>
                           )}
@@ -766,7 +766,7 @@ export default function AdminDashboard({
                     type="button"
                     onClick={() => handleGenerateAIFeedback()}
                     disabled={generatingAI}
-                    className="px-3 py-1.5 bg-electric-cyan/10 hover:bg-electric-cyan/20 border border-electric-cyan/30 text-electric-cyan disabled:opacity-50 text-[10px] font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(0,255,255,0.05)] font-sans"
+                    className="px-3 py-1.5 bg-electric-cyan/10 hover:bg-electric-cyan/20 border border-electric-cyan/30 text-electric-cyan disabled:opacity-50 text-[10px] font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)] font-sans"
                   >
                     {generatingAI ? (
                       <>
@@ -787,7 +787,7 @@ export default function AdminDashboard({
                   onChange={(e) => setAdminFeedback(e.target.value)}
                   placeholder="e.g. Please refactor your CSS layout to be fully responsive. The calculator grid overflows on narrow screens."
                   rows={8}
-                  className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-650 text-xs outline-none resize-none font-sans shadow-inner focus:shadow-[0_0_10px_rgba(0,255,255,0.05)]"
+                  className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-650 text-xs outline-none resize-none font-sans shadow-inner focus:shadow-[0_0_10px_rgba(245,158,11,0.05)]"
                 />
 
                 <div className="flex items-center justify-end gap-2.5 mt-2">
@@ -801,7 +801,7 @@ export default function AdminDashboard({
                   <button
                     onClick={handleRejectTaskSubmit}
                     disabled={loadingId !== null}
-                    className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark text-xs font-extrabold rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
+                    className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark text-xs font-extrabold rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)]"
                   >
                     {loadingId === feedbackTaskId ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />

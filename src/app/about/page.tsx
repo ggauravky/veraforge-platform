@@ -9,8 +9,8 @@ export default function AboutPage() {
     <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350">
       {/* Moving background grid */}
       <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-electric-blue/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/4 w-[400px] h-[400px] bg-yellow-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
@@ -33,13 +33,13 @@ export default function AboutPage() {
       <main className="flex-1 max-w-5xl mx-auto px-6 py-16 relative z-10 w-full">
         {/* Hero Section */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/30 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-6 shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/30 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-6 shadow-[0_0_10px_rgba(245,158,11,0.05)]">
             <Compass className="w-3.5 h-3.5 text-electric-cyan animate-pulse" />
             <span>Our Vision & Philosophy</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tight leading-none mb-6">
             Redefining Practical <br />
-            <span className="bg-gradient-to-r from-electric-blue via-electric-cyan to-blue-400 bg-clip-text text-transparent text-cyan-glow">
+            <span className="bg-gradient-to-r from-yellow-450 via-amber-500 to-orange-400 bg-clip-text text-transparent text-cyan-glow">
               Skill Validation.
             </span>
           </h1>
@@ -50,7 +50,7 @@ export default function AboutPage() {
 
         {/* The Paradox Section (Two Columns) */}
         <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/35 hover:shadow-[0_0_25px_rgba(0,255,255,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-cyber-navy-light/10">
+          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/35 hover:shadow-[0_0_25px_rgba(245,158,11,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-cyber-navy-light/10">
             <div>
               <span className="text-[10px] text-electric-blue font-bold uppercase tracking-widest block mb-2">The Challenge</span>
               <h2 className="text-2xl font-bold text-white mb-4">The Resume Paradox</h2>
@@ -63,7 +63,7 @@ export default function AboutPage() {
             </div>
           </div>
  
-          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/35 hover:shadow-[0_0_25px_rgba(0,255,255,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-cyber-navy-light/10">
+          <div className="glass-panel rounded-3xl p-8 hover:border-electric-cyan/35 hover:shadow-[0_0_25px_rgba(245,158,11,0.08)] hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between bg-cyber-navy-light/10">
             <div>
               <span className="text-[10px] text-electric-cyan font-bold uppercase tracking-widest block mb-2 text-cyan-glow">Our Answer</span>
               <h2 className="text-2xl font-bold text-white mb-4">Cryptographic Execution</h2>
@@ -72,7 +72,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="mt-8 pt-6 border-t border-cyber-navy-light/35 text-electric-cyan/80 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-cyan-glow">
-              <span className="w-1.5 h-1.5 bg-electric-cyan rounded-full animate-pulse shadow-[0_0_8px_#00ffff]" />
+              <span className="w-1.5 h-1.5 bg-electric-cyan rounded-full animate-pulse shadow-[0_0_8px_#fbbf24]" />
               100% Verified Performance Portfolio.
             </div>
           </div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
 
         {/* Dynamic Vetting Comparison Diagram */}
         <div className="glass-panel rounded-3xl p-8 md:p-10 mb-16 border-cyber-navy-light/45 relative overflow-hidden bg-cyber-navy-light/5">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
           
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-[10px] text-electric-cyan font-bold tracking-widest uppercase block mb-2 text-cyan-glow">VETTING METHODOLOGY COMPARISON</span>
@@ -92,14 +92,14 @@ export default function AboutPage() {
             <div className="md:col-span-5 bg-slate-950/40 border border-slate-900 rounded-2xl p-6 text-center space-y-4">
               <div className="text-red-400 font-bold uppercase tracking-wider text-xs">Traditional Vetting</div>
               <div className="h-28 flex items-center justify-center relative">
-                <svg className="w-16 h-16 text-slate-650" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                <svg className="w-16 h-16 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                   <polyline points="14 2 14 8 20 8" />
                   <line x1="16" y1="13" x2="8" y2="13" />
                   <line x1="16" y1="17" x2="8" y2="17" />
                 </svg>
                 {/* Red warning cross */}
-                <div className="absolute bg-red-950/80 border border-red-500/50 rounded-lg px-2 py-1 text-red-400 font-bold text-[8px] tracking-wider animate-pulse">
+                <div className="absolute bg-red-955/80 border border-red-500/50 rounded-lg px-2 py-1 text-red-400 font-bold text-[8px] tracking-wider animate-pulse">
                   UNVERIFIED DATA
                 </div>
               </div>
@@ -108,7 +108,7 @@ export default function AboutPage() {
             
             {/* Center Flow */}
             <div className="md:col-span-2 flex flex-col items-center justify-center py-4">
-              <span className="text-[8px] text-slate-505 font-bold uppercase tracking-wider mb-2">VS</span>
+              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wider mb-2">VS</span>
               <svg className="w-10 h-10 text-slate-800" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <line x1="5" y1="12" x2="19" y2="12" />
                 <polyline points="12 5 19 12 12 19" />
@@ -116,7 +116,7 @@ export default function AboutPage() {
             </div>
             
             {/* Right: Cryptographic */}
-            <div className="md:col-span-5 bg-cyber-navy-dark/80 border border-electric-cyan/20 rounded-2xl p-6 text-center space-y-4 shadow-[0_0_20px_rgba(0,255,255,0.02)]">
+            <div className="md:col-span-5 bg-cyber-navy-dark/80 border border-electric-cyan/20 rounded-2xl p-6 text-center space-y-4 shadow-[0_0_20px_rgba(245,158,11,0.02)]">
               <div className="text-electric-cyan font-bold uppercase tracking-wider text-xs text-cyan-glow">VeraForge Verification</div>
               <div className="h-28 flex items-center justify-center relative">
                 <svg className="w-16 h-16 text-electric-cyan animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
@@ -124,7 +124,7 @@ export default function AboutPage() {
                   <path d="m9 12 2 2 4-4" strokeWidth="1.5" />
                 </svg>
                 {/* Glowing check banner */}
-                <div className="absolute bg-cyan-950/90 border border-electric-cyan/45 rounded-lg px-2 py-1 text-electric-cyan font-mono text-[8px] tracking-wider text-cyan-glow">
+                <div className="absolute bg-amber-950/90 border border-electric-cyan/45 rounded-lg px-2 py-1 text-electric-cyan font-mono text-[8px] tracking-wider text-cyan-glow">
                   CRYPTO SECURED
                 </div>
               </div>
@@ -173,7 +173,7 @@ export default function AboutPage() {
             ].map((item, idx) => (
               <div 
                 key={idx} 
-                className="glass-panel rounded-2xl p-6 hover:border-electric-cyan/35 hover:shadow-[0_0_20px_rgba(0,255,255,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col relative bg-cyber-navy-light/10"
+                className="glass-panel rounded-2xl p-6 hover:border-electric-cyan/35 hover:shadow-[0_0_20px_rgba(245,158,11,0.06)] hover:-translate-y-1 transition-all duration-300 flex flex-col relative bg-cyber-navy-light/10"
               >
                 <div className="absolute top-4 right-4 text-3xl font-black text-cyber-navy-light select-none">
                   {item.step}
@@ -190,7 +190,7 @@ export default function AboutPage() {
 
         {/* Technical Architecture Bento */}
         <div className="glass-panel rounded-3xl p-8 md:p-12 relative overflow-hidden group border-cyber-navy-light/45 bg-cyber-navy-light/5">
-          <div className="absolute top-0 right-0 w-48 h-48 bg-electric-cyan/5 rounded-full blur-3xl pointer-events-none group-hover:bg-electric-cyan/10 transition-colors" />
+          <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 rounded-full blur-3xl pointer-events-none group-hover:bg-amber-500/10 transition-colors" />
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-6">
               <Layers className="w-5 h-5 text-electric-cyan text-cyan-glow" />
