@@ -390,9 +390,18 @@ export default async function Home() {
             </p>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8 text-xs text-slate-500">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8 text-xs text-slate-500">
             <Link href="/about" className="hover:text-electric-cyan transition-colors">
               About Us
+            </Link>
+            <Link href="/curriculum" className="hover:text-electric-cyan transition-colors">
+              Curriculum
+            </Link>
+            <Link href="/faq" className="hover:text-electric-cyan transition-colors">
+              FAQs
+            </Link>
+            <Link href="/verify" className="hover:text-electric-cyan transition-colors">
+              Verify Credential
             </Link>
             <Link href="/contact" className="hover:text-electric-cyan transition-colors">
               Contact Us
@@ -405,7 +414,7 @@ export default async function Home() {
             </Link>
             <Link 
               href="/admin-login" 
-              className="text-[9px] text-slate-700 hover:text-electric-cyan transition-colors tracking-wide self-center md:self-end mt-2 md:mt-0 font-medium"
+              className="text-[9px] text-slate-700 hover:text-electric-cyan transition-colors tracking-wide font-medium"
             >
               Admin Console
             </Link>
