@@ -397,6 +397,9 @@ export default async function Home() {
             <Link href="/curriculum" className="hover:text-electric-cyan transition-colors">
               Curriculum
             </Link>
+            <Link href="/quiz-match" className="hover:text-electric-cyan transition-colors">
+              Track Quiz
+            </Link>
             <Link href="/faq" className="hover:text-electric-cyan transition-colors">
               FAQs
             </Link>
