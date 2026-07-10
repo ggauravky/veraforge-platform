@@ -112,25 +112,25 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100 pb-20">
-      {/* Moving background grid */}
-      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
-      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="flex-1 flex flex-col bg-zinc-950 relative min-h-screen text-slate-100 pb-20">
+      {/* Background Grid */}
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
+      <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-blue-550/2 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg">
+            <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl shadow-sm">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
+              <span className="block text-[8px] text-slate-400 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.05)]">
+            <span className="text-xs text-blue-500 font-semibold bg-zinc-905 border border-zinc-800 px-3 py-1.5 rounded-full">
               Application Approved
             </span>
           </div>
@@ -141,15 +141,15 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
       <main className="flex-1 max-w-6xl mx-auto px-6 py-16 relative z-10 w-full">
         {/* Intro */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-cyber-navy-light/35 border border-electric-cyan/20 text-electric-cyan rounded-full text-xs font-semibold mb-6 shadow-[0_0_10px_rgba(245,158,11,0.05)]">
-            <Sparkles className="w-3.5 h-3.5 text-electric-cyan animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-zinc-800 text-slate-450 rounded-full text-xs font-semibold mb-6">
+            <Sparkles className="w-3.5 h-3.5 text-blue-500" />
             <span>Select Your Specialization Track</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight uppercase">
             Choose Your Technology Specialization
           </h1>
-          <p className="text-slate-400 text-sm mt-3 font-light leading-relaxed">
-            Welcome, <span className="text-slate-250 font-medium">{user.fullName}</span>. Please choose your career specialization track. Once enrolled, you will unlock your sequential development tasks.
+          <p className="text-slate-400 text-xs mt-3 font-light leading-relaxed">
+            Welcome, <span className="text-slate-205 font-medium">{user.fullName}</span>. Please choose your career specialization track. Once enrolled, you will unlock your sequential development tasks.
           </p>
         </div>
 
@@ -160,15 +160,15 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
         )}
 
         {/* Filter Pills */}
-        <div className="flex items-center justify-center gap-2 mb-10 pb-4 border-b border-cyber-navy-light/30">
+        <div className="flex items-center justify-center gap-2 mb-10 pb-4 border-b border-zinc-900">
           {(['All', 'Core Dev', 'Data & AI'] as FilterCategory[]).map((category) => (
             <button
               key={category}
               onClick={() => setActiveFilter(category)}
-              className={`px-4 py-2 text-xs font-bold rounded-full transition-all border cursor-pointer ${
+              className={`px-4 py-1.5 text-xs font-bold rounded-full transition-all border cursor-pointer ${
                 activeFilter === category
-                  ? 'bg-electric-cyan border-electric-cyan text-cyber-navy-dark shadow-lg shadow-electric-cyan/20'
-                  : 'bg-cyber-navy-dark border-cyber-navy-light/40 text-slate-450 hover:text-slate-200 hover:border-electric-cyan/40'
+                  ? 'bg-blue-600 border-blue-600 text-white shadow-sm'
+                  : 'bg-zinc-900 border-zinc-800 text-slate-400 hover:text-slate-200 hover:border-zinc-700'
               }`}
             >
               {category}
@@ -185,28 +185,21 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
             return (
               <div 
                 key={track.id} 
-                className="glass-panel glow-cyan-hover rounded-3xl p-8 transition-all flex flex-col justify-between group relative overflow-hidden shadow-xl bg-cyber-navy-light/10"
+                className="glass-panel glow-cyan-hover rounded-2xl p-8 transition-all flex flex-col justify-between group relative overflow-hidden bg-zinc-900/50"
               >
-                {/* Decorative glow */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl group-hover:bg-electric-cyan/10 transition-colors pointer-events-none" />
- 
                 <div>
                   {/* Header info */}
                   <div className="flex justify-between items-start mb-6">
-                    <div className="p-3 bg-cyber-navy-dark/60 border border-cyber-navy-light/40 w-fit rounded-2xl">
-                      <IconComponent className="w-6 h-6 text-electric-cyan text-cyan-glow" />
+                    <div className="p-3 bg-zinc-950 border border-zinc-850 w-fit rounded-xl">
+                      <IconComponent className="w-5 h-5 text-blue-500" />
                     </div>
-                    <span className={`text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border ${
-                      track.difficulty === 'Advanced' 
-                        ? 'border-amber-500/25 bg-amber-500/10 text-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.08)]' 
-                        : 'border-electric-cyan/25 bg-electric-cyan/10 text-electric-cyan shadow-[0_0_8px_rgba(245,158,11,0.08)]'
-                    }`}>
+                    <span className="text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-950 text-slate-400">
                       {track.difficulty}
                     </span>
                   </div>
 
                   {/* Description */}
-                  <h3 className="text-xl font-bold text-white tracking-tight">{track.name}</h3>
+                  <h3 className="text-lg font-bold text-white tracking-tight">{track.name}</h3>
                   <p className="text-slate-400 text-xs font-light mt-3 leading-relaxed">
                     {track.description}
                   </p>
@@ -214,19 +207,19 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
                   {/* Tech stack badges */}
                   <div className="mt-4 flex flex-wrap gap-1.5">
                     {getTechPills(track.id).map((tech) => (
-                      <span key={tech} className="text-[9px] font-mono text-slate-500 border border-cyber-navy-light/45 px-2 py-0.5 rounded bg-cyber-navy-dark/40 hover:border-electric-cyan/35 hover:text-slate-300 transition-colors">
+                      <span key={tech} className="text-[9px] font-mono text-slate-500 border border-zinc-850 px-2 py-0.5 rounded bg-zinc-950 hover:border-zinc-700 hover:text-slate-300 transition-colors">
                         {tech}
                       </span>
                     ))}
                   </div>
 
                   {/* Tasks List Summary */}
-                  <div className="mt-6 pt-5 border-t border-cyber-navy-light/40 space-y-2.5">
-                    <span className="text-[10px] text-electric-blue font-bold uppercase tracking-wider block">Sequence Milestones</span>
+                  <div className="mt-6 pt-5 border-t border-zinc-800/60 space-y-2.5">
+                    <span className="text-[10px] text-blue-550 font-bold uppercase tracking-wider block">Sequence Milestones</span>
                     <div className="space-y-2">
                        {track.tasks.map((task, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-[11px] text-slate-350 font-medium">
-                          <div className="w-1.5 h-1.5 bg-electric-cyan rounded-full shrink-0 shadow-[0_0_8px_#fbbf24]" />
+                        <div key={idx} className="flex items-center gap-2 text-[11px] text-slate-400 font-medium">
+                          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full shrink-0" />
                           <span>{task}</span>
                         </div>
                       ))}
@@ -239,7 +232,7 @@ export default function TrackSelectionForm({ user }: TrackSelectionFormProps) {
                   <button
                     onClick={() => handleEnroll(track.id, track.name)}
                     disabled={loadingId !== null}
-                    className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-xl shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider shadow-[0_0_15px_rgba(0,255,255,0.1)]"
+                    className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-extrabold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider"
                   >
                     {isEnrolling ? (
                       <>

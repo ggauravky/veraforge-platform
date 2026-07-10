@@ -1,159 +1,103 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cyber-navy-dark: #050508;
-  --color-cyber-navy-light: #12111a;
-  --color-electric-cyan: #fbbf24;
-  --color-electric-blue: #f59e0b;
+  --color-cyber-navy-dark: #09090b;
+  --color-cyber-navy-light: #18181b;
+  --color-electric-cyan: #3b82f6;
+  --color-electric-blue: #2563eb;
 }
 
 :root {
-  --background: #050508;
-  --foreground: #f5f5f4;
+  --background: #09090b;
+  --foreground: #f4f4f5;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
-/* Glassmorphism Panel */
+/* Minimal Flat Panel (Shadcn style) */
 .glass-panel {
-  background: rgba(18, 17, 26, 0.4);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(245, 158, 11, 0.08);
+  background: #18181b;
+  border: 1px solid #27272a;
 }
 
-/* Neon Gold Glow */
+/* Subtle border transitions for hover states */
 .glow-cyan-hover {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.2s ease, transform 0.2s ease;
 }
 .glow-cyan-hover:hover {
-  box-shadow: 0 0 25px rgba(245, 158, 11, 0.12), inset 0 0 10px rgba(245, 158, 11, 0.03);
-  border-color: rgba(251, 191, 36, 0.3);
-  transform: translateY(-2px);
+  border-color: #3b82f6;
+  transform: translateY(-1px);
 }
 
 .text-cyan-glow {
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.45);
+  color: #3b82f6;
 }
 
 .text-blue-glow {
-  text-shadow: 0 0 10px rgba(245, 158, 11, 0.45);
+  color: #2563eb;
 }
 
-/* Custom neural-net animation */
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.42; }
-}
-
+/* Simplified Animations */
 .animate-pulse-slow {
-  animation: pulse-slow 6s ease-in-out infinite;
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  opacity: 0.85;
 }
 
 .animate-spin-slow {
-  animation: spin-slow 20s linear infinite;
+  /* No rotating circles in minimal UI */
 }
 
-/* Vertical terminal scanline animation */
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
-}
-
+/* Empty scanline placeholder to avoid markup errors */
 .scanning-line {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(to bottom, transparent, rgba(245, 158, 11, 0.3), transparent);
-  animation: scanline 4.5s linear infinite;
-  pointer-events: none;
-  z-index: 10;
+  display: none;
 }
 
-/* Typing Caret Blinking */
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
+/* Plain static text placeholder for carets */
 .typing-caret::after {
   content: '▋';
-  color: #fbbf24;
-  animation: blink 1s step-end infinite;
+  color: #3b82f6;
+  opacity: 0.8;
   margin-left: 2px;
 }
 
-/* Moving grid background */
-@keyframes grid-move {
-  0% { background-position: 0 0; }
-  100% { background-position: 4rem 4rem; }
-}
-
+/* Flat Grid (no movement) */
 .cyber-grid-moving {
   background-image: 
-    linear-gradient(to right, rgba(28, 26, 38, 0.45) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(28, 26, 38, 0.45) 1px, transparent 1px);
+    linear-gradient(to right, #1f2937 1px, transparent 1px),
+    linear-gradient(to bottom, #1f2937 1px, transparent 1px);
   background-size: 4rem 4rem;
-  animation: grid-move 22s linear infinite;
+  opacity: 0.15;
 }
 
-/* Custom scrollbar for dark gold theme */
+/* Simple minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #050508;
+  background: #09090b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(18, 17, 26, 0.8);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  border-radius: 9999px;
+  background: #27272a;
+  border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(251, 191, 36, 0.25);
-  border-color: rgba(251, 191, 36, 0.4);
+  background: #3f3f46;
 }
 
-/* Signal Flow Paths */
-@keyframes dash {
-  to {
-    stroke-dashoffset: -40;
-  }
-}
-
+/* Flat dash details */
 .animate-dash {
-  stroke-dasharray: 8 12;
-  animation: dash 2.5s linear infinite;
+  stroke-dasharray: 6 6;
+  stroke: #27272a;
 }
 
-/* Floating Solar Flare Particles */
-@keyframes float-flare {
-  0%, 100% {
-    transform: translateY(0) scale(1);
-    opacity: 0.15;
-  }
-  50% {
-    transform: translateY(-15px) scale(1.08);
-    opacity: 0.42;
-  }
-}
-
+/* Neutral float flare */
 .animate-float-flare {
-  animation: float-flare 8s ease-in-out infinite;
+  opacity: 0.2;
 }
-
-

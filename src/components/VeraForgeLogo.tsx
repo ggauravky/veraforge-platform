@@ -21,18 +21,15 @@ export default function VeraForgeLogo({
       {...props}
     >
       <defs>
-        {/* Shield Metallic Gold-Bronze Gradient */}
+        {/* Shield Minimalist Slate Gradient */}
         <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#78350f" /> {/* bronze-900 */}
-          <stop offset="30%" stopColor="#b45309" /> {/* amber-700 */}
-          <stop offset="70%" stopColor="#92400e" /> {/* amber-800 */}
-          <stop offset="100%" stopColor="#f59e0b" /> {/* amber-500 */}
+          <stop offset="0%" stopColor="#1e293b" />
+          <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
-        {/* Monogram / Arrow Bright Gold-Yellow Gradient */}
+        {/* Monogram Royal Blue Gradient */}
         <linearGradient id="monogramGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#d97706" /> {/* amber-600 */}
-          <stop offset="50%" stopColor="#fbbf24" /> {/* yellow-400 */}
-          <stop offset="100%" stopColor="#fef08a" /> {/* yellow-200 */}
+          <stop offset="0%" stopColor="#3b82f6" />
+          <stop offset="100%" stopColor="#60a5fa" />
         </linearGradient>
       </defs>
       
@@ -40,7 +37,7 @@ export default function VeraForgeLogo({
       <path
         d="M12 2L21 5V14C21 18.5 17.5 21.5 12 22C6.5 21.5 3 18.5 3 14V5L12 2Z"
         fill={shieldColor}
-        stroke="#fbbf24"
+        stroke="#3b82f6"
         strokeWidth="1.5"
         strokeLinejoin="round"
       />

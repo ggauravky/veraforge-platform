@@ -65,21 +65,19 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
   };
 
   return (
-    <div className="w-full max-w-2xl glass-panel rounded-3xl p-8 md:p-10 shadow-2xl relative z-10 bg-cyber-navy-light/10">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
-      
-      <div className="mb-8 border-b border-cyber-navy-light/50 pb-6">
-        <h2 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-          <BookOpen className="text-electric-cyan w-6 h-6 text-cyan-glow animate-pulse" />
+    <div className="w-full max-w-2xl glass-panel rounded-2xl p-8 md:p-10 relative z-10">
+      <div className="mb-8 border-b border-zinc-800 pb-6">
+        <h2 className="text-xl font-bold text-white mb-2 flex items-center gap-2">
+          <BookOpen className="text-blue-500 w-5 h-5" />
           Professional Profile Onboarding
         </h2>
-        <p className="text-slate-400 text-sm font-light leading-relaxed">
+        <p className="text-slate-400 text-xs font-light leading-relaxed">
           Please complete your professional background profile. Once submitted, our team will review your credentials to activate your virtual internship workspace.
         </p>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-955/30 border border-red-900/50 rounded-xl text-red-300 text-sm font-semibold animate-shake">
+        <div className="mb-6 p-3 bg-red-950/30 border border-red-900/40 rounded-xl text-red-300 text-xs font-semibold">
           {error}
         </div>
       )}
@@ -88,8 +86,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
         {/* Personal Details */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <label htmlFor="fullName" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="fullName" className="text-xs font-bold text-slate-350 uppercase tracking-wider flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-slate-500" />
               Full Name
             </label>
             <input
@@ -97,7 +95,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="text"
               placeholder="e.g. John Doe"
               {...register('fullName')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
+              className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
             />
             {errors.fullName && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.fullName.message}</p>
@@ -105,8 +103,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="email" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Globe className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="email" className="text-xs font-bold text-slate-350 uppercase tracking-wider flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-slate-500" />
               Email Address
             </label>
             <input
@@ -114,7 +112,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="email"
               value={initialEmail}
               disabled
-              className="w-full bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl px-4 py-3 text-slate-550 cursor-not-allowed text-sm outline-none"
+              className="w-full bg-zinc-900/40 border border-zinc-850 rounded-xl px-4 py-3 text-slate-500 cursor-not-allowed text-xs outline-none"
             />
           </div>
         </div>
@@ -122,8 +120,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
         {/* Education Details */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2 space-y-2">
-            <label htmlFor="universityName" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="universityName" className="text-xs font-bold text-slate-350 uppercase tracking-wider flex items-center gap-1.5">
+              <GraduationCap className="w-3.5 h-3.5 text-slate-500" />
               University / Institution
             </label>
             <input
@@ -131,7 +129,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="text"
               placeholder="e.g. Stanford University"
               {...register('universityName')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
+              className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
             />
             {errors.universityName && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.universityName.message}</p>
@@ -139,8 +137,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="graduationYear" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="graduationYear" className="text-xs font-bold text-slate-350 uppercase tracking-wider flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-slate-500" />
               Graduation Year
             </label>
             <input
@@ -148,7 +146,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="text"
               placeholder="e.g. 2026"
               {...register('graduationYear')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-650 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
+              className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
             />
             {errors.graduationYear && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.graduationYear.message}</p>
@@ -159,8 +157,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
         {/* Professional Profiles */}
         <div className="space-y-5">
           <div className="space-y-2">
-            <label htmlFor="githubUrl" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Github className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="githubUrl" className="text-xs font-bold text-slate-350 uppercase tracking-wider flex items-center gap-1.5">
+              <Github className="w-3.5 h-3.5 text-slate-500" />
               GitHub Profile Link
             </label>
             <input
@@ -168,7 +166,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="url"
               placeholder="e.g. https://github.com/yourusername"
               {...register('githubUrl')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
+              className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
             />
             {errors.githubUrl && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.githubUrl.message}</p>
@@ -176,8 +174,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="linkedinUrl" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Linkedin className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="linkedinUrl" className="text-xs font-bold text-slate-350 uppercase tracking-wider flex items-center gap-1.5">
+              <Linkedin className="w-3.5 h-3.5 text-slate-500" />
               LinkedIn Profile Link
             </label>
             <input
@@ -185,7 +183,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="url"
               placeholder="e.g. https://linkedin.com/in/yourprofile"
               {...register('linkedinUrl')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
+              className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
             />
             {errors.linkedinUrl && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.linkedinUrl.message}</p>
@@ -193,8 +191,8 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="portfolioUrl" className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Globe className="w-3.5 h-3.5 text-slate-400" />
+            <label htmlFor="portfolioUrl" className="text-xs font-bold text-slate-355 uppercase tracking-wider flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-slate-500" />
               Personal Portfolio / Website (Optional)
             </label>
             <input
@@ -202,7 +200,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
               type="url"
               placeholder="e.g. https://myportfolio.com"
               {...register('portfolioUrl')}
-              className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/30 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-655 transition-all text-sm outline-none shadow-inner focus:shadow-[0_0_12px_rgba(245,158,11,0.05)]"
+              className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
             />
             {errors.portfolioUrl && (
               <p className="text-xs text-red-400 font-semibold mt-1">{errors.portfolioUrl.message}</p>
@@ -214,7 +212,7 @@ export default function OnboardingForm({ initialName, initialEmail }: Onboarding
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-6 py-4 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl hover:shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 group cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+          className="w-full mt-6 py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-extrabold text-xs rounded-lg transition-all flex items-center justify-center gap-2 group cursor-pointer"
         >
           {loading ? (
             <>

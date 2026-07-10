@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
-  ArrowLeft, HelpCircle, ChevronDown, Sparkles, ShieldCheck, 
-  Users, Building, MessageSquare, ExternalLink, ArrowRight 
+  ArrowLeft, HelpCircle, ChevronDown, 
+  Users, Building, MessageSquare, ArrowRight 
 } from 'lucide-react';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
 
@@ -83,17 +83,17 @@ export default function FAQHelpCenter() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350 font-sans">
-      {/* Moving background grid */}
-      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-550/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="flex-1 flex flex-col bg-zinc-950 relative overflow-hidden min-h-screen text-slate-300 font-sans">
+      {/* Background Grid */}
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-550/2 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-zinc-900 bg-zinc-950/85 backdrop-blur-md relative z-10">
         <div className="max-w-5xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link 
             href="/" 
-            className="flex items-center gap-2 text-xs text-slate-400 hover:text-electric-cyan transition-colors font-bold uppercase tracking-wider group"
+            className="flex items-center gap-2 text-xs text-slate-400 hover:text-blue-500 transition-colors font-bold uppercase tracking-wider group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Home
@@ -110,20 +110,20 @@ export default function FAQHelpCenter() {
         
         {/* Title */}
         <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-amber-955/40 border border-electric-cyan/25 text-electric-cyan rounded-full text-xs font-semibold mb-6 shadow-[0_0_15px_rgba(245,158,11,0.05)]">
-            <HelpCircle className="w-3.5 h-3.5 text-electric-cyan" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-800 text-slate-400 rounded-full text-xs font-semibold mb-6">
+            <HelpCircle className="w-3.5 h-3.5 text-blue-500" />
             <span>Support & Help Center</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight mb-4">
             Frequently Asked Questions
           </h1>
-          <p className="text-slate-400 text-sm font-light leading-relaxed">
+          <p className="text-slate-400 text-xs font-light leading-relaxed">
             Find immediate answers regarding eligibility, evaluation timelines, security protocols, and recruiter verification tools.
           </p>
         </div>
 
         {/* Tab Selection */}
-        <div className="flex border-b border-cyber-navy-light/35 mb-8 justify-center gap-4">
+        <div className="flex border-b border-zinc-900 mb-8 justify-center gap-4">
           {Object.values(categories).map((cat) => {
             const isActive = activeCategory === cat.name;
             return (
@@ -135,7 +135,7 @@ export default function FAQHelpCenter() {
                 }}
                 className={`px-6 py-3.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
                   isActive 
-                    ? 'border-electric-cyan text-white text-cyan-glow bg-electric-cyan/5' 
+                    ? 'border-blue-500 text-white bg-blue-950/10' 
                     : 'border-transparent text-slate-500 hover:text-slate-200'
                 }`}
               >
@@ -153,20 +153,20 @@ export default function FAQHelpCenter() {
             return (
               <div 
                 key={index}
-                className="glass-panel bg-cyber-navy-light/5 border-cyber-navy-light/45 rounded-2xl overflow-hidden transition-all duration-200"
+                className="glass-panel bg-zinc-900/30 border border-zinc-850 rounded-2xl overflow-hidden transition-all duration-200"
               >
                 <button
                   onClick={() => toggleAccordion(index)}
                   className="w-full text-left p-5 flex items-center justify-between gap-4 font-bold text-sm text-slate-200 hover:text-white cursor-pointer select-none"
                 >
-                  <span className="font-sans leading-relaxed">{item.q}</span>
+                  <span className="font-sans leading-relaxed text-xs">{item.q}</span>
                   <ChevronDown className={`w-4 h-4 text-slate-500 shrink-0 transition-transform duration-200 ${
-                    isExpanded ? 'rotate-180 text-electric-cyan' : ''
+                    isExpanded ? 'rotate-180 text-blue-500' : ''
                   }`} />
                 </button>
 
                 {isExpanded && (
-                  <div className="px-5 pb-5 pt-1 text-xs text-slate-400 font-light leading-relaxed border-t border-cyber-navy-light/20 animate-in fade-in slide-in-from-top-1 duration-150 font-sans">
+                  <div className="px-5 pb-5 pt-1 text-xs text-slate-400 font-light leading-relaxed border-t border-zinc-850/40 animate-in fade-in slide-in-from-top-1 duration-150 font-sans">
                     {item.a}
                   </div>
                 )}
@@ -176,17 +176,17 @@ export default function FAQHelpCenter() {
         </div>
 
         {/* Support gateway notice */}
-        <div className="max-w-xl mx-auto w-full mt-12 p-6 glass-panel bg-cyber-navy-light/10 border-cyber-navy-light/65 rounded-3xl text-center space-y-4">
-          <MessageSquare className="w-6 h-6 text-electric-cyan mx-auto animate-pulse" />
+        <div className="max-w-xl mx-auto w-full mt-12 p-6 glass-panel bg-zinc-900/50 border border-zinc-800 rounded-2xl text-center space-y-4">
+          <MessageSquare className="w-5 h-5 text-blue-500 mx-auto" />
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wide">Still have questions?</h4>
-            <p className="text-[11px] text-slate-400 font-light mt-1.5 leading-relaxed">
+            <p className="text-[11px] text-slate-450 font-light mt-1.5 leading-relaxed">
               Our support team is online to assist you with onboarding issues, track transfers, or credential inquiries.
             </p>
           </div>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-1 text-[10px] font-bold text-electric-cyan hover:text-white uppercase tracking-wider transition-colors"
+            className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-500 hover:text-white uppercase tracking-wider transition-colors"
           >
             Contact Help Desk
             <ArrowRight className="w-3.5 h-3.5" />
@@ -196,7 +196,7 @@ export default function FAQHelpCenter() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-cyber-navy-light/35 bg-cyber-navy-dark py-10 text-center relative z-10 mt-auto">
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-10 text-center relative z-10 mt-auto">
         <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <VeraForgeLogo className="w-4 h-4" />

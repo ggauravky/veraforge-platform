@@ -110,91 +110,84 @@ export default function AdminDashboard({
     try {
       const res = await approveStudentAction(studentId);
       if (res.success) {
-        setActionSuccess('Student approved successfully and default tasks assigned.');
+        setActionSuccess('Student profile approved and course tasks seeded successfully.');
         router.refresh();
       } else {
         setActionError(res.error || 'Failed to approve student.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing student approval.');
     } finally {
       setLoadingId(null);
     }
   };
 
   const handleRejectStudent = async (studentId: string) => {
-    if (!confirm('Are you sure you want to reject this student application?')) return;
     setLoadingId(studentId);
     setActionError('');
     setActionSuccess('');
     try {
       const res = await rejectStudentAction(studentId);
       if (res.success) {
-        setActionSuccess('Student application rejected.');
+        setActionSuccess('Student registration declined.');
         router.refresh();
       } else {
         setActionError(res.error || 'Failed to reject student.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing student rejection.');
     } finally {
       setLoadingId(null);
     }
   };
 
-  const handleApproveTask = async (userTaskId: string) => {
-    setLoadingId(userTaskId);
+  const handleApproveTask = async (taskSubmissionId: string) => {
+    setLoadingId(taskSubmissionId);
     setActionError('');
     setActionSuccess('');
     try {
-      const res = await reviewTaskAction({
-        userTaskId,
-        status: 'approved',
-      });
+      const res = await reviewTaskAction({ userTaskId: taskSubmissionId, status: 'approved', adminFeedback: '' });
       if (res.success) {
-        setActionSuccess('Task approved! Next task unlocked if available.');
+        setActionSuccess('Task submission approved. Next sequential step unlocked for the student.');
         router.refresh();
       } else {
         setActionError(res.error || 'Failed to approve task.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing task approval.');
     } finally {
       setLoadingId(null);
     }
   };
 
-  const handleOpenRejectTask = (userTaskId: string) => {
-    setFeedbackTaskId(userTaskId);
+  const handleOpenRejectTask = (taskSubmissionId: string) => {
+    setFeedbackTaskId(taskSubmissionId);
     setAdminFeedback('');
     setActionError('');
+    setActionSuccess('');
   };
 
   const handleRejectTaskSubmit = async () => {
     if (!feedbackTaskId) return;
     if (!adminFeedback.trim()) {
-      setActionError('Feedback is required to request revision.');
+      setActionError('Feedback explanation comments are required to request revisions.');
       return;
     }
+
     setLoadingId(feedbackTaskId);
     setActionError('');
     setActionSuccess('');
     try {
-      const res = await reviewTaskAction({
-        userTaskId: feedbackTaskId,
-        status: 'rejected',
-        adminFeedback,
-      });
+      const res = await reviewTaskAction({ userTaskId: feedbackTaskId, status: 'rejected', adminFeedback });
       if (res.success) {
-        setActionSuccess('Revision request submitted with feedback.');
+        setActionSuccess('Task evaluation submitted with revision requests.');
         setFeedbackTaskId(null);
-        setAdminFeedback('');
         router.refresh();
       } else {
-        setActionError(res.error || 'Failed to request revision.');
+        setActionError(res.error || 'Failed to request task revision.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing revision request.');
     } finally {
       setLoadingId(null);
     }
@@ -207,77 +200,81 @@ export default function AdminDashboard({
     try {
       const res = await issueCertificateAction(studentId);
       if (res.success) {
-        setActionSuccess('Certificate generated successfully!');
+        setActionSuccess('Cryptographic verified certificate issued successfully.');
         router.refresh();
       } else {
-        setActionError(res.error || 'Failed to issue certificate.');
+        setActionError(res.error || 'Failed to issue graduation certificate.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing certificate issuance.');
     } finally {
       setLoadingId(null);
     }
   };
 
   const handleRemoveStudent = async (studentId: string) => {
-    if (!confirm('Are you sure you want to permanently remove this student and delete all their progress/certificates?')) return;
+    if (!confirm('Are you sure you want to completely remove this student and all their tasks? This action is irreversible.')) {
+      return;
+    }
     setLoadingId(studentId);
     setActionError('');
     setActionSuccess('');
     try {
       const res = await removeStudentAction(studentId);
       if (res.success) {
-        setActionSuccess('Student record and related progress successfully removed from database.');
+        setActionSuccess('Student record deleted from database.');
         router.refresh();
       } else {
         setActionError(res.error || 'Failed to remove student.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing student removal.');
     } finally {
       setLoadingId(null);
     }
   };
 
   const handleResetTasks = async (studentId: string) => {
-    if (!confirm('Are you sure you want to reset this student\'s task assignments? This will wipe all current submissions and certificates.')) return;
+    if (!confirm('Reset student task timeline? This will clear all submitted code links and reset status back to unlocked for Step 1.')) {
+      return;
+    }
     setLoadingId(studentId);
     setActionError('');
     setActionSuccess('');
     try {
       const res = await resetStudentTasksAction(studentId);
       if (res.success) {
-        setActionSuccess('Student assignments successfully reset and default tasks re-seeded.');
+        setActionSuccess('Student tasks reset and seeded back to Step 1.');
         router.refresh();
       } else {
-        setActionError(res.error || 'Failed to reset student assignments.');
+        setActionError(res.error || 'Failed to reset student tasks.');
       }
     } catch (err: any) {
-      setActionError(err.message || 'An error occurred.');
+      setActionError(err.message || 'Error executing task reset.');
     } finally {
       setLoadingId(null);
     }
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100">
-      {/* Moving background grid */}
-      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
+    <div className="flex-1 flex flex-col bg-zinc-950 min-h-screen text-slate-100 pb-20 relative font-sans">
+      {/* Background Grid */}
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
 
       {/* Header */}
-      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md relative z-20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg">
+            <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl shadow-sm">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
+              <span className="block text-[8px] text-slate-400 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.05)] hidden sm:inline">
+            <span className="text-xs text-blue-500 font-semibold bg-zinc-905 border border-zinc-850 px-3 py-1.5 rounded-full hidden sm:inline">
               Super Admin Control
             </span>
             <button
@@ -286,7 +283,7 @@ export default function AdminDashboard({
                 router.push('/admin-login');
                 router.refresh();
               }}
-              className="text-xs text-red-400 hover:text-red-350 font-medium bg-cyber-navy-dark hover:bg-cyber-navy-light/40 border border-red-900/30 px-3.5 py-1.5 rounded-full transition-colors cursor-pointer"
+              className="text-xs text-red-400 hover:text-red-350 font-medium bg-zinc-900 hover:bg-zinc-850 border border-zinc-850 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer"
             >
               Sign Out
             </button>
@@ -298,17 +295,17 @@ export default function AdminDashboard({
       <main className="flex-1 max-w-7xl mx-auto px-6 py-12 relative z-10 w-full">
         
         {/* Statistics & Notices */}
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10 pb-6 border-b border-cyber-navy-light/35">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-10 pb-6 border-b border-zinc-900">
           <div>
-            <h2 className="text-3xl font-extrabold text-white">Platform Administration</h2>
-            <p className="text-slate-400 text-sm font-light mt-1">
-              Verify applications, review task repositories, and issue dynamic graduation credentials.
+            <h2 className="text-2xl font-bold text-white tracking-tight uppercase">Platform Administration</h2>
+            <p className="text-slate-400 text-xs font-light mt-1">
+              Verify applications, review task repositories, and issue graduation credentials.
             </p>
           </div>
 
           <button 
             onClick={() => { router.refresh(); setActionSuccess('Sync completed.'); }}
-            className="flex items-center gap-1.5 px-4 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light border border-cyber-navy-light/40 rounded-xl text-xs font-semibold text-electric-cyan hover:text-white transition-all shadow-[0_0_10px_rgba(245,158,11,0.05)] cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-lg text-xs font-semibold text-blue-500 hover:text-white transition-all cursor-pointer"
           >
             <RefreshCw className="w-3.5 h-3.5" />
             Reload Data
@@ -317,33 +314,33 @@ export default function AdminDashboard({
 
         {/* Global Action Notifications */}
         {actionError && (
-          <div className="mb-6 p-4 bg-red-955/20 border border-red-900/40 rounded-xl text-red-300 text-xs font-bold flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-505 shrink-0" />
+          <div className="mb-6 p-4 bg-red-955/20 border border-red-900/45 rounded-xl text-red-350 text-xs font-bold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
             <span>{actionError}</span>
           </div>
         )}
 
         {actionSuccess && (
-          <div className="mb-6 p-4 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-bold flex items-center gap-2 shadow-[0_0_10px_rgba(245,158,11,0.05)]">
-            <CheckCircle2 className="w-4 h-4 text-electric-cyan shrink-0" />
+          <div className="mb-6 p-4 bg-blue-950/20 border border-blue-900/40 rounded-xl text-blue-300 text-xs font-bold flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" />
             <span>{actionSuccess}</span>
           </div>
         )}
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-cyber-navy-light/35 mb-8 gap-2">
+        <div className="flex border-b border-zinc-900 mb-8 gap-2">
           <button
             onClick={() => setActiveTab('registrations')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all relative cursor-pointer ${
+            className={`px-4 py-3 text-xs font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'registrations' 
-                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-blue-500 text-blue-500 bg-blue-950/10' 
+                : 'border-transparent text-slate-500 hover:text-slate-200'
             }`}
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-3.5 h-3.5" />
             Pending Approvals
             {pendingStudents.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.25)]">
+              <span className="ml-1.5 px-2 py-0.5 bg-blue-600 text-white text-[9px] font-extrabold rounded-full">
                 {pendingStudents.length}
               </span>
             )}
@@ -351,16 +348,16 @@ export default function AdminDashboard({
 
           <button
             onClick={() => setActiveTab('submissions')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
+            className={`px-4 py-3 text-xs font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'submissions' 
-                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-blue-500 text-blue-500 bg-blue-950/10' 
+                : 'border-transparent text-slate-500 hover:text-slate-200'
             }`}
           >
-            <CheckSquare className="w-4 h-4" />
+            <CheckSquare className="w-3.5 h-3.5" />
             Task Submissions
             {pendingSubmissions.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-electric-blue text-white text-[10px] font-extrabold rounded-full animate-pulse">
+              <span className="ml-1.5 px-2 py-0.5 bg-blue-600 text-white text-[9px] font-extrabold rounded-full">
                 {pendingSubmissions.length}
               </span>
             )}
@@ -368,16 +365,16 @@ export default function AdminDashboard({
 
           <button
             onClick={() => setActiveTab('graduations')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
+            className={`px-4 py-3 text-xs font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'graduations' 
-                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-blue-500 text-blue-500 bg-blue-950/10' 
+                : 'border-transparent text-slate-500 hover:text-slate-200'
             }`}
           >
-            <Award className="w-4 h-4" />
+            <Award className="w-3.5 h-3.5" />
             Graduations
             {graduationCandidates.filter(c => !c.certificateId).length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-electric-cyan text-cyber-navy-dark text-[10px] font-extrabold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.25)]">
+              <span className="ml-1.5 px-2 py-0.5 bg-blue-600 text-white text-[9px] font-extrabold rounded-full">
                 {graduationCandidates.filter(c => !c.certificateId).length}
               </span>
             )}
@@ -385,71 +382,66 @@ export default function AdminDashboard({
 
           <button
             onClick={() => setActiveTab('students')}
-            className={`px-5 py-3.5 text-sm font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
+            className={`px-4 py-3 text-xs font-bold flex items-center gap-2 border-b-2 transition-all cursor-pointer ${
               activeTab === 'students' 
-                ? 'border-electric-cyan text-white bg-electric-cyan/5 text-cyan-glow' 
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-blue-500 text-blue-500 bg-blue-950/10' 
+                : 'border-transparent text-slate-500 hover:text-slate-200'
             }`}
           >
-            <Users className="w-4 h-4" />
+            <Users className="w-3.5 h-3.5" />
             Student Directory
-            {allStudents.length > 0 && (
-              <span className="ml-1.5 px-2 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/60 text-slate-300 text-[10px] font-extrabold rounded-full">
-                {allStudents.length}
-              </span>
-            )}
           </button>
         </div>
 
-        {/* Tab Panel contents */}
-        <div className="glass-panel rounded-3xl p-6 shadow-xl min-h-[300px] bg-cyber-navy-light/10">
+        {/* Dashboard Panels */}
+        <div className="glass-panel rounded-2xl p-6 bg-zinc-900/30">
           
-          {/* TAB 1: PENDING STUDENTS */}
+          {/* TAB 1: PENDING REGISTRATIONS */}
           {activeTab === 'registrations' && (
             <div className="overflow-x-auto animate-in fade-in duration-200">
               {pendingStudents.length === 0 ? (
                 <div className="text-center py-16 text-slate-500 text-sm">
-                  <Users className="w-12 h-12 mx-auto mb-3 text-slate-700" />
-                  No pending student applications at this time.
+                  <UserPlus className="w-10 h-10 mx-auto mb-3 text-slate-700" />
+                  No student applications are pending verification.
                 </div>
               ) : (
-                <table className="w-full text-left text-sm border-collapse">
+                <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
-                      <th className="pb-4 font-semibold">Student</th>
-                      <th className="pb-4 font-semibold">Education</th>
-                      <th className="pb-4 font-semibold">Reference Profiles</th>
-                      <th className="pb-4 font-semibold text-right">Actions</th>
+                    <tr className="border-b border-zinc-800 text-slate-500 font-bold uppercase tracking-wider">
+                      <th className="pb-4 font-semibold">Student Name</th>
+                      <th className="pb-4 font-semibold">University</th>
+                      <th className="pb-4 font-semibold">Social Handles</th>
+                      <th className="pb-4 font-semibold text-right">Administrative Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-cyber-navy-light/25">
+                  <tbody className="divide-y divide-zinc-850">
                     {pendingStudents.map((student) => (
-                      <tr key={student._id} className="hover:bg-cyber-navy-light/10 transition-colors">
+                      <tr key={student._id} className="hover:bg-zinc-900/30 transition-colors">
                         <td className="py-4">
-                          <div className="font-bold text-white text-base">{student.fullName}</div>
-                          <div className="text-slate-400 text-xs mt-0.5">{student.email}</div>
+                          <div className="font-bold text-white text-sm">{student.fullName}</div>
+                          <div className="text-slate-500 text-[10px] mt-0.5">{student.email}</div>
                         </td>
                         <td className="py-4">
-                          <div className="text-slate-300 font-medium">{student.universityName}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">Class of {student.graduationYear}</div>
+                          <div className="text-slate-350 font-medium">{student.universityName}</div>
+                          <div className="text-slate-500 text-[10px] mt-0.5 font-light">Class of {student.graduationYear}</div>
                         </td>
                         <td className="py-4 space-y-1">
                           <a 
                             href={student.githubUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
+                            className="flex items-center gap-1 text-[10px] text-slate-450 hover:text-blue-500 w-fit transition-colors"
                           >
-                            <Github className="w-3.5 h-3.5" />
+                            <Github className="w-3 h-3" />
                             GitHub Profile
                           </a>
                           <a 
                             href={student.linkedinUrl} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
+                            className="flex items-center gap-1 text-[10px] text-slate-450 hover:text-blue-500 w-fit transition-colors"
                           >
-                            <Linkedin className="w-3.5 h-3.5" />
+                            <Linkedin className="w-3 h-3" />
                             LinkedIn Profile
                           </a>
                         </td>
@@ -458,17 +450,17 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleRejectStudent(student._id)}
                               disabled={loadingId !== null}
-                              className="px-3.5 py-2 border border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                              className="px-3.5 py-2 border border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-[10px] font-bold rounded-lg transition-colors cursor-pointer"
                             >
                               Reject
                             </button>
                             <button
                               onClick={() => handleApproveStudent(student._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.1)]"
+                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 text-[10px] font-extrabold rounded-lg shadow-sm transition-all cursor-pointer"
                             >
                               {loadingId === student._id ? (
-                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                <Loader2 className="w-3 h-3 animate-spin" />
                               ) : (
                                 'Approve & Seed'
                               )}
@@ -488,61 +480,61 @@ export default function AdminDashboard({
             <div className="overflow-x-auto animate-in fade-in duration-200">
               {pendingSubmissions.length === 0 ? (
                 <div className="text-center py-16 text-slate-500 text-sm">
-                  <CheckSquare className="w-12 h-12 mx-auto mb-3 text-slate-700" />
+                  <CheckSquare className="w-10 h-10 mx-auto mb-3 text-slate-700" />
                   No student task submissions are pending evaluation.
                 </div>
               ) : (
-                <table className="w-full text-left text-sm border-collapse">
+                <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-zinc-800 text-slate-500 font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Task Details</th>
                       <th className="pb-4 font-semibold">Deliverable Links</th>
                       <th className="pb-4 font-semibold text-right">Evaluation</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-cyber-navy-light/25">
+                  <tbody className="divide-y divide-zinc-850">
                     {pendingSubmissions.map((sub) => (
-                      <tr key={sub._id} className="hover:bg-cyber-navy-light/10 transition-colors">
+                      <tr key={sub._id} className="hover:bg-zinc-900/30 transition-colors">
                         <td className="py-4">
-                          <div className="font-bold text-white text-base">{sub.userId?.fullName || 'Unknown Student'}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">{sub.userId?.email}</div>
+                          <div className="font-bold text-white text-sm">{sub.userId?.fullName || 'Unknown Student'}</div>
+                          <div className="text-slate-500 text-[10px] mt-0.5">{sub.userId?.email}</div>
                         </td>
                         <td className="py-4">
-                          <span className="inline-block px-2.5 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/50 rounded-full text-slate-400 font-medium text-[10px] tracking-wide mb-1">
+                          <span className="inline-block px-2 py-0.5 bg-zinc-950 border border-zinc-850 rounded text-slate-400 font-medium text-[9px] tracking-wide mb-1 font-mono">
                             Step {sub.taskId?.sequenceOrder}
                           </span>
-                          <div className="text-slate-200 font-bold text-sm">{sub.taskId?.title}</div>
+                          <div className="text-slate-200 font-bold text-xs">{sub.taskId?.title}</div>
                         </td>
                         <td className="py-4 space-y-1.5">
                           <a 
                             href={sub.submissionRepoLink} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
+                            className="flex items-center gap-1 text-[10px] text-slate-450 hover:text-blue-500 w-fit transition-colors"
                           >
-                            <Github className="w-3.5 h-3.5 text-slate-500" />
+                            <Github className="w-3 h-3 text-slate-500" />
                             Repository Code
-                            <ExternalLink className="w-3 h-3" />
+                            <ExternalLink className="w-2.5 h-2.5" />
                           </a>
                           <a 
                             href={sub.submissionLiveLink} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan w-fit transition-colors"
+                            className="flex items-center gap-1 text-[10px] text-slate-450 hover:text-blue-500 w-fit transition-colors"
                           >
-                            <Globe className="w-3.5 h-3.5 text-slate-500" />
+                            <Globe className="w-3 h-3 text-slate-500" />
                             Live Host Application
-                            <ExternalLink className="w-3 h-3" />
+                            <ExternalLink className="w-2.5 h-2.5" />
                           </a>
                           <button
                             onClick={() => {
                               handleOpenRejectTask(sub._id);
                               handleGenerateAIFeedback(sub._id);
                             }}
-                            className="mt-1 flex items-center gap-1 text-[10px] text-electric-cyan hover:text-white bg-cyber-navy-dark/40 hover:bg-cyber-navy-light/35 border border-electric-cyan/20 px-2 py-1 rounded-md transition-all cursor-pointer shadow-[0_0_8px_rgba(245,158,11,0.05)] w-fit font-bold"
+                            className="mt-1 flex items-center gap-1 text-[9px] text-blue-500 hover:text-white bg-zinc-950 border border-zinc-850 px-2 py-1 rounded transition-all cursor-pointer font-bold"
                           >
-                            <Sparkles className="w-3 h-3 text-cyan-glow animate-pulse" />
+                            <Sparkles className="w-3 h-3 text-blue-500" />
                             Generate Automated AI Code Report
                           </button>
                         </td>
@@ -551,17 +543,17 @@ export default function AdminDashboard({
                             <button
                               onClick={() => handleOpenRejectTask(sub._id)}
                               disabled={loadingId !== null}
-                              className="px-3.5 py-2 border border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                              className="px-3.5 py-2 border border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-[10px] font-bold rounded-lg transition-colors cursor-pointer"
                             >
                               Request Revision
                             </button>
                             <button
                               onClick={() => handleApproveTask(sub._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark disabled:opacity-50 text-xs font-extrabold rounded-lg shadow transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.1)]"
+                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white disabled:opacity-50 text-[10px] font-extrabold rounded-lg shadow-sm transition-all cursor-pointer"
                             >
                               {loadingId === sub._id ? (
-                                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                <Loader2 className="w-3 h-3 animate-spin" />
                               ) : (
                                 'Approve & Unlock'
                               )}
@@ -580,39 +572,39 @@ export default function AdminDashboard({
           {activeTab === 'graduations' && (
             <div className="overflow-x-auto animate-in fade-in duration-200">
               {graduationCandidates.length === 0 ? (
-                <div className="text-center py-16 text-slate-500 text-sm">
-                  <Award className="w-12 h-12 mx-auto mb-3 text-slate-700" />
+                <div className="text-center py-16 text-slate-505 text-sm">
+                  <Award className="w-10 h-10 mx-auto mb-3 text-slate-700" />
                   No students have completed all track assignments yet.
                 </div>
               ) : (
-                <table className="w-full text-left text-sm border-collapse">
+                <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-zinc-800 text-slate-500 font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student</th>
                       <th className="pb-4 font-semibold">Institution</th>
                       <th className="pb-4 font-semibold">Credential State</th>
                       <th className="pb-4 font-semibold text-right">Certificate Action</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-cyber-navy-light/25">
+                  <tbody className="divide-y divide-zinc-850">
                     {graduationCandidates.map((candidate) => (
-                      <tr key={candidate._id} className="hover:bg-cyber-navy-light/10 transition-colors">
+                      <tr key={candidate._id} className="hover:bg-zinc-900/30 transition-colors">
                         <td className="py-4">
-                          <div className="font-bold text-white text-base">{candidate.fullName}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">{candidate.email}</div>
+                          <div className="font-bold text-white text-sm">{candidate.fullName}</div>
+                          <div className="text-slate-500 text-[10px] mt-0.5">{candidate.email}</div>
                         </td>
                         <td className="py-4">
-                          <div className="text-slate-300 font-medium">{candidate.universityName}</div>
-                          <div className="text-slate-500 text-xs mt-0.5">Class of {candidate.graduationYear}</div>
+                          <div className="text-slate-350 font-medium">{candidate.universityName}</div>
+                          <div className="text-slate-500 text-[10px] mt-0.5">Class of {candidate.graduationYear}</div>
                         </td>
                         <td className="py-4">
                           {candidate.certificateId ? (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/10 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.05)]">
-                              <CheckCircle2 className="w-3.5 h-3.5" />
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-950/20 border border-blue-900/30 text-blue-500 text-[10px] font-semibold rounded-full">
+                              <CheckCircle2 className="w-3 h-3" />
                               Issued
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-blue/15 border border-electric-blue/20 text-electric-blue text-xs font-semibold rounded-full animate-pulse">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-950/20 border border-blue-900/20 text-blue-500 text-[10px] font-semibold rounded-full animate-pulse">
                               Ready for Certificate
                             </span>
                           )}
@@ -621,16 +613,16 @@ export default function AdminDashboard({
                           {candidate.certificateId ? (
                             <a
                               href={`/verify/${candidate.certificateId}`}
-                              className="inline-flex items-center gap-1.5 px-4 py-2 border border-cyber-navy-light/40 hover:border-cyber-navy-light bg-cyber-navy-dark hover:bg-cyber-navy-light/20 text-slate-300 hover:text-white text-xs font-bold rounded-lg transition-all"
+                              className="inline-flex items-center gap-1.5 px-4 py-2 border border-zinc-800 bg-zinc-900 hover:bg-zinc-850 text-slate-300 hover:text-white text-[10px] font-bold rounded-lg transition-all"
                             >
                               Verify Portal
-                              <ExternalLink className="w-3.5 h-3.5" />
+                              <ExternalLink className="w-3 h-3" />
                             </a>
                           ) : (
                             <button
                               onClick={() => handleIssueCertificate(candidate._id)}
                               disabled={loadingId !== null}
-                              className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-xs rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.1)]"
+                              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[10px] rounded-lg shadow-sm transition-all cursor-pointer"
                             >
                               {loadingId === candidate._id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -652,32 +644,32 @@ export default function AdminDashboard({
           {activeTab === 'students' && (
             <div className="overflow-x-auto animate-in fade-in duration-200">
               {allStudents.length === 0 ? (
-                <div className="text-center py-16 text-slate-505 text-sm">
-                  <Users className="w-12 h-12 mx-auto mb-3 text-slate-700" />
+                <div className="text-center py-16 text-slate-500 text-sm">
+                  <Users className="w-10 h-10 mx-auto mb-3 text-slate-700" />
                   No students registered on the platform.
                 </div>
               ) : (
-                <table className="w-full text-left text-sm border-collapse">
+                <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-cyber-navy-light/35 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                    <tr className="border-b border-zinc-800 text-slate-500 font-bold uppercase tracking-wider">
                       <th className="pb-4 font-semibold">Student Name / Email</th>
                       <th className="pb-4 font-semibold">Onboarding Details</th>
                       <th className="pb-4 font-semibold">Verification Status</th>
                       <th className="pb-4 font-semibold text-right">Directory Management</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-cyber-navy-light/25">
+                  <tbody className="divide-y divide-zinc-850">
                     {allStudents.map((student) => (
-                      <tr key={student._id} className="hover:bg-cyber-navy-light/10 transition-colors">
+                      <tr key={student._id} className="hover:bg-zinc-900/30 transition-colors">
                         <td className="py-4">
-                          <div className="font-bold text-white text-base">{student.fullName}</div>
-                          <div className="text-slate-450 text-xs mt-0.5">{student.email}</div>
+                          <div className="font-bold text-white text-sm">{student.fullName}</div>
+                          <div className="text-slate-450 text-[10px] mt-0.5">{student.email}</div>
                         </td>
                         <td className="py-4">
                           {student.universityName ? (
                             <>
-                              <div className="text-slate-300 font-medium">{student.universityName}</div>
-                              <div className="text-slate-500 text-xs mt-0.5">Class of {student.graduationYear}</div>
+                              <div className="text-slate-350 font-medium">{student.universityName}</div>
+                              <div className="text-slate-500 text-[10px] mt-0.5">Class of {student.graduationYear}</div>
                             </>
                           ) : (
                             <span className="text-slate-600 text-xs italic">Pending Onboarding Form</span>
@@ -685,17 +677,17 @@ export default function AdminDashboard({
                         </td>
                         <td className="py-4">
                           {student.accountStatus === 'active' && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-cyan/15 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-full shadow-[0_0_8px_rgba(245,158,11,0.05)]">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-950/20 border border-blue-900/30 text-blue-500 text-[10px] font-semibold rounded-full">
                               Active Student
                             </span>
                           )}
                           {student.accountStatus === 'pending_approval' && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-electric-blue/15 border border-electric-blue/20 text-electric-blue text-xs font-semibold rounded-full animate-pulse">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-blue-955/15 border border-blue-900/20 text-blue-450 text-[10px] font-semibold rounded-full animate-pulse">
                               Pending Review
                             </span>
                           )}
                           {student.accountStatus === 'rejected' && (
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-red-950/40 border border-red-900/30 text-red-400 text-xs font-semibold rounded-full">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-red-950/40 border border-red-900/30 text-red-400 text-[10px] font-semibold rounded-full">
                               Application Declined
                             </span>
                           )}
@@ -706,19 +698,19 @@ export default function AdminDashboard({
                               <button
                                 onClick={() => handleResetTasks(student._id)}
                                 disabled={loadingId !== null}
-                                className="px-3 py-1.5 border border-cyber-navy-light/30 text-slate-350 bg-cyber-navy-dark hover:bg-cyber-navy-light/35 disabled:opacity-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                                className="px-3 py-1.5 border border-zinc-850 text-slate-300 bg-zinc-950 hover:bg-zinc-900 disabled:opacity-50 text-[10px] font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
                                 title="Reset student's task progress and re-assign tasks"
                               >
-                                <RotateCw className="w-3.5 h-3.5" />
+                                <RotateCw className="w-3 h-3" />
                                 Reset Tasks
                               </button>
                             )}
                             <button
                               onClick={() => handleRemoveStudent(student._id)}
                               disabled={loadingId !== null}
-                              className="px-3 py-1.5 border border-red-950/30 hover:border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
+                              className="px-3 py-1.5 border border-red-950/30 hover:border-red-900/40 text-red-400 bg-red-950/10 hover:bg-red-950/20 disabled:opacity-50 text-[10px] font-semibold rounded-lg transition-colors cursor-pointer flex items-center gap-1"
                             >
-                              <Trash2 className="w-3.5 h-3.5" />
+                              <Trash2 className="w-3 h-3" />
                               Remove
                             </button>
                           </div>
@@ -730,7 +722,6 @@ export default function AdminDashboard({
               )}
             </div>
           )}
-
         </div>
       </main>
 
@@ -738,23 +729,23 @@ export default function AdminDashboard({
       {feedbackTaskId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-cyber-navy-dark/80 backdrop-blur-md"
+            className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm"
             onClick={() => { if (loadingId === null) setFeedbackTaskId(null); }}
           />
 
-          <div className={`relative glass-panel rounded-3xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 bg-cyber-navy-dark/95 w-full ${adminFeedback ? 'max-w-4xl' : 'max-w-md'}`}>
+          <div className={`relative glass-panel rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-zinc-800 z-55 bg-zinc-900 w-full ${adminFeedback ? 'max-w-4xl' : 'max-w-md'}`}>
             <button
               onClick={() => setFeedbackTaskId(null)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 transition-colors"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-300 transition-colors"
             >
               <XCircle className="w-5 h-5" />
             </button>
 
-            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-electric-cyan text-cyan-glow animate-pulse" />
+            <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
+              <MessageSquare className="w-4 h-4 text-blue-500" />
               Request Assignment Revision
             </h3>
-            <p className="text-slate-400 text-xs font-light leading-relaxed mb-4">
+            <p className="text-slate-450 text-[11px] font-light leading-relaxed mb-4">
               Explain why this submission requires revisions and what specific updates the student must apply.
             </p>
 
@@ -766,11 +757,11 @@ export default function AdminDashboard({
                     type="button"
                     onClick={() => handleGenerateAIFeedback()}
                     disabled={generatingAI}
-                    className="px-3 py-1.5 bg-electric-cyan/10 hover:bg-electric-cyan/20 border border-electric-cyan/30 text-electric-cyan disabled:opacity-50 text-[10px] font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)] font-sans"
+                    className="px-3 py-1.5 bg-blue-950/15 hover:bg-blue-950/30 border border-blue-900/30 text-blue-450 disabled:opacity-50 text-[9px] font-bold rounded transition-all flex items-center gap-1.5 cursor-pointer font-sans"
                   >
                     {generatingAI ? (
                       <>
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <Loader2 className="w-3 h-3 animate-spin" />
                         Analyzing Submission...
                       </>
                     ) : (
@@ -787,24 +778,24 @@ export default function AdminDashboard({
                   onChange={(e) => setAdminFeedback(e.target.value)}
                   placeholder="e.g. Please refactor your CSS layout to be fully responsive. The calculator grid overflows on narrow screens."
                   rows={8}
-                  className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl p-3 text-slate-100 placeholder-slate-650 text-xs outline-none resize-none font-sans shadow-inner focus:shadow-[0_0_10px_rgba(245,158,11,0.05)]"
+                  className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl p-3 text-slate-105 placeholder-slate-700 text-xs outline-none resize-none font-sans shadow-inner"
                 />
 
                 <div className="flex items-center justify-end gap-2.5 mt-2">
                   <button
                     onClick={() => setFeedbackTaskId(null)}
                     disabled={loadingId !== null}
-                    className="px-4 py-2 text-slate-400 hover:text-slate-205 text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                    className="px-4 py-2 text-slate-500 hover:text-slate-300 text-xs font-bold rounded-lg transition-colors cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleRejectTaskSubmit}
                     disabled={loadingId !== null}
-                    className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark text-xs font-extrabold rounded-lg shadow-lg shadow-electric-cyan/25 hover:shadow-electric-cyan/35 transition-all cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.15)]"
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold rounded-lg shadow-sm transition-all cursor-pointer"
                   >
                     {loadingId === feedbackTaskId ? (
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      <Loader2 className="w-3 h-3 animate-spin" />
                     ) : (
                       'Submit Feedback'
                     )}
@@ -814,10 +805,10 @@ export default function AdminDashboard({
 
               {/* Right Column: AI Report Bento-Style Visualizer */}
               {adminFeedback && (
-                <div className="bg-slate-950/70 border border-cyber-navy-light/45 rounded-2xl p-4 max-h-[300px] md:max-h-none md:h-full overflow-y-auto space-y-4 font-sans text-xs flex flex-col justify-between">
+                <div className="bg-zinc-950 border border-zinc-850 rounded-xl p-4 max-h-[300px] md:max-h-none md:h-full overflow-y-auto space-y-4 font-sans text-xs flex flex-col justify-between">
                   <div>
-                    <div className="flex items-center gap-1.5 text-electric-cyan font-bold border-b border-cyber-navy-light/35 pb-2 uppercase text-[10px]">
-                      <Sparkles className="w-3.5 h-3.5 animate-pulse text-cyan-glow" />
+                    <div className="flex items-center gap-1.5 text-blue-500 font-bold border-b border-zinc-850 pb-2 uppercase text-[9px]">
+                      <Sparkles className="w-3.5 h-3.5 text-blue-500" />
                       <span>Structured AI Feedback Report</span>
                     </div>
                     
@@ -827,34 +818,34 @@ export default function AdminDashboard({
                       return (
                         <div className="space-y-4 mt-3">
                           {report.strengths.length > 0 && (
-                            <div className="bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl p-3">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block mb-1">Code Strengths</span>
-                              <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px] font-light">
+                            <div className="bg-zinc-900/40 border border-zinc-850 rounded-lg p-3">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-450 block mb-1">Code Strengths</span>
+                              <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[10px] font-light">
                                 {report.strengths.map((s, i) => <li key={i}>{s}</li>)}
                               </ul>
                             </div>
                           )}
                           
                           {report.optimizations.length > 0 && (
-                            <div className="bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl p-3">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-electric-blue block mb-1">Optimizations</span>
-                              <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px] font-light">
+                            <div className="bg-zinc-900/40 border border-zinc-850 rounded-lg p-3">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-blue-450 block mb-1 font-sans">Optimizations</span>
+                              <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[10px] font-light">
                                 {report.optimizations.map((o, i) => <li key={i}>{o}</li>)}
                               </ul>
                             </div>
                           )}
                           
                           {report.security && (
-                            <div className="bg-cyber-navy-dark/40 border border-cyber-navy-light/30 rounded-xl p-3">
-                              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500 block mb-1">Security Audit</span>
-                              <p className="text-slate-400 text-[11px] leading-relaxed font-light">{report.security}</p>
+                            <div className="bg-zinc-900/40 border border-zinc-850 rounded-lg p-3">
+                              <span className="text-[9px] font-bold uppercase tracking-wider text-amber-500 block mb-1">Security Audit</span>
+                              <p className="text-slate-400 text-[10px] leading-relaxed font-light">{report.security}</p>
                             </div>
                           )}
                         </div>
                       );
                     })()}
                   </div>
-                  <div className="text-[9px] text-slate-500 border-t border-cyber-navy-light/30 pt-2 font-mono mt-4">
+                  <div className="text-[8px] text-slate-600 border-t border-zinc-850 pt-2 font-mono mt-4">
                     ANALYZER MODEL: gemini-2.5-flash-preview
                   </div>
                 </div>

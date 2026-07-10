@@ -98,33 +98,82 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
     setQuizError('');
 
     try {
-      const result = await submitQuizAction(activeQuizTask._id, quizAnswers);
-      if (result.success) {
-        setSuccessMsg('Verification passed! Task unlocked.');
-        setTimeout(() => {
-          setActiveQuizTask(null);
-          setSuccessMsg('');
-          router.refresh();
-        }, 1200);
+      const res = await submitQuizAction(activeQuizTask._id, quizAnswers);
+      if (res.success) {
+        // Correct answers! Close quiz, open task submission
+        setActiveQuizTask(null);
+        handleOpenSubmission(userTasks.find(ut => ut._id === activeQuizTask._id));
       } else {
-        setCooldownActive(true);
-        setCooldownTime(5);
-        
-        const interval = setInterval(() => {
-          setCooldownTime((prev) => {
-            if (prev <= 1) {
-              clearInterval(interval);
-              setCooldownActive(false);
-              return 0;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        // Quiz answers incorrect
+        if (res.cooldown) {
+          setCooldownActive(true);
+          setCooldownTime(res.cooldownTime || 5);
+          
+          const interval = setInterval(() => {
+            setCooldownTime((prev) => {
+              if (prev <= 1) {
+                clearInterval(interval);
+                setCooldownActive(false);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+        }
+        setQuizError(res.error || 'Verification failed. Intrusive access detection triggered.');
       }
     } catch (err: any) {
-      setQuizError(err.message || 'An error occurred during quiz verification.');
+      setQuizError(err.message || 'Verification pipeline error.');
     } finally {
       setQuizLoading(false);
+    }
+  };
+
+  const onSubmit = async (data: SubmissionValues) => {
+    if (!selectedTask) return;
+    setLoading(true);
+    setError('');
+    setSuccessMsg('');
+    setIsScanning(true);
+    setTerminalLogs([]);
+
+    // 1. Scan trigger latency simulations
+    const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    
+    setTerminalLogs(prev => [...prev, '> Initializing VeraForge CI/CD pipeline...']);
+    await delay(700);
+    setTerminalLogs(prev => [...prev, `> Cloning repository: ${data.submissionRepoLink}`]);
+    await delay(900);
+    setTerminalLogs(prev => [...prev, `> Checking live hosting: ${data.submissionLiveLink}`]);
+    await delay(800);
+    setTerminalLogs(prev => [...prev, '> Running lint and security audits...']);
+    await delay(900);
+    setTerminalLogs(prev => [...prev, '> TELEMETRY RESULT: 0 critical vulnerabilities, 2 warnings (Lint) - SUCCESS.']);
+    await delay(500);
+
+    try {
+      const res = await submitTaskAction(selectedTask._id, {
+        submissionRepoLink: data.submissionRepoLink,
+        submissionLiveLink: data.submissionLiveLink,
+      });
+
+      if (res.success) {
+        setSuccessMsg('Work successfully submitted. Awaiting administrative evaluation.');
+        reset();
+        setTimeout(() => {
+          setSelectedTask(null);
+          setIsScanning(false);
+          router.refresh();
+        }, 1500);
+      } else {
+        setError(res.error || 'Failed to submit task. Please check server state.');
+        setIsScanning(false);
+      }
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred.');
+      setIsScanning(false);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,84 +185,31 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
   };
 
   const handleCopyLinkedIn = () => {
-    const template = getLinkedInTemplate(user.enrolledTrack);
-    navigator.clipboard.writeText(template);
+    const post = getLinkedInTemplate(user.enrolledTrack);
+    navigator.clipboard.writeText(post);
     setCopiedLinkedIn(true);
     setTimeout(() => setCopiedLinkedIn(false), 2000);
   };
 
-  const onSubmit = async (data: SubmissionValues) => {
-    if (!selectedTask) return;
-    setLoading(true);
-    setIsScanning(true);
-    setError('');
-    setSuccessMsg('');
-    setTerminalLogs([]);
-
-    const repoLink = data.submissionRepoLink;
-    const liveLink = data.submissionLiveLink;
-
-    const logs = [
-      `> Connecting to remote repository: ${repoLink}... SUCCESS`,
-      `> Querying static dependency vulnerabilities... 0 critical bugs found`,
-      `> Performing DOM accessibility and responsive paint analysis... OK`,
-      `> Package compiled successfully. Submitting architecture artifacts to review queue.`
-    ];
-
-    try {
-      for (let i = 0; i < logs.length; i++) {
-        await new Promise((resolve) => setTimeout(resolve, i === 0 ? 0 : 1200));
-        setTerminalLogs((prev) => [...prev, logs[i]]);
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, 600));
-
-      const result = await submitTaskAction({
-        userTaskId: selectedTask._id,
-        submissionRepoLink: repoLink,
-        submissionLiveLink: liveLink,
-      });
-
-      if (result.success) {
-        setSuccessMsg('Work submitted successfully! Refreshing dashboard...');
-        setTimeout(() => {
-          setSelectedTask(null);
-          reset();
-          setIsScanning(false);
-          setTerminalLogs([]);
-          router.refresh();
-        }, 1200);
-      } else {
-        setError(result.error || 'Failed to submit task.');
-        setIsScanning(false);
-      }
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred.');
-      setIsScanning(false);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative min-h-screen text-slate-100">
-      {/* Moving background grid */}
-      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
+    <div className="flex-1 flex flex-col bg-zinc-950 relative min-h-screen text-slate-100 pb-20 font-sans">
+      {/* Background Grid */}
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
 
       {/* Header */}
-      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md relative z-10">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg">
+            <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl shadow-sm">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
-              <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
+              <span className="block text-[8px] text-slate-400 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-xs text-electric-cyan font-semibold bg-cyber-navy-dark border border-electric-cyan/20 px-3 py-1.5 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.05)] hidden sm:inline">
+            <span className="text-xs text-blue-500 font-semibold bg-zinc-905 border border-zinc-850 px-3 py-1.5 rounded-full hidden sm:inline">
               Student Workspace
             </span>
             <UserButton />
@@ -228,58 +224,56 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
         <div className="space-y-8 lg:col-span-1">
           
           {/* Welcome Card */}
-          <div className="glass-panel rounded-3xl p-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
-            <span className="text-xs text-electric-cyan font-bold uppercase tracking-wider block mb-1 text-cyan-glow">Welcome back</span>
+          <div className="glass-panel rounded-2xl p-6 bg-zinc-900/50">
+            <span className="text-xs text-blue-500 font-bold uppercase tracking-wider block mb-1">Welcome back</span>
             <h2 className="text-2xl font-bold text-white mb-2">{user.fullName}</h2>
-            <p className="text-slate-405 text-xs font-light leading-relaxed">
+            <p className="text-slate-400 text-xs font-light leading-relaxed">
               Virtual {user.enrolledTrack || 'Web Development'} Internship Track at VeraForge.
             </p>
             
-            <div className="mt-6 pt-4 border-t border-cyber-navy-light/30 text-xs text-slate-400 space-y-2">
+            <div className="mt-6 pt-4 border-t border-zinc-800/60 text-xs text-slate-450 space-y-2">
               <div className="flex justify-between">
-                <span className="text-slate-500">Institution:</span>
+                <span className="text-slate-500 font-light">Institution:</span>
                 <span className="text-slate-200 font-medium truncate max-w-[150px]">{user.universityName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Graduation Year:</span>
+                <span className="text-slate-500 font-light">Graduation Year:</span>
                 <span className="text-slate-200 font-medium">{user.graduationYear}</span>
               </div>
             </div>
           </div>
- 
+  
           {/* Progress Tracker Card */}
-          <div className="glass-panel rounded-3xl p-6 shadow-xl bg-cyber-navy-light/10">
+          <div className="glass-panel rounded-2xl p-6 bg-zinc-900/50">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-350">Track Progress</h3>
-              <span className="text-2xl font-extrabold text-electric-cyan text-cyan-glow">{progressPercent}%</span>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">Track Progress</h3>
+              <span className="text-xl font-extrabold text-blue-500">{progressPercent}%</span>
             </div>
             
             {/* Progress Bar */}
-            <div className="w-full bg-cyber-navy-dark h-3 rounded-full overflow-hidden border border-cyber-navy-light/40 p-[2px]">
+            <div className="w-full bg-zinc-950 h-3 rounded-full overflow-hidden border border-zinc-850 p-[2px]">
               <div 
-                className="bg-gradient-to-r from-electric-blue to-electric-cyan h-full rounded-full transition-all duration-500 shadow-[0_0_8px_rgba(245,158,11,0.35)]"
+                className="bg-blue-600 h-full rounded-full transition-all duration-500"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
  
-            <div className="flex justify-between items-center mt-4 text-xs text-slate-450">
+            <div className="flex justify-between items-center mt-4 text-xs text-slate-400">
               <span>{approvedTasksCount} of {totalTasks} Tasks Approved</span>
-              <span className="text-electric-cyan font-bold text-cyan-glow">{approvedTasksCount === totalTasks ? 'Ready' : 'In Progress'}</span>
+              <span className="text-blue-500 font-semibold">{approvedTasksCount === totalTasks ? 'Ready' : 'In Progress'}</span>
             </div>
           </div>
 
           {/* Graduation & Certificate Card */}
           {progressPercent === 100 && (
-            <div className="glass-panel border-electric-cyan/20 rounded-3xl p-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="glass-panel rounded-2xl p-6 bg-zinc-900/50 border border-blue-900/40">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-electric-cyan/25 rounded-xl border border-electric-cyan/20">
-                  <Award className="w-6 h-6 text-electric-cyan text-cyan-glow animate-pulse" />
+                <div className="p-2 bg-blue-950 border border-blue-900/40 rounded-xl">
+                  <Award className="w-5 h-5 text-blue-500" />
                 </div>
                 <div>
                   <h4 className="text-base font-bold text-white">Graduation Reached</h4>
-                  <p className="text-[10px] text-electric-cyan font-bold tracking-wider uppercase text-cyan-glow">{user.enrolledTrack || 'Web Development'} Track</p>
+                  <p className="text-[10px] text-blue-500 font-bold tracking-wider uppercase">{user.enrolledTrack || 'Web Development'} Track</p>
                 </div>
               </div>
               <p className="text-slate-400 text-xs font-light leading-relaxed mb-6">
@@ -289,14 +283,14 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
               {certificate ? (
                 <a
                   href={`/verify/${certificate.certificateId}`}
-                  className="w-full py-3 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl text-center flex items-center justify-center gap-2 shadow-lg transition-all"
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-lg text-center flex items-center justify-center gap-2 transition-all cursor-pointer"
                 >
                   View Verified Certificate
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               ) : (
-                <div className="p-3.5 bg-cyber-navy-dark border border-cyber-navy-light/45 rounded-xl text-center text-xs text-electric-cyan font-semibold flex items-center justify-center gap-2">
-                  <Loader2 className="w-4 h-4 animate-spin text-electric-cyan" />
+                <div className="p-3.5 bg-zinc-950 border border-zinc-850 rounded-xl text-center text-xs text-blue-500 font-semibold flex items-center justify-center gap-2">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-500" />
                   Awaiting Admin Issuance...
                 </div>
               )}
@@ -304,21 +298,20 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
           )}
 
           {/* Resume Booster Card */}
-          {progressPercent === 100 && (
-            <div className="glass-panel border-electric-blue/20 rounded-3xl p-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10 animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none" />
-              <div className="flex items-center gap-2 mb-4 border-b border-cyber-navy-light/45 pb-3">
-                <Sparkles className="w-5 h-5 text-electric-cyan text-cyan-glow animate-pulse" />
-                <h4 className="text-sm font-bold uppercase tracking-wider text-white">Resume Booster</h4>
+          {approvedTasksCount > 0 && (
+            <div className="glass-panel rounded-2xl p-6 bg-zinc-900/50">
+              <div className="flex items-center gap-2 mb-4 border-b border-zinc-800/60 pb-3">
+                <Sparkles className="w-4 h-4 text-blue-500" />
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-350">Resume Booster</h4>
               </div>
               
-              <div className="flex gap-2 mb-4 border-b border-cyber-navy-light/35 pb-2">
+              <div className="flex gap-2 mb-4 border-b border-zinc-850 pb-2">
                 <button
                   onClick={() => setResumeTab('bullets')}
                   className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer ${
                     resumeTab === 'bullets' 
-                      ? 'bg-electric-cyan text-cyber-navy-dark' 
-                      : 'bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 hover:text-slate-200'
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-zinc-950 border border-zinc-850 text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   Resume Bullets
@@ -327,8 +320,8 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   onClick={() => setResumeTab('linkedin')}
                   className={`px-3 py-1.5 text-[10px] font-bold rounded-lg transition-all cursor-pointer ${
                     resumeTab === 'linkedin' 
-                      ? 'bg-electric-cyan text-cyber-navy-dark' 
-                      : 'bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 hover:text-slate-200'
+                      ? 'bg-blue-600 text-white' 
+                      : 'bg-zinc-950 border border-zinc-850 text-slate-400 hover:text-slate-200'
                   }`}
                 >
                   LinkedIn Template
@@ -340,22 +333,22 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   <p className="text-[10px] text-slate-500 font-light leading-relaxed">
                     Tailored bullet points verifying your {user.enrolledTrack} achievements:
                   </p>
-                  <div className="bg-slate-950/80 border border-slate-900 rounded-xl p-3.5 space-y-2 text-[10px] text-slate-450 leading-relaxed font-mono">
+                  <div className="bg-zinc-950 border border-zinc-850 rounded-xl p-3.5 space-y-2 text-[10px] text-slate-400 leading-relaxed font-mono">
                     {getResumeBullets(user.enrolledTrack).map((bullet, idx) => (
                       <div key={idx} className="flex gap-1.5 items-start">
-                        <span className="text-electric-cyan shrink-0">•</span>
+                        <span className="text-blue-500 shrink-0">•</span>
                         <span>{bullet}</span>
                       </div>
                     ))}
                   </div>
                   <button
                     onClick={handleCopyBullets}
-                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full mt-2 py-2 bg-zinc-950 hover:bg-zinc-900 border border-zinc-850 text-slate-300 font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     {copiedBullets ? (
                       <>
-                        <Check className="w-3.5 h-3.5" />
-                        Copied to Clipboard!
+                        <Check className="w-3.5 h-3.5 text-blue-500" />
+                        Copied!
                       </>
                     ) : (
                       <>
@@ -367,20 +360,20 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <p className="text-[10px] text-slate-505 font-light leading-relaxed">
+                  <p className="text-[10px] text-slate-500 font-light leading-relaxed">
                     Share your achievements with your professional network:
                   </p>
-                  <div className="bg-slate-950/80 border border-slate-900 rounded-xl p-3.5 text-[10px] text-slate-450 leading-relaxed font-mono whitespace-pre-wrap select-all">
+                  <div className="bg-zinc-950 border border-zinc-850 rounded-xl p-3.5 text-[10px] text-slate-400 leading-relaxed font-mono whitespace-pre-wrap select-all">
                     {getLinkedInTemplate(user.enrolledTrack)}
                   </div>
                   <button
                     onClick={handleCopyLinkedIn}
-                    className="w-full mt-2 py-2 bg-cyber-navy-dark hover:bg-cyber-navy-light/60 border border-electric-cyan/20 hover:border-electric-cyan/45 text-electric-cyan font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    className="w-full mt-2 py-2 bg-zinc-950 hover:bg-zinc-900 border border-zinc-850 text-slate-300 font-bold text-[10px] uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                   >
                     {copiedLinkedIn ? (
                       <>
-                        <Check className="w-3.5 h-3.5" />
-                        Copied to Clipboard!
+                        <Check className="w-3.5 h-3.5 text-blue-500" />
+                        Copied!
                       </>
                     ) : (
                       <>
@@ -397,21 +390,19 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
 
         {/* Right column: Sequential Tasks */}
         {user.accountStatus === 'pending_approval' ? (
-          <div className="lg:col-span-2 space-y-6 animate-in fade-in duration-300">
-            <div className="glass-panel rounded-3xl p-8 md:p-12 text-center space-y-6 shadow-xl relative overflow-hidden bg-cyber-navy-light/10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-electric-cyan/5 rounded-full blur-2xl pointer-events-none animate-pulse-slow" />
-              
-              <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/20 rounded-2xl flex items-center justify-center animate-pulse">
-                <AlertTriangle className="w-8 h-8 text-electric-cyan text-cyan-glow" />
+          <div className="lg:col-span-2 space-y-6">
+            <div className="glass-panel rounded-2xl p-8 md:p-12 text-center space-y-6 bg-zinc-900/50">
+              <div className="mx-auto w-16 h-16 bg-zinc-950 border border-zinc-800 rounded-2xl flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-yellow-500 animate-pulse" />
               </div>
               
-              <div className="max-w-md mx-auto space-y-3 font-sans">
-                <h3 className="text-xl font-bold text-white uppercase tracking-wider text-cyan-glow">Security Audit Notice</h3>
+              <div className="max-w-md mx-auto space-y-3">
+                <h3 className="text-lg font-bold text-white uppercase tracking-wider">Security Audit Notice</h3>
                 
                 {/* Visual Status Meter */}
                 <div className="py-2">
-                  <div className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-full h-2 p-[1px] relative">
-                    <div className="bg-electric-cyan h-full rounded-full animate-pulse" style={{ width: '40%' }} />
+                  <div className="w-full bg-zinc-950 border border-zinc-850 rounded-full h-2 p-[1px] relative">
+                    <div className="bg-blue-600 h-full rounded-full" style={{ width: '40%' }} />
                   </div>
                   <div className="flex justify-between text-[9px] text-slate-500 mt-1.5 font-mono">
                     <span>ONBOARDING: OK</span>
@@ -419,24 +410,23 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                   </div>
                 </div>
 
-                <p className="text-slate-400 text-xs leading-relaxed font-light">
+                <p className="text-slate-400 text-xs leading-relaxed font-light font-sans">
                   Your credentials are undergoing administrative verification. The audit engine will release your dashboard upon confirmation.
                 </p>
               </div>
             </div>
           </div>
-        )
-  : (
+        ) : (
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center justify-between pb-2 border-b border-cyber-navy-light/35">
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-                <BookOpen className="w-5 h-5 text-electric-cyan text-cyan-glow" />
+            <div className="flex items-center justify-between pb-2 border-b border-zinc-905">
+              <h3 className="text-base font-bold text-slate-105 flex items-center gap-2 uppercase">
+                <BookOpen className="w-4 h-4 text-blue-500" />
                 Internship Course Assignments
               </h3>
-              <span className="text-xs text-slate-400">{totalTasks} Sequential Steps</span>
+              <span className="text-xs text-slate-500 font-light">{totalTasks} Sequential Steps</span>
             </div>
 
-            <div className="space-y-4 font-sans">
+            <div className="space-y-4">
               {userTasks.map((userTask) => {
                 const task = userTask.taskId;
                 const isLocked = userTask.status === 'locked';
@@ -447,103 +437,103 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 return (
                   <div 
                     key={userTask._id}
-                    className={`bg-cyber-navy-light/5 border rounded-2xl p-6 transition-all duration-300 ${
-                      isLocked ? 'border-cyber-navy-light/20 opacity-40' :
-                      isApproved ? 'border-electric-cyan/25 bg-electric-cyan/5' :
+                    className={`bg-zinc-900/30 border rounded-2xl p-6 transition-all duration-300 ${
+                      isLocked ? 'border-zinc-900 opacity-40' :
+                      isApproved ? 'border-zinc-800 bg-zinc-900/20' :
                       isRejected ? 'border-red-950/30 bg-red-950/5' :
-                      isPending ? 'border-electric-blue/25 bg-electric-blue/5' :
-                      'border-cyber-navy-light/40 hover:border-electric-cyan/35 hover:bg-cyber-navy-light/15'
+                      isPending ? 'border-blue-950/40 bg-blue-950/10' :
+                      'border-zinc-800 hover:border-zinc-700 bg-zinc-900/40'
                     }`}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
                       <div>
                         {/* Step Indicator & Status Badge */}
                         <div className="flex flex-wrap items-center gap-2.5 mb-2.5">
-                          <span className="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 bg-cyber-navy-dark border border-cyber-navy-light/50 rounded-full text-slate-300 font-sans">
+                          <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 bg-zinc-950 border border-zinc-850 rounded text-slate-400 font-mono">
                             Step {task.sequenceOrder}
                           </span>
  
                           {isLocked && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-cyber-navy-dark border border-cyber-navy-light/20 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-slate-550 bg-zinc-950 border border-zinc-850 px-2 py-0.5 rounded flex items-center gap-1">
                               <Lock className="w-3 h-3" /> Locked
                             </span>
                           )}
                           {isApproved && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan bg-electric-cyan/10 border border-electric-cyan/20 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans text-cyan-glow">
-                              <CheckCircle2 className="w-3 h-3 text-electric-cyan" /> Completed
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-emerald-450 bg-emerald-950/20 border border-emerald-900/30 px-2 py-0.5 rounded flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3 text-emerald-450" /> Completed
                             </span>
                           )}
                           {isPending && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-blue/90 bg-electric-blue/10 border border-electric-blue/20 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-blue-450 bg-blue-950/20 border border-blue-900/30 px-2 py-0.5 rounded flex items-center gap-1">
                               <Loader2 className="w-3 h-3 animate-spin" /> Pending Review
                             </span>
                           )}
                           {isRejected && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-red-400 bg-red-950/20 border border-red-900/30 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-red-400 bg-red-950/20 border border-red-900/30 px-2 py-0.5 rounded flex items-center gap-1 font-sans">
                               <AlertTriangle className="w-3 h-3" /> Revision Required
                             </span>
                           )}
                           {userTask.status === 'unlocked' && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan bg-electric-cyan/5 border border-electric-cyan/20 px-2 py-0.5 rounded-full flex items-center gap-1 font-sans">
-                              <Unlock className="w-3 h-3 animate-pulse" /> Active Task
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-blue-500 bg-blue-950/15 border border-blue-900/30 px-2 py-0.5 rounded flex items-center gap-1">
+                              <Unlock className="w-3 h-3" /> Active Task
                             </span>
                           )}
                           {userTask.status === 'quiz_pending' && (
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-955/20 border border-amber-900/30 px-2 py-0.5 rounded-full flex items-center gap-1 shadow-[0_0_8px_rgba(245,158,11,0.1)] font-sans">
-                              <BookOpen className="w-3 h-3 animate-pulse" /> Quiz Pending
+                            <span className="text-[9px] font-bold uppercase tracking-wider text-amber-500 bg-amber-955/20 border border-amber-900/30 px-2 py-0.5 rounded flex items-center gap-1">
+                              <BookOpen className="w-3 h-3" /> Quiz Pending
                             </span>
                           )}
                         </div>
 
-                        <h4 className="text-lg font-bold text-white mb-2 font-sans">{task.title}</h4>
-                        <p className="text-slate-400 text-sm font-light leading-relaxed mb-4 max-w-xl font-sans">
+                        <h4 className="text-base font-bold text-white mb-2">{task.title}</h4>
+                        <p className="text-slate-400 text-xs font-light leading-relaxed mb-4 max-w-xl">
                           {task.description}
                         </p>
 
-                        {/* Display Submitted Links if any */}
+                        {/* Display Submitted Links */}
                         {(isApproved || isPending || isRejected) && (
-                          <div className="flex flex-wrap gap-4 text-xs mt-3 pt-3 border-t border-cyber-navy-light/30 text-slate-400 font-sans">
+                          <div className="flex flex-wrap gap-4 text-[10px] mt-3 pt-3 border-t border-zinc-800/60 text-slate-500">
                             <a 
                               href={userTask.submissionRepoLink} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="flex items-center gap-1.5 hover:text-electric-cyan transition-colors"
+                              className="flex items-center gap-1 hover:text-blue-500 transition-colors"
                             >
-                              <Github className="w-3.5 h-3.5" />
+                              <Github className="w-3 h-3" />
                               GitHub Repository
-                              <ExternalLink className="w-3 h-3" />
+                              <ExternalLink className="w-2.5 h-2.5" />
                             </a>
                             <a 
                               href={userTask.submissionLiveLink} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="flex items-center gap-1.5 hover:text-electric-cyan transition-colors"
+                              className="flex items-center gap-1 hover:text-blue-500 transition-colors"
                             >
-                              <Globe className="w-3.5 h-3.5" />
-                              Live Web Application
-                              <ExternalLink className="w-3 h-3" />
+                              <Globe className="w-3 h-3" />
+                              Live Hosted App
+                              <ExternalLink className="w-2.5 h-2.5" />
                             </a>
                           </div>
                         )}
  
                         {/* Feedback Panel */}
                         {userTask.adminFeedback && (
-                          <div className="mt-4 p-3.5 bg-cyber-navy-dark/60 border border-cyber-navy-light/40 rounded-xl flex gap-2.5 items-start text-xs max-w-xl font-sans">
-                            <MessageSquare className="w-4 h-4 text-electric-cyan shrink-0 mt-0.5 animate-pulse" />
+                          <div className="mt-4 p-3.5 bg-zinc-950 border border-zinc-850 rounded-xl flex gap-2.5 items-start text-xs max-w-xl font-sans">
+                            <MessageSquare className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                             <div>
-                              <div className="font-bold text-slate-300">Administrator Feedback:</div>
-                              <p className="text-slate-400 font-light mt-0.5 leading-relaxed">{userTask.adminFeedback}</p>
+                              <div className="font-bold text-slate-350">Admin Code Audit Report:</div>
+                              <p className="text-slate-450 font-light mt-0.5 leading-relaxed">{userTask.adminFeedback}</p>
                             </div>
                           </div>
                         )}
                       </div>
 
                       {/* Action Button */}
-                      <div className="shrink-0 font-sans">
+                      <div className="shrink-0">
                         {isLocked && (
                           <button 
                             disabled 
-                            className="px-4 py-2 bg-cyber-navy-dark/40 border border-cyber-navy-light/20 text-slate-600 text-xs font-semibold rounded-lg flex items-center gap-1.5 cursor-not-allowed"
+                            className="px-4 py-2 bg-zinc-950 border border-zinc-850 text-slate-500 text-xs font-semibold rounded-lg flex items-center gap-1.5 cursor-not-allowed"
                           >
                             <Lock className="w-3.5 h-3.5" />
                             Task Locked
@@ -553,7 +543,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {userTask.status === 'quiz_pending' && (
                           <button
                             onClick={() => handleOpenQuiz(userTask)}
-                            className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark text-xs font-bold rounded-lg transition-all shadow-md shadow-electric-cyan/15 hover:scale-[1.02] cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)] flex items-center gap-1"
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all flex items-center gap-1 cursor-pointer"
                           >
                             <BookOpen className="w-3.5 h-3.5" />
                             Take Quiz
@@ -563,7 +553,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {userTask.status === 'unlocked' && (
                           <button
                             onClick={() => handleOpenSubmission(userTask)}
-                            className="px-4 py-2 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark text-xs font-bold rounded-lg transition-all shadow-md shadow-electric-cyan/15 hover:scale-[1.02] cursor-pointer shadow-[0_0_10px_rgba(245,158,11,0.05)]"
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all cursor-pointer"
                           >
                             Submit Assignment
                           </button>
@@ -572,7 +562,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {isPending && (
                           <button
                             disabled
-                            className="px-4 py-2 bg-cyber-navy-dark border border-cyber-navy-light/40 text-slate-400 text-xs font-semibold rounded-lg"
+                            className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-slate-500 text-xs font-semibold rounded-lg"
                           >
                             Under Evaluation
                           </button>
@@ -581,7 +571,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {isRejected && (
                           <button
                             onClick={() => handleOpenSubmission(userTask)}
-                            className="px-4 py-2 bg-red-955/30 hover:bg-red-955/50 border border-red-900/40 text-red-300 hover:text-red-200 text-xs font-bold rounded-lg transition-all cursor-pointer shadow-[0_0_10px_rgba(239,68,68,0.1)]"
+                            className="px-4 py-2 bg-red-955/25 hover:bg-red-955/40 border border-red-900/40 text-red-300 text-xs font-bold rounded-lg transition-all cursor-pointer"
                           >
                             Revise & Re-submit
                           </button>
@@ -590,7 +580,7 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                         {isApproved && (
                           <button
                             disabled
-                            className="px-4 py-2 bg-electric-cyan/10 border border-electric-cyan/20 text-electric-cyan text-xs font-semibold rounded-lg flex items-center gap-1"
+                            className="px-4 py-2 bg-zinc-900 border border-zinc-800 text-slate-500 text-xs font-semibold rounded-lg flex items-center gap-1"
                           >
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             Approved
@@ -610,61 +600,58 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
       {selectedTask && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-cyber-navy-dark/80 backdrop-blur-md"
+            className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm"
             onClick={() => { if (!loading) setSelectedTask(null); }}
           />
  
-          <div className="relative glass-panel rounded-3xl p-6 md:p-8 w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 font-sans bg-cyber-navy-dark/95">
+          <div className="relative glass-panel rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-zinc-800 z-55 bg-zinc-900">
             <button
               onClick={() => setSelectedTask(null)}
               disabled={loading}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 disabled:opacity-50 transition-colors"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-300 disabled:opacity-50 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
  
             <div className="mb-6">
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/50 text-slate-350 rounded-full">
+              <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 bg-zinc-950 border border-zinc-850 text-slate-400 rounded">
                 Step {selectedTask.taskId.sequenceOrder} Submission
               </span>
               <h3 className="text-xl font-bold text-white mt-2.5">
                 Submit {selectedTask.taskId.title}
               </h3>
-              <p className="text-slate-400 text-xs font-light leading-relaxed mt-1">
+              <p className="text-slate-450 text-xs font-light leading-relaxed mt-1">
                 Provide the active Github codebase and the public live deployment URL.
               </p>
             </div>
  
             {error && (
-              <div className="mb-4 p-3 bg-red-955/30 border border-red-900/50 rounded-xl text-red-300 text-xs font-semibold font-sans">
+              <div className="mb-4 p-3 bg-red-955/30 border border-red-900/50 rounded-xl text-red-300 text-xs font-semibold">
                 {error}
               </div>
             )}
  
             {successMsg && (
-              <div className="mb-4 p-3 bg-electric-cyan/10 border border-electric-cyan/20 rounded-xl text-electric-cyan text-xs font-semibold shadow-[0_0_10px_rgba(245,158,11,0.05)] font-sans">
+              <div className="mb-4 p-3 bg-blue-955/20 border border-blue-900/30 rounded-xl text-blue-300 text-xs font-semibold">
                 {successMsg}
               </div>
             )}
 
             {isScanning ? (
               <div className="space-y-4">
-                <div className="bg-slate-950 p-5 rounded-2xl border border-amber-500/25 font-mono text-[11px] leading-relaxed text-slate-300 min-h-[220px] shadow-[0_0_30px_rgba(245,158,11,0.08)] relative overflow-hidden flex flex-col justify-between">
-                  {/* Vertical Scanline */}
-                  <div className="scanning-line" />
-                  
+                <div className="bg-zinc-950 p-5 rounded-xl border border-zinc-800 font-mono text-[11px] leading-relaxed text-slate-300 min-h-[220px] relative overflow-hidden flex flex-col justify-between">
                   <div className="space-y-2 relative z-20">
-                     <div className="flex items-center gap-2 border-b border-cyber-navy-light pb-2 mb-2 text-xs text-electric-cyan font-bold tracking-wider text-cyan-glow">
-                       <span className="w-2 h-2 rounded-full bg-electric-cyan animate-pulse shadow-[0_0_8px_#fbbf24]" />
-                       <span>VERAFORGE CI/CD TELEMETRY SCANNER v2.5</span>
+                     <div className="flex items-center gap-2 border-b border-zinc-850 pb-2 mb-2 text-xs text-blue-500 font-bold tracking-wider">
+                       <span className="w-2 h-2 rounded-full bg-blue-500" />
+                       <span>VERAFORGE CI/CD PIPELINE AUDIT</span>
                      </div>
                     {terminalLogs.map((log, idx) => {
                       const isSuccess = log.includes('SUCCESS') || log.includes('OK') || log.includes('0 critical');
                       return (
                         <div 
                           key={idx} 
-                          className={`animate-in fade-in slide-in-from-bottom-1 duration-250 ${
-                            isSuccess ? 'text-emerald-450 font-semibold' : 'text-slate-300'
+                          className={`animate-in fade-in duration-150 ${
+                            isSuccess ? 'text-emerald-450 font-semibold' : 'text-slate-350'
                           }`}
                         >
                           {log}
@@ -672,15 +659,14 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                       );
                     })}
                      
-                     {/* Blinking cursor for the active scanner log */}
-                     {terminalLogs.length < 4 && (
-                       <div className="text-electric-cyan/70 typing-caret">
+                     {terminalLogs.length < 5 && (
+                       <div className="text-blue-500/70 typing-caret">
                          &gt; Telemetry analyze active...
                        </div>
                      )}
                   </div>
-                  <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-cyber-navy-light/45 pt-2 mt-4 relative z-20">
-                     <span className="animate-pulse">SECURITY AUDIT ENGINE: RUNNING</span>
+                  <div className="flex justify-between items-center text-[9px] text-slate-500 border-t border-zinc-850 pt-2 mt-4 relative z-20">
+                     <span>SECURITY AUDIT ENGINE: RUNNING</span>
                      <span>THREADS: 0x2A4</span>
                   </div>
                 </div>
@@ -688,15 +674,15 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                    <Github className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-350 flex items-center gap-1.5">
+                    <Github className="w-3.5 h-3.5 text-slate-500" />
                     GitHub Repository URL
                   </label>
                   <input
                     type="url"
                     placeholder="e.g. https://github.com/username/calculator"
                     {...register('submissionRepoLink')}
-                    className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-650 transition-all text-xs outline-none shadow-inner"
+                    className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
                   />
                   {errors.submissionRepoLink && (
                     <p className="text-[10px] text-red-400 font-semibold">{errors.submissionRepoLink.message}</p>
@@ -704,15 +690,15 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 </div>
  
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1.5">
-                    <Globe className="w-3.5 h-3.5 text-slate-400" />
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-slate-355 flex items-center gap-1.5">
+                    <Globe className="w-3.5 h-3.5 text-slate-500" />
                     Live Hosted URL
                   </label>
                   <input
                     type="url"
                     placeholder="e.g. https://calculator-demo.vercel.app"
                     {...register('submissionLiveLink')}
-                    className="w-full bg-cyber-navy-dark border border-cyber-navy-light/45 focus:border-electric-cyan focus:ring-1 focus:ring-electric-cyan/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-650 transition-all text-xs outline-none shadow-inner"
+                    className="w-full bg-zinc-950 border border-zinc-850 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 rounded-xl px-4 py-2.5 text-slate-100 placeholder-slate-700 transition-all text-xs outline-none shadow-inner"
                   />
                   {errors.submissionLiveLink && (
                     <p className="text-[10px] text-red-400 font-semibold">{errors.submissionLiveLink.message}</p>
@@ -720,19 +706,19 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                 </div>
  
                 {selectedTask.adminFeedback && (
-                  <div className="p-3 bg-cyber-navy-dark border border-cyber-navy-light/45 rounded-xl text-xs space-y-1">
-                    <div className="font-bold text-slate-300 flex items-center gap-1">
-                      <MessageSquare className="w-3.5 h-3.5 text-electric-cyan text-cyan-glow" />
+                  <div className="p-3 bg-zinc-950 border border-zinc-850 rounded-xl text-xs space-y-1">
+                    <div className="font-bold text-slate-350 flex items-center gap-1">
+                      <MessageSquare className="w-3.5 h-3.5 text-blue-500" />
                       Previous Revision Request:
                     </div>
-                    <p className="text-slate-400 leading-relaxed font-light">{selectedTask.adminFeedback}</p>
+                    <p className="text-slate-450 leading-relaxed font-light">{selectedTask.adminFeedback}</p>
                   </div>
                 )}
  
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-6 shadow-[0_0_15px_rgba(245,158,11,0.15)] font-sans"
+                  className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-650/50 text-white font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer mt-6"
                 >
                   Submit Work for Review
                   <ArrowRight className="w-4 h-4" />
@@ -747,24 +733,24 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
       {activeQuizTask && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="absolute inset-0 bg-cyber-navy-dark/80 backdrop-blur-md"
+            className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm"
             onClick={() => { if (!quizLoading && !cooldownActive) setActiveQuizTask(null); }}
           />
 
-          <div className="relative glass-panel rounded-3xl p-6 md:p-8 w-full max-w-xl shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-cyber-navy-light/65 z-55 overflow-hidden font-sans bg-cyber-navy-dark/95">
+          <div className="relative glass-panel rounded-2xl p-6 md:p-8 w-full max-w-xl shadow-2xl animate-in fade-in zoom-in-95 duration-150 border-zinc-805 z-55 overflow-hidden bg-zinc-900">
             
             {cooldownActive ? (
               /* Cooldown Screen Overlay */
-              <div className="absolute inset-0 bg-red-950/95 z-60 flex flex-col items-center justify-center p-6 text-center border-4 border-red-500/50 rounded-3xl shadow-[0_0_30px_rgba(239,68,68,0.25)] animate-in fade-in duration-300">
-                <div className="w-16 h-16 rounded-2xl bg-red-950 border border-red-500/35 flex items-center justify-center mb-4 animate-bounce">
-                  <AlertTriangle className="w-8 h-8 text-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
+              <div className="absolute inset-0 bg-red-950/95 z-60 flex flex-col items-center justify-center p-6 text-center border-4 border-red-500/50 rounded-2xl shadow-lg animate-in fade-in duration-200">
+                <div className="w-16 h-16 rounded-xl bg-red-950 border border-red-500/35 flex items-center justify-center mb-4">
+                  <AlertTriangle className="w-8 h-8 text-red-500" />
                 </div>
-                <h3 className="text-xl font-extrabold text-red-400 tracking-wider uppercase mb-2">SECURITY VERIFICATION FAILURE</h3>
+                <h3 className="text-lg font-extrabold text-red-400 tracking-wider uppercase mb-2">SECURITY VERIFICATION FAILURE</h3>
                 <p className="text-xs text-red-300 max-w-md font-mono leading-relaxed mb-6">
-                  Intrusive access prevention protocol activated. Locking validation interface for {cooldownTime} seconds.
+                  Verification cooldown interface activated. Locking verification inputs for {cooldownTime} seconds.
                 </p>
-                <div className="w-20 h-20 rounded-full border-4 border-red-500/20 border-t-red-500 flex items-center justify-center animate-spin-slow">
-                  <span className="text-2xl font-black text-red-400 font-mono">{cooldownTime}</span>
+                <div className="w-16 h-16 rounded-full border-4 border-red-500/20 border-t-red-500 flex items-center justify-center animate-spin">
+                  <span className="text-xl font-bold text-red-400 font-mono">{cooldownTime}</span>
                 </div>
               </div>
             ) : null}
@@ -772,25 +758,25 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             <button
               onClick={() => setActiveQuizTask(null)}
               disabled={quizLoading}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-200 disabled:opacity-50 transition-colors animate-in fade-in"
+              className="absolute top-4 right-4 text-slate-500 hover:text-slate-350 disabled:opacity-50 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="mb-6">
-              <span className="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 bg-cyber-navy-dark border border-cyber-navy-light/50 text-slate-350 rounded-full font-sans">
+              <span className="text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 bg-zinc-950 border border-zinc-850 text-slate-400 rounded">
                 Prerequisite Verification Quiz
               </span>
-              <h3 className="text-xl font-bold text-white mt-2.5 font-sans">
+              <h3 className="text-xl font-bold text-white mt-2.5">
                 Verify Track Knowledge
               </h3>
-              <p className="text-slate-400 text-xs font-light leading-relaxed mt-1 font-sans">
+              <p className="text-slate-450 text-xs font-light leading-relaxed mt-1">
                 Answer all 3 technical questions correctly to unlock the submission terminal for **{activeQuizTask.taskId.title}**.
               </p>
             </div>
 
             {quizError && (
-              <div className="mb-4 p-3 bg-red-955/30 border border-red-900/50 rounded-xl text-red-350 text-xs font-semibold font-sans">
+              <div className="mb-4 p-3 bg-red-955/30 border border-red-900/50 rounded-xl text-red-350 text-xs font-semibold">
                 {quizError}
               </div>
             )}
@@ -798,10 +784,10 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
             <form onSubmit={handleQuizSubmit} className="space-y-6">
               <div className="space-y-5 max-h-[350px] overflow-y-auto pr-1">
                 {activeQuizTask.taskId.quizQuestions.map((q: any, qIdx: number) => (
-                  <div key={qIdx} className="space-y-2 border-b border-cyber-navy-light/30 pb-4 last:border-0 last:pb-0">
-                    <div className="text-xs font-bold text-slate-200 flex gap-2">
-                      <span className="text-electric-cyan font-sans">Q{qIdx + 1}.</span>
-                      <p className="font-sans">{q.question}</p>
+                  <div key={qIdx} className="space-y-2 border-b border-zinc-850 pb-4 last:border-0 last:pb-0">
+                    <div className="text-xs font-bold text-slate-205 flex gap-2">
+                      <span className="text-blue-500">Q{qIdx + 1}.</span>
+                      <p>{q.question}</p>
                     </div>
                     <div className="grid grid-cols-1 gap-2 mt-2">
                       {q.options.map((opt: string, optIdx: number) => {
@@ -819,15 +805,15 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
                             }}
                             className={`w-full text-left px-4 py-2.5 text-xs rounded-xl border transition-all cursor-pointer font-sans ${
                               isSelected
-                                ? 'bg-electric-cyan/15 border-electric-cyan text-white shadow-[0_0_10px_rgba(245,158,11,0.08)]'
-                                : 'bg-cyber-navy-dark/60 border-cyber-navy-light/40 text-slate-400 hover:border-cyber-navy-light/80 hover:text-slate-200'
+                                ? 'bg-blue-950/20 border-blue-600 text-white'
+                                : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:border-zinc-700 hover:text-slate-200'
                             }`}
                           >
                             <div className="flex items-center gap-2">
                               <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${
-                                isSelected ? 'border-electric-cyan' : 'border-slate-600'
+                                isSelected ? 'border-blue-500' : 'border-zinc-700'
                               }`}>
-                                {isSelected && <div className="w-1.5 h-1.5 bg-electric-cyan rounded-full" />}
+                                {isSelected && <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />}
                               </div>
                               <span>{opt}</span>
                             </div>
@@ -842,11 +828,11 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
               <button
                 type="submit"
                 disabled={quizLoading || quizAnswers.some(a => a === -1)}
-                className="w-full py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-cyber-navy-light disabled:border-cyber-navy-light/45 disabled:text-slate-500 border border-transparent disabled:cursor-not-allowed text-cyber-navy-dark font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-[0_0_15px_rgba(245,158,11,0.1)] font-sans"
+                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-900 disabled:border-zinc-850 disabled:text-slate-500 border border-transparent disabled:cursor-not-allowed text-white font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {quizLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin font-sans" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                     Validating Credentials...
                   </>
                 ) : (
@@ -894,12 +880,12 @@ function getResumeBullets(track: string): string[] {
 
 function getLinkedInTemplate(track: string): string {
   if (track === 'Data Science') {
-    return `I am excited to share that I have graduated from the Data Science Virtual Internship track at VeraForge! I built and deployed explanatory predictive regression models using Pandas, NumPy, and Scikit-Learn. Ready to turn raw data into high-value business intelligence! #DataScience #MachineLearning #Pandas #VeraForge`;
+    return `I am excited to share that I have graduated from the Data Science Virtual Internship track at VeraForge! I built and deployed explanatory predictive regression models using Pandas, NumPy, and Scikit-Learn. Ready to turn data into high-value business intelligence! #DataScience #MachineLearning #Pandas #VeraForge`;
   } else if (track === 'Artificial Intelligence') {
-    return `Proud to have completed the Artificial Intelligence Virtual Internship at VeraForge! I designed custom Retrieval-Augmented Generation (RAG) architectures and integrated Gemini LLM endpoints with robust rate-limit protocols. Excited for the future of AI engineering! #AI #GenerativeAI #RAG #VeraForge`;
+    return `Proud to have completed the Artificial Intelligence Virtual Internship at VeraForge! I designed custom Retrieval-Augmented Generation (RAG) architectures and integrated Gemini LLM endpoints with robust rate-limit protocols. #AI #GenerativeAI #RAG #VeraForge`;
   } else if (track === 'Backend Engineering') {
-    return `I have successfully completed the Backend Engineering Virtual Internship at VeraForge! I built secure REST APIs with Node.js/Express, implemented JWT token authentication, and optimized MongoDB aggregation pipelines. Ready for enterprise-grade backend challenges! #Backend #API #NodeJS #VeraForge`;
+    return `I have successfully completed the Backend Engineering Virtual Internship at VeraForge! I built secure REST APIs with Node.js/Express, implemented JWT token authentication, and optimized MongoDB aggregation pipelines. #Backend #API #NodeJS #VeraForge`;
   } else { // Web Development
-    return `I am thrilled to announce that I have successfully completed the Web Development Virtual Internship at VeraForge! I engineered a full-stack serverless task workspace using Next.js, Tailwind CSS, and MongoDB, and passed the rigorous code reviews. Ready to apply these skills to production-grade applications! #WebDev #NextJS #FullStack #VeraForge`;
+    return `I am thrilled to announce that I have successfully completed the Web Development Virtual Internship at VeraForge! I engineered a full-stack serverless task workspace using Next.js, Tailwind CSS, and MongoDB, and passed the rigorous reviews. #WebDev #NextJS #FullStack #VeraForge`;
   }
 }

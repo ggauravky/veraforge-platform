@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { 
-  ArrowLeft, Brain, Sparkles, CheckCircle2, ChevronRight, 
+  ArrowLeft, Brain, ChevronRight, 
   RotateCcw, Globe, Database, Code, ShieldCheck, ArrowRight 
 } from 'lucide-react';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
@@ -124,10 +124,10 @@ export default function TrackMatcherQuiz() {
   const { matchedTrack, percentiles } = step === 6 ? getResults() : { matchedTrack: '', percentiles: {} };
 
   const trackIcons: Record<string, React.ReactNode> = {
-    'Web Development': <Globe className="w-8 h-8 text-electric-cyan" />,
-    'Backend Engineering': <Database className="w-8 h-8 text-electric-cyan" />,
-    'Data Science': <Code className="w-8 h-8 text-electric-cyan" />,
-    'Artificial Intelligence': <Brain className="w-8 h-8 text-electric-cyan" />
+    'Web Development': <Globe className="w-8 h-8 text-blue-500" />,
+    'Backend Engineering': <Database className="w-8 h-8 text-blue-500" />,
+    'Data Science': <Code className="w-8 h-8 text-blue-500" />,
+    'Artificial Intelligence': <Brain className="w-8 h-8 text-blue-500" />
   };
 
   const trackDescriptions: Record<string, string> = {
@@ -138,23 +138,23 @@ export default function TrackMatcherQuiz() {
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-cyber-navy-dark relative overflow-hidden min-h-screen text-slate-350 font-sans">
-      {/* Moving background grid */}
-      <div className="absolute inset-0 cyber-grid-moving opacity-[0.22] pointer-events-none z-0" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-amber-550/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="flex-1 flex flex-col bg-zinc-950 relative overflow-hidden min-h-screen text-slate-350 font-sans">
+      {/* Background Grid */}
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-550/2 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10">
+      <header className="border-b border-zinc-900 bg-zinc-950/85 backdrop-blur-md relative z-10">
         <div className="max-w-4xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link 
             href="/" 
-            className="flex items-center gap-2 text-xs text-slate-400 hover:text-electric-cyan transition-colors font-bold uppercase tracking-wider group"
+            className="flex items-center gap-2 text-xs text-slate-400 hover:text-blue-500 transition-colors font-bold uppercase tracking-wider group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Home
           </Link>
           <div className="flex items-center gap-2">
-            <VeraForgeLogo className="w-5 h-5 animate-pulse" />
+            <VeraForgeLogo className="w-5 h-5" />
             <span className="font-extrabold text-lg tracking-wider text-white">VERAFORGE</span>
           </div>
         </div>
@@ -166,12 +166,12 @@ export default function TrackMatcherQuiz() {
         {step === 0 && (
           /* Step 0: Intro Page */
           <div className="text-center space-y-8 animate-in fade-in duration-300">
-            <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/25 rounded-2xl flex items-center justify-center animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.05)]">
-              <Brain className="w-8 h-8 text-electric-cyan text-cyan-glow" />
+            <div className="mx-auto w-16 h-16 bg-zinc-900 border border-zinc-800 rounded-2xl flex items-center justify-center">
+              <Brain className="w-8 h-8 text-blue-500" />
             </div>
 
             <div className="space-y-3">
-              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-electric-cyan text-cyan-glow block">
+              <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-blue-500 block">
                 SPECIALIZATION ALIGNMENT SYSTEM
               </span>
               <h1 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tight">
@@ -184,7 +184,7 @@ export default function TrackMatcherQuiz() {
 
             <button
               onClick={() => setStep(1)}
-              className="px-8 py-3.5 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)] flex items-center gap-2 mx-auto cursor-pointer"
+              className="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-2 mx-auto cursor-pointer"
             >
               Start Specialization Quiz
               <ArrowRight className="w-4 h-4" />
@@ -194,23 +194,21 @@ export default function TrackMatcherQuiz() {
 
         {step > 0 && step <= 5 && (
           /* Steps 1-5: Questions */
-          <div className="w-full glass-panel rounded-3xl p-8 shadow-2xl relative overflow-hidden bg-cyber-navy-light/10 animate-in fade-in duration-200">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-550/5 rounded-full blur-2xl pointer-events-none" />
-
+          <div className="w-full glass-panel rounded-2xl p-8 bg-zinc-900/50 relative overflow-hidden animate-in fade-in duration-200">
             {/* Question Step Indicator */}
             <div className="flex justify-between items-center mb-6">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-electric-cyan text-cyan-glow">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-500">
                 Question {step} of 5
               </span>
-              <div className="w-32 bg-cyber-navy-dark border border-cyber-navy-light/45 rounded-full h-1.5 overflow-hidden">
+              <div className="w-32 bg-zinc-950 border border-zinc-850 rounded-full h-1.5 overflow-hidden">
                 <div 
-                  className="bg-electric-cyan h-full rounded-full transition-all duration-300"
+                  className="bg-blue-600 h-full rounded-full transition-all duration-300"
                   style={{ width: `${(step / 5) * 100}%` }}
                 />
               </div>
             </div>
 
-            <h2 className="text-lg font-bold text-white mb-6 leading-snug font-sans">
+            <h2 className="text-sm font-bold text-white mb-6 leading-snug font-sans">
               {questions[step - 1].question}
             </h2>
 
@@ -223,15 +221,15 @@ export default function TrackMatcherQuiz() {
                     onClick={() => setSelectedOption(optIdx)}
                     className={`w-full text-left p-4 text-xs rounded-xl border transition-all cursor-pointer font-sans ${
                       isSelected
-                        ? 'bg-electric-cyan/15 border-electric-cyan text-white shadow-[0_0_10px_rgba(245,158,11,0.08)]'
-                        : 'bg-cyber-navy-dark/60 border-cyber-navy-light/40 text-slate-400 hover:border-cyber-navy-light/80 hover:text-slate-200'
+                        ? 'bg-blue-950/20 border-blue-600 text-white'
+                        : 'bg-zinc-950 border-zinc-850 text-slate-400 hover:border-zinc-700 hover:text-slate-200'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 ${
-                        isSelected ? 'border-electric-cyan' : 'border-slate-600'
+                      <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center shrink-0 ${
+                        isSelected ? 'border-blue-500' : 'border-zinc-700'
                       }`}>
-                        {isSelected && <div className="w-2 h-2 bg-electric-cyan rounded-full animate-scale" />}
+                        {isSelected && <div className="w-1.5 h-1.5 bg-blue-500 rounded-full" />}
                       </div>
                       <span className="leading-relaxed">{opt.text}</span>
                     </div>
@@ -244,7 +242,7 @@ export default function TrackMatcherQuiz() {
               <button
                 onClick={handleNext}
                 disabled={selectedOption === null}
-                className="px-5 py-2.5 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-cyber-navy-light disabled:border-cyber-navy-light/45 disabled:text-slate-500 border border-transparent disabled:cursor-not-allowed text-cyber-navy-dark font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all flex items-center gap-1 shadow-[0_0_10px_rgba(245,158,11,0.05)] cursor-pointer"
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-950 disabled:border-zinc-850 disabled:text-slate-500 border border-transparent disabled:cursor-not-allowed text-white font-extrabold text-xs uppercase tracking-wider rounded-lg transition-all flex items-center gap-1 cursor-pointer"
               >
                 Next
                 <ChevronRight className="w-4 h-4" />
@@ -256,39 +254,37 @@ export default function TrackMatcherQuiz() {
         {step === 6 && (
           /* Step 6: Results */
           <div className="w-full space-y-6 animate-in fade-in zoom-in-95 duration-300">
-            <div className="glass-panel rounded-3xl p-8 shadow-2xl relative overflow-hidden bg-cyber-navy-light/10 text-center space-y-6">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-550/5 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="mx-auto w-16 h-16 bg-cyber-navy-dark border border-electric-cyan/25 rounded-2xl flex items-center justify-center animate-pulse">
+            <div className="glass-panel rounded-2xl p-8 bg-zinc-900/50 relative overflow-hidden text-center space-y-6">
+              <div className="mx-auto w-16 h-16 bg-zinc-950 border border-zinc-850 rounded-2xl flex items-center justify-center">
                 {trackIcons[matchedTrack]}
               </div>
 
               <div className="space-y-2">
-                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-electric-cyan text-cyan-glow block">
+                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-blue-500 block">
                   RECOMMENDED TRACK MATCH
                 </span>
-                <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tight">
+                <h2 className="text-2xl font-black text-white uppercase tracking-tight">
                   {matchedTrack}
                 </h2>
-                <p className="text-slate-400 text-xs font-light leading-relaxed max-w-md mx-auto">
+                <p className="text-slate-405 text-xs font-light leading-relaxed max-w-md mx-auto">
                   {trackDescriptions[matchedTrack]}
                 </p>
               </div>
 
               {/* Match Percentiles Stats */}
-              <div className="border-t border-cyber-navy-light/35 pt-6 space-y-4 max-w-sm mx-auto text-left">
+              <div className="border-t border-zinc-800/60 pt-6 space-y-4 max-w-sm mx-auto text-left">
                 <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest block">Match breakdown:</span>
                 
                 {Object.entries(percentiles).map(([track, score]) => (
                   <div key={track} className="space-y-1.5">
                     <div className="flex justify-between text-[10px] font-bold">
-                      <span className={track === matchedTrack ? 'text-white' : 'text-slate-400'}>{track}</span>
-                      <span className="text-electric-cyan">{score}%</span>
+                      <span className={track === matchedTrack ? 'text-white' : 'text-slate-450'}>{track}</span>
+                      <span className="text-blue-500">{score}%</span>
                     </div>
-                    <div className="w-full bg-cyber-navy-dark border border-cyber-navy-light/40 rounded-full h-1.5 p-[1px] relative">
+                    <div className="w-full bg-zinc-950 border border-zinc-850 rounded-full h-1.5 p-[1px] relative">
                       <div 
                         className={`h-full rounded-full transition-all duration-500 ${
-                          track === matchedTrack ? 'bg-electric-cyan shadow-[0_0_8px_#fbbf24]' : 'bg-electric-cyan/40'
+                          track === matchedTrack ? 'bg-blue-600' : 'bg-blue-600/40'
                         }`} 
                         style={{ width: `${score}%` }} 
                       />
@@ -297,10 +293,10 @@ export default function TrackMatcherQuiz() {
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4 border-t border-cyber-navy-light/35">
+              <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4 border-t border-zinc-800/60">
                 <button
                   onClick={handleReset}
-                  className="px-5 py-3 border border-cyber-navy-light/40 hover:border-cyber-navy-light bg-cyber-navy-dark hover:bg-cyber-navy-light/20 text-slate-300 hover:text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="px-5 py-3 border border-zinc-805 bg-zinc-950 hover:bg-zinc-900 text-slate-300 hover:text-white text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
                   Restart Quiz
@@ -308,7 +304,7 @@ export default function TrackMatcherQuiz() {
 
                 <Link
                   href="/sign-up"
-                  className="px-6 py-3 bg-electric-cyan hover:bg-electric-cyan/85 text-cyber-navy-dark font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.1)] flex items-center justify-center gap-1.5"
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-1.5"
                 >
                   <ShieldCheck className="w-4 h-4" />
                   Enroll in Track
@@ -319,10 +315,10 @@ export default function TrackMatcherQuiz() {
 
             <div className="text-center">
               <Link 
-                href="/curriculum" 
-                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-electric-cyan transition-colors"
+                href="/about" 
+                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-blue-500 transition-colors"
               >
-                Browse complete course curriculums
+                Learn more about our methodology
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -332,13 +328,13 @@ export default function TrackMatcherQuiz() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-cyber-navy-light/35 bg-cyber-navy-dark py-10 text-center relative z-10 mt-auto">
+      <footer className="border-t border-zinc-900 bg-zinc-950 py-10 text-center relative z-10 mt-auto">
         <div className="max-w-4xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <VeraForgeLogo className="w-4 h-4" />
             <span className="font-extrabold text-xs tracking-wider text-white uppercase">VeraForge Track Matcher</span>
           </div>
-          <p className="text-[10px] text-slate-500">
+          <p className="text-[10px] text-slate-550">
             &copy; {new Date().getFullYear()} VeraForge Platform. SSL Secured cryptographic verifications.
           </p>
         </div>
