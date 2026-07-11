@@ -105,9 +105,10 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
         handleOpenSubmission(userTasks.find(ut => ut._id === activeQuizTask._id));
       } else {
         // Quiz answers incorrect
-        if (res.cooldown) {
+        const quizRes = res as any;
+        if (quizRes.cooldown) {
           setCooldownActive(true);
-          setCooldownTime(res.cooldownTime || 5);
+          setCooldownTime(quizRes.cooldownTime || 5);
           
           const interval = setInterval(() => {
             setCooldownTime((prev) => {
@@ -152,7 +153,8 @@ export default function StudentDashboard({ user, userTasks, certificate }: Stude
     await delay(500);
 
     try {
-      const res = await submitTaskAction(selectedTask._id, {
+      const res = await submitTaskAction({
+        userTaskId: selectedTask._id,
         submissionRepoLink: data.submissionRepoLink,
         submissionLiveLink: data.submissionLiveLink,
       });

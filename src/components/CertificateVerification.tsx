@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { 
-  Shield, Award, CheckCircle2, Download, Home, ArrowLeft, Loader2, ShieldCheck, ExternalLink 
+  Award, CheckCircle2, Download, Home, ArrowLeft, Loader2, ShieldCheck, ExternalLink 
 } from 'lucide-react';
 import Link from 'next/link';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { Linkedin } from '@/components/icons';
 import VeraForgeLogo from '@/components/VeraForgeLogo';
 
 interface CertificateVerificationProps {
@@ -17,6 +18,11 @@ interface CertificateVerificationProps {
 export default function CertificateVerification({ certificate, student }: CertificateVerificationProps) {
   const certificateRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
+  const [origin, setOrigin] = useState('');
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const formattedDate = new Date(certificate.issueDate).toLocaleDateString('en-US', {
     year: 'numeric',
@@ -36,7 +42,7 @@ export default function CertificateVerification({ certificate, student }: Certif
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#060a12'
+        backgroundColor: '#fcfbf7'
       });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('l', 'mm', 'a4');
@@ -50,28 +56,41 @@ export default function CertificateVerification({ certificate, student }: Certif
     }
   };
 
+  const issueDate = new Date(certificate.issueDate);
+  const issueMonth = issueDate.getMonth() + 1;
+  const issueYear = issueDate.getFullYear();
+  const verifyUrl = `${origin}/verify/${certificate.certificateId}`;
+
+  const linkedInShareUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME` +
+    `&name=${encodeURIComponent(`Virtual Internship - ${trackName}`)}` +
+    `&organizationName=${encodeURIComponent('VeraForge')}` +
+    `&certId=${encodeURIComponent(certificate.certificateId)}` +
+    `&certUrl=${encodeURIComponent(verifyUrl)}` +
+    `&issueMonth=${issueMonth}` +
+    `&issueYear=${issueYear}`;
+
   return (
-    <div className="flex-1 flex flex-col bg-slate-950 relative min-h-screen text-slate-100 pb-20">
+    <div className="flex-1 flex flex-col bg-zinc-950 relative min-h-screen text-slate-100 pb-20 font-sans">
       {/* Background decorations */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
 
       {/* Verification Registry Header */}
-      <header className="border-b border-cyber-navy-light/35 bg-cyber-navy-dark/80 backdrop-blur-md relative z-10 mb-10">
+      <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md relative z-10 mb-10">
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg">
+            <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl shadow-sm">
               <VeraForgeLogo className="w-6 h-6" />
             </div>
             <div>
               <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
-              <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+              <span className="block text-[8px] text-slate-400 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
             </div>
           </Link>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-electric-cyan/15 border border-electric-cyan/20 text-electric-cyan text-xs font-bold rounded-full shadow-[0_0_10px_rgba(0,255,255,0.05)]">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-900 border border-zinc-800 text-blue-500 text-xs font-bold rounded-full">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-electric-cyan opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-electric-cyan"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-550"></span>
               </span>
               Registry Status: ONLINE
             </span>
@@ -83,34 +102,49 @@ export default function CertificateVerification({ certificate, student }: Certif
       <main className="max-w-6xl mx-auto px-6 relative z-10 w-full flex flex-col items-center">
         
         {/* Verification Status Banner */}
-        <div className="w-full max-w-[1123px] glass-panel rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl border-cyber-navy-light/45">
+        <div className="w-full max-w-[1123px] glass-panel rounded-2xl p-6 mb-8 flex flex-col md:flex-row items-center justify-between gap-6 bg-zinc-900/50">
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-electric-cyan/15 border border-electric-cyan/20 rounded-2xl shadow-[0_0_10px_rgba(0,255,255,0.05)]">
-              <CheckCircle2 className="w-8 h-8 text-electric-cyan text-cyan-glow" />
+            <div className="p-3 bg-zinc-950 border border-zinc-850 rounded-xl">
+              <CheckCircle2 className="w-8 h-8 text-blue-500" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-electric-cyan uppercase tracking-widest block font-sans text-cyan-glow">System Registry Check</span>
+              <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest block font-sans">System Registry Check</span>
               <h2 className="text-xl font-bold text-white font-sans">CREDENTIAL VERIFIED & AUTHENTIC</h2>
               <p className="text-slate-400 text-xs mt-0.5 font-sans">This certificate record has been matched with our secure database registry.</p>
             </div>
           </div>
-          <button
-            onClick={handleDownloadPDF}
-            disabled={downloading}
-            className="flex items-center justify-center gap-2 px-5 py-3 bg-electric-cyan hover:bg-electric-cyan/85 disabled:bg-electric-cyan/50 text-cyber-navy-dark font-extrabold text-sm rounded-xl hover:shadow-lg hover:shadow-electric-cyan/25 hover:scale-[1.01] transition-all shrink-0 cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.15)]"
-          >
-            {downloading ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Generating PDF...
-              </>
-            ) : (
-              <>
-                <Download className="w-4 h-4" />
-                Download Official PDF
-              </>
+          
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto shrink-0">
+            {origin && (
+              <a
+                href={linkedInShareUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-5 py-3 bg-zinc-950 hover:bg-zinc-900 border border-zinc-850 text-white font-bold text-xs rounded-xl hover:scale-[1.01] transition-all cursor-pointer w-full sm:w-auto font-sans"
+              >
+                <Linkedin className="w-4 h-4 text-blue-400" />
+                Add to LinkedIn
+              </a>
             )}
-          </button>
+            
+            <button
+              onClick={handleDownloadPDF}
+              disabled={downloading}
+              className="flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-600/50 text-white font-extrabold text-xs rounded-xl hover:scale-[1.01] transition-all shrink-0 cursor-pointer w-full sm:w-auto font-sans animate-in fade-in"
+            >
+              {downloading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Generating PDF...
+                </>
+              ) : (
+                <>
+                  <Download className="w-4 h-4" />
+                  Download Official PDF
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Certificate Scroll Wrapper */}
@@ -122,7 +156,7 @@ export default function CertificateVerification({ certificate, student }: Certif
             className="w-[1123px] h-[794px] bg-[#fcfbf7] border-[16px] border-double border-[#0b1e36] p-16 relative flex flex-col justify-between overflow-hidden text-[#1a2e40] shadow-2xl shrink-0 select-none"
             style={{ fontFamily: 'Georgia, serif' }}
           >
-            {/* Transparent HEIC Seal Watermark */}
+            {/* Transparent Seal Watermark */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
               <svg className="w-[500px] h-[500px] text-[#0b1e36] opacity-[0.03]" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="200" cy="200" r="160" stroke="currentColor" strokeWidth="2" strokeDasharray="6,4"/>
@@ -192,7 +226,7 @@ export default function CertificateVerification({ certificate, student }: Certif
                 <div className="relative flex items-center justify-center shrink-0">
                   {/* CSS gold seal jagged outer border */}
                   <div 
-                    className="absolute w-20 h-20 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-700 border border-amber-500 shadow-md animate-pulse" 
+                    className="absolute w-20 h-20 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-700 border border-amber-500 shadow-md" 
                     style={{ clipPath: 'polygon(50% 0%, 64% 18%, 85% 9%, 82% 32%, 99% 38%, 88% 59%, 95% 82%, 73% 79%, 68% 99%, 50% 88%, 32% 99%, 27% 79%, 5% 82%, 12% 59%, 1% 38%, 18% 32%, 15% 9%, 36% 18%)' }} 
                   />
                   {/* Gold Seal inner circle */}
@@ -204,7 +238,7 @@ export default function CertificateVerification({ certificate, student }: Certif
                 <span className="text-[7px] text-[#c5a059] font-extrabold tracking-widest uppercase mt-2.5 block font-sans">Gold Metallic Seal</span>
               </div>
  
-              {/* Right Signature (Gaurav Kumar Yadav) */}
+              {/* Right Signature */}
               <div className="w-1/3 text-right flex flex-col items-end">
                 {/* Gaurav Signature Scribble */}
                 <svg className="w-36 h-12 text-[#0b1e36]/80 -mb-2" viewBox="0 0 150 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -228,15 +262,15 @@ export default function CertificateVerification({ certificate, student }: Certif
         <div className="flex items-center gap-4 mt-4">
           <Link
             href="/"
-            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan transition-colors font-sans"
+            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-500 transition-colors font-sans"
           >
             <Home className="w-3.5 h-3.5" />
             VeraForge Home
           </Link>
-          <span className="text-cyber-navy-light/40">|</span>
+          <span className="text-zinc-800">|</span>
           <Link
             href="/dashboard"
-            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-electric-cyan transition-colors font-sans"
+            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-blue-500 transition-colors font-sans"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Internship Dashboard

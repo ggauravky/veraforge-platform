@@ -7,12 +7,30 @@ import User from '@/models/User';
 import { currentUser } from '@clerk/nextjs/server';
 
 const onboardingSchema = z.object({
+  role: z.enum(['student', 'recruiter']).default('student'),
   fullName: z.string().min(2, 'Full Name must be at least 2 characters'),
-  universityName: z.string().min(2, 'University Name must be at least 2 characters'),
-  graduationYear: z.string().regex(/^\d{4}$/, 'Must be a 4-digit year'),
-  githubUrl: z.string().url('Invalid URL').regex(/github\.com/, 'Must be a GitHub profile URL'),
+  universityName: z.string().optional(),
+  graduationYear: z.string().optional(),
+  githubUrl: z.string().optional(),
   linkedinUrl: z.string().url('Invalid URL').regex(/linkedin\.com/, 'Must be a LinkedIn profile URL'),
   portfolioUrl: z.string().url('Invalid URL').optional().or(z.literal('')),
+  companyName: z.string().optional(),
+}).refine((data) => {
+  if (data.role === 'student') {
+    return (
+      !!data.universityName &&
+      data.universityName.length >= 2 &&
+      !!data.graduationYear &&
+      /^\d{4}$/.test(data.graduationYear) &&
+      !!data.githubUrl &&
+      /github\.com/.test(data.githubUrl)
+    );
+  } else {
+    return !!data.companyName && data.companyName.length >= 2;
+  }
+}, {
+  message: "Required parameters missing for the selected role",
+  path: ["role"]
 });
 
 export type OnboardingFormValues = z.infer<typeof onboardingSchema>;
@@ -39,12 +57,24 @@ export async function submitOnboarding(data: OnboardingFormValues) {
     if (user) {
       // Update existing user record
       user.fullName = validatedData.fullName;
-      user.universityName = validatedData.universityName;
-      user.graduationYear = validatedData.graduationYear;
-      user.githubUrl = validatedData.githubUrl;
+      user.role = validatedData.role;
       user.linkedinUrl = validatedData.linkedinUrl;
-      user.portfolioUrl = validatedData.portfolioUrl || undefined;
-      user.accountStatus = 'pending_approval';
+      
+      if (validatedData.role === 'student') {
+        user.universityName = validatedData.universityName;
+        user.graduationYear = validatedData.graduationYear;
+        user.githubUrl = validatedData.githubUrl;
+        user.portfolioUrl = validatedData.portfolioUrl || undefined;
+        user.accountStatus = 'pending_approval';
+        user.companyName = undefined;
+      } else {
+        user.companyName = validatedData.companyName;
+        user.accountStatus = 'active'; // Recruiters auto-approve immediately
+        user.universityName = undefined;
+        user.graduationYear = undefined;
+        user.githubUrl = undefined;
+        user.portfolioUrl = undefined;
+      }
       await user.save();
     } else {
       // Create new user record
@@ -52,13 +82,14 @@ export async function submitOnboarding(data: OnboardingFormValues) {
         clerkId: clerkUser.id,
         fullName: validatedData.fullName,
         email,
-        universityName: validatedData.universityName,
-        graduationYear: validatedData.graduationYear,
-        githubUrl: validatedData.githubUrl,
+        role: validatedData.role,
         linkedinUrl: validatedData.linkedinUrl,
-        portfolioUrl: validatedData.portfolioUrl || undefined,
-        accountStatus: 'pending_approval',
-        role: 'student',
+        universityName: validatedData.role === 'student' ? validatedData.universityName : undefined,
+        graduationYear: validatedData.role === 'student' ? validatedData.graduationYear : undefined,
+        githubUrl: validatedData.role === 'student' ? validatedData.githubUrl : undefined,
+        portfolioUrl: (validatedData.role === 'student' && validatedData.portfolioUrl) ? validatedData.portfolioUrl : undefined,
+        companyName: validatedData.role === 'recruiter' ? validatedData.companyName : undefined,
+        accountStatus: validatedData.role === 'student' ? 'pending_approval' : 'active',
       });
     }
 

@@ -17,10 +17,13 @@ export default async function OnboardingPage() {
   await connectToDatabase();
   const dbUser = await User.findOne({ clerkId: clerkUser.id });
 
-  // If user already exists in MongoDB and has completed onboarding, redirect to dashboard/admin/review
-  if (dbUser && dbUser.universityName) {
+  // If user already exists in MongoDB and has completed onboarding, redirect accordingly
+  if (dbUser && (dbUser.universityName || dbUser.companyName)) {
     if (dbUser.role === 'admin') {
       redirect('/admin');
+    }
+    if (dbUser.role === 'recruiter') {
+      redirect('/recruiter');
     }
     if (dbUser.accountStatus === 'pending_approval' || dbUser.accountStatus === 'rejected') {
       redirect('/pending-review');
@@ -28,23 +31,24 @@ export default async function OnboardingPage() {
     redirect('/dashboard');
   }
 
-  const initialName = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'New Student';
+  const initialName = `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'New User';
   const initialEmail = clerkUser.emailAddresses[0]?.emailAddress || '';
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-cyber-navy-dark relative overflow-hidden min-h-screen py-16 px-6">
+    <div className="flex-1 flex flex-col items-center justify-center bg-zinc-950 relative overflow-hidden min-h-screen py-16 px-6 font-sans">
       {/* Background patterns */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 cyber-grid-moving pointer-events-none z-0" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-550/2 rounded-full blur-3xl pointer-events-none animate-pulse-slow" />
       
       {/* Brand Header */}
       <div className="relative z-10 flex flex-col items-center mb-8">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-cyber-navy-dark/80 border border-cyber-navy-light/40 rounded-xl shadow-lg shadow-electric-cyan/5">
+          <div className="p-2.5 bg-zinc-900 border border-zinc-800 rounded-xl shadow-sm">
             <VeraForgeLogo className="w-6 h-6" />
           </div>
           <div>
-            <span className="font-extrabold text-2xl tracking-wider bg-gradient-to-r from-slate-50 to-slate-200 bg-clip-text text-transparent">VERAFORGE</span>
-            <span className="block text-[8px] text-electric-cyan font-bold tracking-[0.2em] uppercase text-cyan-glow">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
+            <span className="font-extrabold text-2xl tracking-wider text-white">VERAFORGE</span>
+            <span className="block text-[8px] text-slate-400 font-bold tracking-[0.2em] uppercase">VIRTUAL INTERNSHIP SECURITY PORTAL</span>
           </div>
         </div>
       </div>

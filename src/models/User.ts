@@ -11,7 +11,9 @@ export interface IUser extends Document {
   portfolioUrl?: string;
   enrolledTrack?: string;
   accountStatus: 'pending_approval' | 'active' | 'rejected';
-  role: 'student' | 'admin';
+  role: 'student' | 'admin' | 'recruiter';
+  companyName?: string;
+  recruiterVerified?: boolean;
   graduated?: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -26,6 +28,8 @@ const UserSchema = new Schema<IUser>({
   githubUrl: { type: String },
   linkedinUrl: { type: String },
   portfolioUrl: { type: String },
+  companyName: { type: String },
+  recruiterVerified: { type: Boolean, default: true },
   enrolledTrack: { type: String, default: null },
   accountStatus: { 
     type: String, 
@@ -34,7 +38,7 @@ const UserSchema = new Schema<IUser>({
   },
   role: { 
     type: String, 
-    enum: ['student', 'admin'], 
+    enum: ['student', 'admin', 'recruiter'], 
     default: 'student' 
   },
   graduated: { type: Boolean, default: false }
