@@ -15,6 +15,11 @@ export default async function SelectTrackPage() {
   await connectToDatabase();
   const dbUser = await User.findOne({ clerkId: clerkUser.id });
 
+  // Recruiter redirect
+  if (dbUser && dbUser.role === 'recruiter') {
+    redirect('/recruiter');
+  }
+
   if (!dbUser || !dbUser.universityName) {
     redirect('/onboarding');
   }

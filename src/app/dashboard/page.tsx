@@ -20,6 +20,11 @@ export default async function DashboardPage() {
   // Post-Login check: immediately find student in MongoDB
   const dbUser = await User.findOne({ clerkId: clerkUser.id });
 
+  // Recruiter redirect
+  if (dbUser && dbUser.role === 'recruiter') {
+    redirect('/recruiter');
+  }
+
   // Redirection Logic: If user is authenticated in Clerk but does NOT exist in MongoDB or hasn't filled onboarding, redirect to onboarding
   if (!dbUser || !dbUser.universityName) {
     redirect('/onboarding');
